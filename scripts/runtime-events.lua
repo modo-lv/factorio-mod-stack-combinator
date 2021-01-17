@@ -31,7 +31,7 @@ function this.tick(ev)
       global.config[sc.unit_number] = { invert_red = settings.invert("red"), invert_green = settings.invert("green") }
     end
 
-    runtime.process(config, input, output)
+    runtime.process(sc, input, output)
     
     ::next::
   end

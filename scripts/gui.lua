@@ -34,7 +34,7 @@ function this.create(sc, player)
 	}
 	local title = caption.add {
 		type = "label",
-		caption = {"entity-name." .. SC_ENTITY_NAME},
+		caption = {"", {"entity-name." .. SC_ENTITY_NAME}, " " , sc.unit_number},
 		style = "frame_title"
 	}
 	title.drag_target = parent

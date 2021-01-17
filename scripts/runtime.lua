@@ -5,10 +5,11 @@
 local this = {}
 
 --- Main combinator logic, process combinator inputs into stackified output
--- @param config Stack combinator entity configuration
+-- @param sc Stack combinator entity
 -- @param input LuaArithmeticCombinatorControlBehavior
 -- @param output LuaConstantCombinatorControlBehavior
-function this.process(config, input, output)
+function this.process(sc, input, output)
+  local config = global.config[sc.unit_number]
   local red = input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
   local green = input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
 
@@ -16,8 +17,20 @@ function this.process(config, input, output)
     this.stackify(red, config.invert_red)
   )
 
-  if (#result > output.signals_count) then
-    -- TODO: Warn player to increase signal capacity
+  --- Not enough signal space
+  if (table_size(result) > output.signals_count) then
+    if not (signal_space_errors[sc.unit_number]) then
+      game.print({"main.signal-space-error", sc.unit_number, table_size(result), output.signals_count})
+      signal_space_errors[sc.unit_number] = true
+    end
+
+    output.parameters = {}
+    return
+  end
+
+  --- Clear the error flag if signal count has been reduced
+  if (signal_space_errors[sc.unit_number]) then
+    signal_space_errors[sc.unit_number] = nil
   end
   
   local i = 1

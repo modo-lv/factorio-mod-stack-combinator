@@ -36,6 +36,10 @@ if (script) then
   -- Convenience shorthand
   g("dlog")
   dlog = debug_log.print
+
+  g("signal_space_errors")
+  --- Errors about insufficient signal capacity shown to the user
+  signal_space_errors = {}
 end
 
 
