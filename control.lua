@@ -24,6 +24,8 @@ event.on_robot_built_entity(entity.create, filter)
 event.on_entity_cloned(entity.create, filter)
 event.script_raised_built(entity.create, filter)
 event.script_raised_revive(entity.create, filter)
+-- Rotation
+event.on_player_rotated_entity(entity.rotate)
 -- Removal
 event.on_player_mined_entity(entity.destroy, filter)
 event.on_robot_mined_entity(entity.destroy, filter)

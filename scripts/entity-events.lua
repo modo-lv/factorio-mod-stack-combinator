@@ -13,13 +13,19 @@ function this.tick(ev)
   entity.find_all()
 end
 
---- Handle all entity creation events
+--- Creation events
 function this.create(event)
   if not (event.created_entity and event.created_entity.name == SC_ENTITY_NAME) then return end
   entity.build(event.created_entity)
 end
 
---- Handle all entity removal events
+--- Rotation
+function this.rotate(ev)
+  if not (ev.entity and ev.entity.name == SC_ENTITY_NAME) then return end
+  entity.rotate(ev.entity, game.get_player(ev.player_index))
+end
+
+--- Removal events
 function this.destroy(event)
   local en = event.entity
   if not (en and en.name == SC_ENTITY_NAME) then return end
@@ -27,7 +33,7 @@ function this.destroy(event)
   entity.remove(en)
 end
 
---- Handle chunk/surface removals
+--- Chunk/surface removals
 function this.purge_missing(ev)
   -- Deleting the combinator list will trigger its recreation on next tick,
   -- which will also remove any leftover configurations.

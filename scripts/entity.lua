@@ -23,7 +23,6 @@ function this.build(sc)
     create_built_effect_smoke = false
   }
   out.destructible = false
-  out.rotatable = false
   out.operable = false
   
   -- Connect the output combinator to the stack combinator's output
@@ -105,6 +104,11 @@ function this.find_all()
       )
     end
   end
+end
+
+--- Rotate the output along with the main SC
+function this.rotate(sc, player)
+  all_combinators[sc.unit_number].out.direction = sc.direction
 end
 
 --- Remove a stack combinator
