@@ -78,9 +78,11 @@ function this.create(sc, player)
 		direction = "vertical"
 	}
 	
+	local cfg = global.config[sc.unit_number]
+
 	checks.add {
 		type = "checkbox",
-		state = false,
+		state = cfg and cfg.invert_red,
 		name = this.INVERT_RED_NAME,
 		caption = {"gui.invert-red"},
 		tooltip = {"gui.invert-red-description"}
@@ -88,7 +90,7 @@ function this.create(sc, player)
 
 	checks.add {
 		type = "checkbox",
-		state = false,
+		state = cfg and cfg.invert_green,
 		name = this.INVERT_GREEN_NAME,
 		caption = {"gui.invert-green"},
 		tooltip = {"gui.invert-green-description"}

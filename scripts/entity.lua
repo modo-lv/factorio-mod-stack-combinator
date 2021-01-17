@@ -2,6 +2,8 @@
 --- # SC entity construction, destruction etc.
 --------------------------------------------------------------------------------
 
+local settings = require("settings")
+
 local this = {}
 
 --- Log a debug message related to a specific stack combinator
@@ -52,8 +54,7 @@ end
 function this.add_to_list(sc, out)
   if not (global.config) then global.config = {} end
   if not (global.config[sc.unit_number]) then
-    -- TODO: Use mod settings for default values
-    local cfg = { invert_red = false, invert_green = false }
+    local cfg = { invert_red = settings.invert("red"), invert_green = settings.invert("green") }
     global.config[sc.unit_number] = cfg
     this.dlog(sc, "Combinator config: " .. serpent.line(cfg))
   end

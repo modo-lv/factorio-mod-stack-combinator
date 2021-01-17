@@ -28,8 +28,7 @@ function this.tick(ev)
     local config = global.config[sc.unit_number]
     if not (config) then
       dlog("⚠️ Stack combinator " .. sc.unit_number .. " has no configuration despite being in the combinator list! Setting to defaults.")
-      -- TODO: Use mod settings
-      global.config[sc.unit_number] = { invert_red = false, invert_green = false }
+      global.config[sc.unit_number] = { invert_red = settings.invert("red"), invert_green = settings.invert("green") }
     end
 
     runtime.process(config, input, output)
