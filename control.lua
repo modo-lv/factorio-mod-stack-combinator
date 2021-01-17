@@ -8,13 +8,21 @@ local event = require("__flib__.event")
 local entity = require("scripts.entity-events")
 local gui = require("scripts.gui-events")
 local runtime = require("scripts.runtime-events")
+local mod_picker_dollies = require("scripts.mods.picker-dollies")
 
 --[[ Scripts: Multiple handlers ]]
+event.on_init(function(ev) 
+  mod_picker_dollies.init()
+end)
+
+event.on_load(function(ev)
+  mod_picker_dollies.init()
+end)
+
 event.on_tick(function(ev)
   entity.tick(ev)
   runtime.tick(ev)
 end)
-
 
 --[[ Scripts: Building ]]
 local filter = { { filter = "name", name = SC_ENTITY_NAME } }
@@ -35,7 +43,6 @@ event.on_entity_died(entity.destroy, filter)
 event.on_chunk_deleted(entity.purge_missing)
 event.on_surface_cleared(entity.purge_missing)
 event.on_surface_deleted(entity.purge_missing)
-
 
 --[[ Scripts: GUI]]
 event.on_gui_opened(gui.open)
