@@ -27,7 +27,7 @@ if (script) then
   -- Table:
   --  { [SC entity no.] = { sc = [SC entity], out = [output combinator entity] } }
   g("all_combinators")
-  all_combinators = {}
+  all_combinators = nil
 
   --- Debug logger
   g("debug_log")
