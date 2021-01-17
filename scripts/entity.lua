@@ -43,21 +43,22 @@ function this.build(sc)
   })
 
   this.dlog(sc, "Output combinator built and connected.")
-  this.add_to_list(sc)  
+  this.add_to_list(sc, out)  
 end
 
 
 --- Add a fully-built stack combinator to the global list of combinators.
 -- @param sc The stack combiantor entity
-function this.add_to_list(sc)
-  all_combinators[sc.unit_number] = { sc = sc, out = out }
+-- @param out The output combinator entity
+function this.add_to_list(sc, out)
   if not (global.config) then global.config = {} end
   if not (global.config[sc.unit_number]) then
     -- TODO: Use mod settings for default values
-    cfg = { invert_red = false, invert_green = false }
+    local cfg = { invert_red = false, invert_green = false }
     global.config[sc.unit_number] = cfg
     this.dlog(sc, "Combinator config: " .. serpent.line(cfg))
   end
+  all_combinators[sc.unit_number] = { sc = sc, out = out }
   this.dlog(sc, "Added to global list.")
 end
 
@@ -78,7 +79,7 @@ function this.find_all()
       if not out then 
         error("Stack Combinator " .. sc.unit_number .. " (at {" .. sc.position.x .. ", " .. sc.position.y .. "} on " .. surface.name  .. ") has no output!") 
       end
-      all_combinators[sc.unit_number] = { sc = sc, out = out }
+      this.add_to_list(sc, out)
     end
   end
 
@@ -88,19 +89,21 @@ function this.find_all()
   start = game.ticks_played
 
   -- Remove any orphaned configurations
-  local orphans = 0
-  for id, _ in pairs(global.config) do
-    if not (all_combinators[id]) then
-      global.config[id] = nil
-      orphans = orphans + 1
+  if (global.config) then 
+    local orphans = 0
+    for id, _ in pairs(global.config) do
+      if not (all_combinators[id]) then
+        global.config[id] = nil
+        orphans = orphans + 1
+      end
     end
-  end
-  delta = game.ticks_played - start
-  if (orphans > 0) then
-    dlog("Removed " .. orphans .. " configuration(s) for combinators that "
-      .. "no longer exist (this is normal on chunk/surface removals) "
-      .. "in ".. delta .." tick(s)."
-    )
+    delta = game.ticks_played - start
+    if (orphans > 0) then
+      dlog("Removed " .. orphans .. " configuration(s) for combinators that "
+        .. "no longer exist (this is normal on chunk/surface removals) "
+        .. "in ".. delta .." tick(s)."
+      )
+    end
   end
 end
 

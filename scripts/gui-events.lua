@@ -2,8 +2,8 @@
 --- # GUI events: showing, hiding, interactions, etc.
 --------------------------------------------------------------------------------
 
-local entity = require("entity-layout")
-local gui = require("gui-layout")
+local entity = require("entity")
+local gui = require("gui")
 
 local this = {
   --- The open GUI

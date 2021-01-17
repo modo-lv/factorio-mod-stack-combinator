@@ -3,7 +3,7 @@
 -- Event setup for combinator placing, moving, removing etc.
 --------------------------------------------------------------------------------
 
-local entity = require("entity-layout")
+local entity = require("entity")
 
 local this = {}
 

@@ -7,10 +7,12 @@ local event = require("__flib__.event")
 --[[ Scripts ]]
 local entity = require("scripts.entity-events")
 local gui = require("scripts.gui-events")
+local runtime = require("scripts.runtime-events")
 
 --[[ Scripts: Multiple handlers ]]
 event.on_tick(function(ev)
   entity.tick(ev)
+  runtime.tick(ev)
 end)
 
 
