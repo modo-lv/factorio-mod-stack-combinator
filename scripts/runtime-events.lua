@@ -2,6 +2,8 @@
 --- # Main combinator running events
 --------------------------------------------------------------------------------
 
+local sc_config = require("entity-config")
+local mod_config = require("mod-config")
 local runtime = require("runtime")
 
 local this = {}
@@ -25,10 +27,10 @@ function this.tick(ev)
       goto next 
     end
 
-    local config = global.config[sc.unit_number]
+    local config = sc_config.from_combinator(sc)
     if not (config) then
       dlog("⚠️ Stack combinator " .. sc.unit_number .. " has no configuration despite being in the combinator list! Setting to defaults.")
-      global.config[sc.unit_number] = { invert_red = settings.invert("red"), invert_green = settings.invert("green") }
+      sc_config.to_combinator(mod_config.inversion_defaults())
     end
 
     runtime.process(sc, input, output)

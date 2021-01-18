@@ -2,6 +2,8 @@
 --- # GUI layout: the window and all its contents
 --------------------------------------------------------------------------------
 
+local sc_config = require("entity-config")
+
 local this = {}
 this.NAME = SC_ENTITY_NAME .. "-gui"
 this.CLOSE_BUTTON_NAME = this.NAME .. "-close"
@@ -78,11 +80,11 @@ function this.create(sc, player)
 		direction = "vertical"
 	}
 	
-	local cfg = global.config[sc.unit_number]
+	local cfg = sc_config.from_combinator(sc)
 
 	checks.add {
 		type = "checkbox",
-		state = cfg and cfg.invert_red,
+		state = (cfg and cfg.invert_red) == true,
 		name = this.INVERT_RED_NAME,
 		caption = {"gui.invert-red"},
 		tooltip = {"gui.invert-red-description"}
@@ -90,7 +92,7 @@ function this.create(sc, player)
 
 	checks.add {
 		type = "checkbox",
-		state = cfg and cfg.invert_green,
+		state = (cfg and cfg.invert_green) == true,
 		name = this.INVERT_GREEN_NAME,
 		caption = {"gui.invert-green"},
 		tooltip = {"gui.invert-green-description"}

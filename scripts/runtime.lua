@@ -2,6 +2,8 @@
 --- # Main combinator logic
 --------------------------------------------------------------------------------
 
+local sc_config = require("entity-config")
+
 local this = {}
 
 --- Main combinator logic, process combinator inputs into stackified output
@@ -9,7 +11,7 @@ local this = {}
 -- @param input LuaArithmeticCombinatorControlBehavior
 -- @param output LuaConstantCombinatorControlBehavior
 function this.process(sc, input, output)
-  local config = global.config[sc.unit_number]
+  local config = sc_config.from_combinator(sc)
   local red = input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
   local green = input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
 

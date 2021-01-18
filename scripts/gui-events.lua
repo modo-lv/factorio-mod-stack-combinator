@@ -4,6 +4,7 @@
 
 local entity = require("entity")
 local gui = require("gui")
+local sc_config = require("entity-config")
 
 local this = {
   --- The open GUI
@@ -25,12 +26,17 @@ function this.config(ev)
   if not (global.open_sc and el and (el.name == gui.INVERT_RED_NAME or gui.INVERT_GREEN_NAME)) 
     then return end
   local id = global.open_sc.unit_number
+  local sc = global.open_sc
+
+  local config = {}
   if (el.name == gui.INVERT_RED_NAME) then 
-    global.config[id].invert_red = el.state 
+    config.invert_red = el.state 
   elseif (el.name == gui.INVERT_GREEN_NAME) then 
-    global.config[id].invert_green = el.state 
+    config.invert_green = el.state 
   end
-  entity.dlog(global.open_sc, "Combinator's settings are now: " .. serpent.line(global.config[id]))
+
+  sc_config.to_combinator(sc, config)
+  entity.dlog(sc, "Combinator's settings are now: " .. serpent.line(sc_config.from_combinator(sc)))
 end
 
 --- Close GUI if user clicks the `X` button

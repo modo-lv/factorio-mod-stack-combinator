@@ -56,12 +56,6 @@ if (global) then
   -- keep track of which SC is currently open for configuration.
   global.open_sc = nil
 
-  --- Combinator configurations
-  -- Tracks settings for each combinator, configurable in the combinator GUI.
-  -- Table:
-  --  { [SC entity no.] = { invert_red = [boolean], invert_green = [boolean] } }
-  global.config = {}
-
   --- Unique persistent ID used in the debug log filename.
   -- Factorio does not allow or provide any way to read date/time or save name,
   -- so the only way to ensure the same log file over multiple saves is

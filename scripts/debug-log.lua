@@ -4,7 +4,7 @@
 
 local misc = require("__flib__.misc")
 local event = require("__flib__.event")
-local config = require("settings")
+local mod_config = require("mod-config")
 
 local this = {
   OUTPUT_FOLDER = MOD_NAME .. "/logs",
@@ -13,7 +13,7 @@ this.output_file = this.OUTPUT_FOLDER .. "/debug.log"
 
 --- Print to console and debug log file
 function this.print(text, without_space)
-  if not (config.debug_mode()) then return end
+  if not (mod_config.debug_mode()) then return end
 
   -- Set an ID if we don't have one
   if not (global.dlog_id and global.dlog_id > 0) then

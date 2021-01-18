@@ -2,7 +2,8 @@
 --- # SC entity construction, destruction etc.
 --------------------------------------------------------------------------------
 
-local settings = require("settings")
+local sc_config = require("entity-config")
+local mod_config = require("mod-config")
 
 local this = {}
 
@@ -15,6 +16,8 @@ end
 -- @param sc The stack combinator entity
 function this.build(sc)
   this.dlog(sc, "Building output combinator...")
+  -- Set default config
+  sc_config.to_combinator(sc, mod_config.default_inversion())
   -- Create the hidden output combinator
   local out = sc.surface.create_entity {
     name = OUT_ENTITY_NAME,
@@ -52,12 +55,6 @@ end
 -- @param sc The stack combiantor entity
 -- @param out The output combinator entity
 function this.add_to_list(sc, out)
-  if not (global.config) then global.config = {} end
-  if not (global.config[sc.unit_number]) then
-    local cfg = { invert_red = settings.invert("red"), invert_green = settings.invert("green") }
-    global.config[sc.unit_number] = cfg
-    this.dlog(sc, "Combinator config: " .. serpent.line(cfg))
-  end
   all_combinators[sc.unit_number] = { sc = sc, out = out }
   this.dlog(sc, "Added to global list.")
 end
@@ -87,24 +84,6 @@ function this.find_all()
   dlog("(Re-)registered " .. table_size(all_combinators) .. " stack combinator(s) in " .. delta .. " tick(s).")
 
   start = game.ticks_played
-
-  -- Remove any orphaned configurations
-  if (global.config) then 
-    local orphans = 0
-    for id, _ in pairs(global.config) do
-      if not (all_combinators[id]) then
-        global.config[id] = nil
-        orphans = orphans + 1
-      end
-    end
-    delta = game.ticks_played - start
-    if (orphans > 0) then
-      dlog("Removed " .. orphans .. " configuration(s) for combinators that "
-        .. "no longer exist (this is normal on chunk/surface removals) "
-        .. "in ".. delta .." tick(s)."
-      )
-    end
-  end
 end
 
 --- Rotate the output along with the main SC
@@ -116,8 +95,6 @@ end
 function this.remove(sc)
   -- Remove output
   all_combinators[sc.unit_number].out.destroy({raise_destroy = false})
-  -- Remove config
-  global.config[sc.unit_number] = nil  
   -- Remove from list
   all_combinators[sc.unit_number] = nil
   this.dlog(sc, "Combinator removed, output destroyed and configuration deleted.")

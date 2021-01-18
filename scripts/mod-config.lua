@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
---- # Mod settings
+--- # Mod configuration
 --------------------------------------------------------------------------------
 
 local this = {}
@@ -13,6 +13,12 @@ end
 function this.invert(color)
   local setting = settings.global[MOD_NAME .. "-defaults-invert"].value
   return setting == color or setting == "both"
+end
+
+--- Default inversion configuration
+-- @return Default SC configuration
+function this.default_inversion()
+  return { invert_red = this.invert("red"), invert_green = this.invert("green") }
 end
 
 return this
