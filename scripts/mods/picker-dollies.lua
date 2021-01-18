@@ -16,7 +16,7 @@ function this.moved(ev)
   local sc = ev.moved_entity
   if not (sc and sc.name == SC_ENTITY_NAME) then return end
   dlog("Combinator " .. sc.unit_number .. " moved by Picker Dollies, moving output as well.")
-  all_combinators[sc.unit_number].out.teleport(sc.position)
+  global.all_combinators[sc.unit_number].out.teleport(sc.position)
 end
 
 return this

@@ -22,11 +22,9 @@ OUT_ENTITY_NAME = SC_ENTITY_NAME .. "-output"
 --------------------------------------------------------------------------------
 
 if (script) then
-  --- List of all stack combinators placed on the map
-  -- Table:
-  --  { [SC entity no.] = { sc = [SC entity], out = [output combinator entity] } }
-  g("all_combinators")
-  all_combinators = nil
+  --- Have all combinators been (re)registered?
+  g("combinators_listed")
+  combinators_listed = false
 
   --- Debug logger
   g("debug_log")
@@ -50,6 +48,8 @@ end
 -- WARNING: The values assigned here are for documentation purposes only,
 -- `global` gets overwritten after a game is started/loaded.
 if (global) then 
+  global.all_combinators = nil
+
   --- SC entity that has its configuration GUI open
   -- Custom GUIs are not associated with entities, so we have to manually 
   -- keep track of which SC is currently open for configuration.

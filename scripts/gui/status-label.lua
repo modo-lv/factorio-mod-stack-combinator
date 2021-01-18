@@ -13,8 +13,14 @@ local this = {
 }
 
 function this.tick(sc)
-  this.indicator.sprite = "utility/" .. this.STATUS_SPRITES[sc.status]
-  this.text.caption = { "entity-status." .. this.STATUS_NAMES[sc.status] }
+  if (signal_space_errors[sc.unit_number]) then
+    this.indicator.sprite = "utility/status_not_working"
+    this.text.caption = { "gui.signal-space-error" }
+    this.text.tooltip = signal_space_errors[sc.unit_number]
+  else
+    this.indicator.sprite = "utility/" .. this.STATUS_SPRITES[sc.status]
+    this.text.caption = { "entity-status." .. this.STATUS_NAMES[sc.status] }
+  end
 end
 
 --- Create the status indicator
@@ -23,9 +29,11 @@ function this.create(sc, parent)
 
   local flow = parent.add {
     type = "flow",
-    style = "status_flow"
+    style = "status_flow",
+    direction = "horizontal"
   }
   flow.style.vertical_align = "center"
+  flow.style.horizontally_stretchable = true
 
   -- Status indicator
   this.indicator = flow.add {
@@ -35,9 +43,17 @@ function this.create(sc, parent)
 
   -- Status text
   this.text = flow.add {
+    type = "label"
+  }
+
+  local spacer = flow.add {
+    type = "empty-widget"
+  }
+  spacer.style.horizontally_stretchable = true
+
+  id = flow.add {
     type = "label",
-    vertically_stretchable = true,
-    size = 16,
+    caption = "ID: " .. sc.unit_number
   }
 
   this.tick(sc)

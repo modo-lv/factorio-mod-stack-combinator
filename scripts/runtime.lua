@@ -22,19 +22,28 @@ function this.process(sc, input, output)
   --- Not enough signal space
   if (table_size(result) > output.signals_count) then
     if not (signal_space_errors[sc.unit_number]) then
-      game.print({"main.signal-space-error", sc.unit_number, table_size(result), output.signals_count})
-      signal_space_errors[sc.unit_number] = true
+      signal_space_errors[sc.unit_number] = {"gui.signal-space-error-description", table_size(result), output.signals_count}
+    end
+    for _, player in pairs(game.players) do
+      player.add_custom_alert(sc, { type = "item", name = SC_ENTITY_NAME }, signal_space_errors[sc.unit_number], true)
     end
 
     output.parameters = {}
     return
   end
 
-  --- Clear the error flag if signal count has been reduced
+  --- Clear the error if signal count is OK now
   if (signal_space_errors[sc.unit_number]) then
     signal_space_errors[sc.unit_number] = nil
+    for _, player in pairs(game.players) do
+      player.remove_alert {
+        entity = sc,
+        type = defines.alert_type.custom,
+        icon = { type = "item", name = SC_ENTITY_NAME }
+      }
+    end
   end
-  
+
   local i = 1
   for _, entry in pairs(result) do
     entry.index = i

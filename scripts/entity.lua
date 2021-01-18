@@ -54,7 +54,8 @@ end
 -- @param sc The stack combiantor entity
 -- @param out The output combinator entity
 function this.add_to_list(sc, out)
-  all_combinators[sc.unit_number] = { sc = sc, out = out }
+  if not (global.all_combinators) then global.all_combinators = {} end
+  global.all_combinators[sc.unit_number] = { sc = sc, out = out }
   if not (sc_config.from_combinator(sc)) then
     local defaults = mod_config.sc_defaults()
     this.dlog(sc, "Applying defaults: " .. serpent.line(defaults))
@@ -67,7 +68,7 @@ end
 function this.find_all()
   dlog("Finding all existing stack combinators...")
   local start = game.ticks_played
-  all_combinators = {}
+  global.all_combinators = {}
   
   for _, surface in pairs(game.surfaces) do
     -- Find all combinator entities
@@ -85,22 +86,22 @@ function this.find_all()
   end
 
   local delta = game.ticks_played - start
-  dlog("(Re-)registered " .. table_size(all_combinators) .. " stack combinator(s) in " .. delta .. " tick(s).")
+  dlog("(Re-)registered " .. table_size(global.all_combinators) .. " stack combinator(s) in " .. delta .. " tick(s).")
 
-  start = game.ticks_played
+  combinators_listed = true
 end
 
 --- Rotate the output along with the main SC
 function this.rotate(sc, player)
-  all_combinators[sc.unit_number].out.direction = sc.direction
+  global.all_combinators[sc.unit_number].out.direction = sc.direction
 end
 
 --- Remove a stack combinator
 function this.remove(sc)
   -- Remove output
-  all_combinators[sc.unit_number].out.destroy({raise_destroy = false})
+  global.all_combinators[sc.unit_number].out.destroy({raise_destroy = false})
   -- Remove from list
-  all_combinators[sc.unit_number] = nil
+  global.all_combinators[sc.unit_number] = nil
   this.dlog(sc, "Combinator removed, output destroyed and configuration deleted.")
 end
 

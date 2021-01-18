@@ -15,7 +15,7 @@ function this.create(sc, parent)
   -- Title text
   local title = title_bar.add {
     type = "label",
-    caption = {"", {"entity-name." .. SC_ENTITY_NAME}, " " , sc.unit_number},
+    caption = { "entity-name." .. SC_ENTITY_NAME },
     style = "frame_title",
     ignored_by_interaction = true
   }

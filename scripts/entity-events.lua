@@ -9,8 +9,8 @@ local sc_config = require("entity-config")
 local this = {}
 
 --- Run on every tick
-function this.tick(ev)
-  if (all_combinators) then return end
+function this.tick()
+  if (combinators_listed) then return end
   entity.find_all()
 end
 
@@ -47,7 +47,7 @@ end
 function this.purge_missing(ev)
   -- Deleting the combinator list will trigger its recreation on next tick,
   -- which will also remove any leftover configurations.
-  all_combinators = nil
+  global.all_combinators = nil
 end
 
 return this

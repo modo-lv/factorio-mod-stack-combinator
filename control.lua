@@ -11,16 +11,21 @@ local runtime = require("scripts.runtime-events")
 local mod_picker_dollies = require("scripts.mods.picker-dollies")
 
 --[[ Scripts: Multiple handlers ]]
-event.on_init(function(ev) 
+event.on_init(function(ev)
   mod_picker_dollies.init()
+  entity.tick()
 end)
 
 event.on_load(function(ev)
   mod_picker_dollies.init()
 end)
 
+event.on_configuration_changed(function(ev) 
+  entity.tick()
+end)
+
 event.on_tick(function(ev)
-  entity.tick(ev)
+  entity.tick()
   runtime.tick(ev)
   gui.tick(ev)
 end)
