@@ -32,10 +32,10 @@ end
 
 function this.from_combinator(sc)
   local s = this.get_signal(sc)
-  return {
+  return s.type == "virtual" and {
     invert_red = s.name == "signal-red" or s.name == "signal-yellow",
     invert_green = s.name == "signal-green" or s.name == "signal-yellow"
-  }
+  } or nil
 end
 
 function this.to_combinator(sc, config)

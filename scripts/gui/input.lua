@@ -38,7 +38,7 @@ function this.create(sc, parent, sc_config)
   this.green = row.add {
     type = "checkbox",
     tooltip = {"gui.invert-description"},
-    state = (cfg and cfg.invert_red) == true,
+    state = (cfg and cfg.invert_green) == true,
     caption = {"gui.invert-green"}
   }
   this.red.style.horizontally_stretchable = true

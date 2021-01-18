@@ -55,6 +55,11 @@ end
 -- @param out The output combinator entity
 function this.add_to_list(sc, out)
   all_combinators[sc.unit_number] = { sc = sc, out = out }
+  if not (sc_config.from_combinator(sc)) then
+    local defaults = mod_config.sc_defaults()
+    this.dlog(sc, "Applying defaults: " .. serpent.line(defaults))
+    sc_config.to_combinator(sc, defaults)
+  end
   this.dlog(sc, "Added to global list.")
 end
 

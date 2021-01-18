@@ -7,7 +7,7 @@ local this = {
 }
 
 function this.tick(sc)
-
+	if not (this.signal_table) then return end
   this.signal_table.clear()
   local out = all_combinators[sc.unit_number].out
   local signals = out.get_circuit_network(
@@ -46,16 +46,12 @@ function this.create(sc, parent, sc_config)
 	scroll_pane.style.margin = 0
 	
 	this.signal_table = scroll_pane.add({
-    type = "frame",
+	  type = "frame",
 		style = "slot_button_deep_frame",
-		margin = 0,
-		minimal_height = 0
-  })
-  .add({
+	}).add({
     type = "table",
     style = "slot_table",
 		column_count = 10,
-		minimal_height = 0
 	})
 end
 
