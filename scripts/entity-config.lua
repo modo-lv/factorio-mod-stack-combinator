@@ -5,41 +5,44 @@
 -- to a signal we can store in built-in arithmetic combinator parameters.
 --------------------------------------------------------------------------------
 
-local this = {
-  signal_to_config = {},
-  config_to_signal = {}
-}
+local mod_config = require("mod-config")
 
-this.signal_to_config["signal-everything"] = { invert_red = true, invert_green = true }
-this.signal_to_config["signal-red"] = { invert_red = true, invert_green = false }
-this.signal_to_config["signal-green"] = { invert_red = false, invert_green = true }
-this.config_to_signal[true] = {}
-this.config_to_signal[true][false] = { type= "virtual", name = "signal-red" }
-this.config_to_signal[true][true] = { type= "virtual", name = "signal-everything" }
-this.config_to_signal[false] = {}
-this.config_to_signal[false][true] = { type= "virtual", name = "signal-green"}
+local this = {}
 
-
---- Convert configuration to signal
-function this.to_signal(config)
-  return this.config_to_signal[config.invert_red or false][config.invert_green or false]
+--- Should the input be inverted?
+-- @param circuit_network LuaCircuitNetwork
+-- @param config_signal SignalID indicating the stack combinator configuration
+function this.is_inverted(circuit_network, config_signal)
+  if not (circuit_network) then return false end
+  local red_or_green = circuit_network.wire_type == defines.wire_type.red
+  return config_signal.name == "signal-yellow" or config_signal.name == (red_or_green and "signal-red" or "signal-green")
 end
 
---- Convert a signal to the corresponding SC configuration
-function this.to_config(signal)
-  return this.signal_to_config[signal and signal.name] or {}
+--- Get the configuration signal from a stack size combinator.
+-- @param input LuaEntity or LuaArithmeticCombinatorControlBehavior
+function this.get_signal(input)
+  if (input.type == defines.control_behavior.type.arithmetic_combinator) then
+    return input.parameters.first_signal
+  elseif (input.type == "arithmetic-combinator" and input.name == SC_ENTITY_NAME) then
+    return input.get_or_create_control_behavior().parameters.first_signal
+  else
+    error("Stack combinator configuration can't be read from " .. input.name .. " (" .. input.type .. ")!")
+  end
 end
 
---- Read configuration from a stack combinator
 function this.from_combinator(sc)
-  local signal = sc.get_control_behavior().parameters.first_signal
-  return this.to_config(signal)
+  local s = this.get_signal(sc)
+  return {
+    invert_red = s.name == "signal-red" or s.name == "signal-yellow",
+    invert_green = s.name == "signal-green" or s.name == "signal-yellow"
+  }
 end
 
---- Write configuration to a stack combinator
 function this.to_combinator(sc, config)
-  local signal = this.to_signal(config)
-  sc.get_control_behavior().parameters = {
+  local r, g = config.invert_red, config.invert_green
+  local name = (r and g and "yellow") or (r and "red") or (g and "green") or ("black")
+  local signal = { type = "virtual", name = "signal-" .. name }
+  sc.get_or_create_control_behavior().parameters = {
     first_signal = signal
   }
 end

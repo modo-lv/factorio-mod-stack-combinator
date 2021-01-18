@@ -25,17 +25,16 @@ function this.config(ev)
   local el = ev.element
   if not (global.open_sc and el and (el.name == gui.INVERT_RED_NAME or gui.INVERT_GREEN_NAME)) 
     then return end
-  local id = global.open_sc.unit_number
   local sc = global.open_sc
 
-  local config = {}
+  local cfg = sc_config.from_combinator(sc)
   if (el.name == gui.INVERT_RED_NAME) then 
-    config.invert_red = el.state 
+    cfg.invert_red = el.state
   elseif (el.name == gui.INVERT_GREEN_NAME) then 
-    config.invert_green = el.state 
+    cfg.invert_green = el.state 
   end
 
-  sc_config.to_combinator(sc, config)
+  sc_config.to_combinator(sc, cfg)
   entity.dlog(sc, "Combinator's settings are now: " .. serpent.line(sc_config.from_combinator(sc)))
 end
 

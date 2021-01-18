@@ -4,6 +4,7 @@
 --------------------------------------------------------------------------------
 
 local entity = require("entity")
+local sc_config = require("entity-config")
 
 local this = {}
 
@@ -14,9 +15,18 @@ function this.tick(ev)
 end
 
 --- Creation events
-function this.create(event)
-  if not (event.created_entity and event.created_entity.name == SC_ENTITY_NAME) then return end
-  entity.build(event.created_entity)
+function this.create(ev)
+  local sc
+  if (ev.name == defines.events.on_built_entity or ev.name == defines.events.on_robot_built_entity) then
+    sc = ev.created_entity
+  elseif (ev.name == defines.events.on_entity_cloned) then
+    sc = ev.destination
+  else -- script_raised_built, script_raised_revive
+    sc = ev.entity  
+  end
+
+  if not (sc and sc.name == SC_ENTITY_NAME) then return end
+  entity.build(sc)
 end
 
 --- Rotation

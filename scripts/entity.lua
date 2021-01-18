@@ -14,10 +14,9 @@ end
 
 --- Build the hidden output combinator for a new stack combinator
 -- @param sc The stack combinator entity
+-- @param config Starting configuration or default
 function this.build(sc)
   this.dlog(sc, "Building output combinator...")
-  -- Set default config
-  sc_config.to_combinator(sc, mod_config.default_inversion())
   -- Create the hidden output combinator
   local out = sc.surface.create_entity {
     name = OUT_ENTITY_NAME,
@@ -46,8 +45,8 @@ function this.build(sc)
       target_circuit_id = defines.circuit_connector_id.constant_combinator
   })
 
-  this.dlog(sc, "Output combinator built and connected.")
   this.add_to_list(sc, out)  
+  this.dlog(sc, "Output combinator built and connected.")
 end
 
 

@@ -17,7 +17,7 @@ end
 
 --- Default inversion configuration
 -- @return Default SC configuration
-function this.default_inversion()
+function this.default_config()
   return { invert_red = this.invert("red"), invert_green = this.invert("green") }
 end
 

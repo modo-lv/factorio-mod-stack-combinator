@@ -11,12 +11,12 @@ local this = {}
 -- @param input LuaArithmeticCombinatorControlBehavior
 -- @param output LuaConstantCombinatorControlBehavior
 function this.process(sc, input, output)
-  local config = sc_config.from_combinator(sc)
+  local config_signal = sc_config.get_signal(input)
   local red = input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
   local green = input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
 
-  local result = this.stackify(green, config.invert_green,
-    this.stackify(red, config.invert_red)
+  local result = this.stackify(green, sc_config.is_inverted(green, config_signal),
+    this.stackify(red, sc_config.is_inverted(red, config_signal))
   )
 
   --- Not enough signal space

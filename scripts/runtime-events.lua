@@ -27,12 +27,6 @@ function this.tick(ev)
       goto next 
     end
 
-    local config = sc_config.from_combinator(sc)
-    if not (config) then
-      dlog("⚠️ Stack combinator " .. sc.unit_number .. " has no configuration despite being in the combinator list! Setting to defaults.")
-      sc_config.to_combinator(mod_config.inversion_defaults())
-    end
-
     runtime.process(sc, input, output)
     
     ::next::
