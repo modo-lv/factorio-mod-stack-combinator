@@ -1,0 +1,18 @@
+# Tag the HEAD commit on main branch with the given version, zip up the files and publish a release
+name: Publish a new version
+on: 
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: Release version, format "v1.2.3"
+        required: true
+jobs:
+  release:
+    name: Tag, zip and publish release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tag commit
+        uses: tvdias/github-tagger@v0.0.1
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          tag: "test"
