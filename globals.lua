@@ -16,13 +16,6 @@ SC_ENTITY_NAME = MOD_NAME
 g("OUT_ENTITY_NAME")
 OUT_ENTITY_NAME = SC_ENTITY_NAME .. "-output"
 
-g("RED")
-RED = true
-
-g("GREEN")
-GREEN = false
-
-
 --------------------------------------------------------------------------------
 --- # Transient
 --- Cannot be used in data phase, erased when player quits the map.
