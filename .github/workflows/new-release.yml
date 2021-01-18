@@ -19,8 +19,6 @@ jobs:
   release:
     name: Tag, zip and publish release
     runs-on: ubuntu-latest
-    env:
-      ZIPNAME: ${{ env.FILENAME }}.zip
     
     steps:
       - uses: actions/checkout@master
