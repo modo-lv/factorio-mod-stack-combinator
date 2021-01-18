@@ -19,6 +19,7 @@ jobs:
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           tag: ${{ env.VERSION_TAG }}
+      - uses: actions/checkout@master
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
