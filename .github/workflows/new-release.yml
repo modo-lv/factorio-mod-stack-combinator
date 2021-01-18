@@ -8,6 +8,7 @@ on:
         required: true
 env:
   VERSION_TAG: "v${{ github.event.inputs.version }}"
+  FILENAME: "stack-combinator_${{ github.event.inputs.version_tag }}.zip"
 jobs:
   release:
     name: Tag, zip and publish release
@@ -33,6 +34,11 @@ jobs:
       - name: Zip files
         uses: TheDoctor0/zip-release@0.4.1
         with:
-          filename: "stack-combinator_${{ github.event.inputs.version_tag }}.zip"
+          filename: ${{ env.FILENAME }}
           exclusions: "*.git*"
+      - name: Attach zip to release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{ env.FILENAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
