@@ -11,8 +11,9 @@ on:
         description: Release version, format "1.2.3". Tag will be created as "v1.2.3", but release file will not (to comply with Factorio conventions).
         required: true
 env:
-  VERSION_TAG: "v${{ github.event.inputs.version }}"
-  FILENAME: "stack-combinator_${{ github.event.inputs.version }}.zip"
+  VERSION_TAG: v${{ github.event.inputs.version }}
+  FILENAME: stack-combinator_${{ github.event.inputs.version }}
+  ZIPNAME: ${{ env.FILENAME }}.zip
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   release:
@@ -26,7 +27,7 @@ jobs:
       - name: Zip files
         uses: TheDoctor0/zip-release@0.4.1
         with:
-          filename: ${{ env.FILENAME }}
+          filename: ${{ env.ZIPNAME }}
           exclusions: "*.git*"
       - name: Create release draft
         uses: ncipollo/release-action@v1
