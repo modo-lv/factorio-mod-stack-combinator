@@ -8,7 +8,7 @@ on:
         required: true
 env:
   VERSION_TAG: "v${{ github.event.inputs.version }}"
-  FILENAME: "stack-combinator_${{ github.event.inputs.version_tag }}.zip"
+  FILENAME: "stack-combinator_${{ github.event.inputs.version }}.zip"
 jobs:
   release:
     name: Tag, zip and publish release
