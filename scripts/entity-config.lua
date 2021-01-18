@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 --- # Convert stack settings to/from arithmetic combinator
 -- Since Factorio doesn't support storing arbitrary data for built entities,
--- in order to support Blueprints we must convert stack size combinator setings
+-- in order to support Blueprints we must convert stack combinator setings
 -- to a signal we can store in built-in arithmetic combinator parameters.
 --------------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ function this.is_inverted(circuit_network, config_signal)
   return config_signal.name == "signal-yellow" or config_signal.name == (red_or_green and "signal-red" or "signal-green")
 end
 
---- Get the configuration signal from a stack size combinator.
+--- Get the configuration signal from a stack combinator.
 -- @param input LuaEntity or LuaArithmeticCombinatorControlBehavior
 function this.get_signal(input)
   if (input.type == defines.control_behavior.type.arithmetic_combinator) then

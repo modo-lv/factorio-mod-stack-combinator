@@ -63,7 +63,7 @@ function this.add_to_list(sc, out)
   this.dlog(sc, "Added to global list.")
 end
 
---- Find all stack size combinators
+--- Find all stack combinators
 function this.find_all()
   dlog("Finding all existing stack combinators...")
   local start = game.ticks_played
