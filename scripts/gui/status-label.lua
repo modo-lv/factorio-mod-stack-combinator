@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
---- # Entity status indicator of the stack size combinator GUI
+--- # Entity status indicator of the stack combinator GUI
 --------------------------------------------------------------------------------
 
 local table = require("__flib__.table")

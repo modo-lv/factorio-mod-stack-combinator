@@ -6,12 +6,12 @@ local sc_config = require("entity-config")
 
 local this = {
   elements = {
-		title_bar = require("gui.title-bar"),
-		status = require("gui.status-label"),
-		preview = require("gui.preview"),
-		input = require("gui.input"),
-		output = require("gui.output")
-	}
+    title_bar = require("gui.title-bar"),
+    status = require("gui.status-label"),
+    preview = require("gui.preview"),
+    input = require("gui.input"),
+    output = require("gui.output")
+  }
 }
 this.NAME = SC_ENTITY_NAME .. "-gui"
 this.CLOSE_BUTTON_NAME = this.NAME .. "-close"
@@ -25,35 +25,35 @@ function this.create(sc, player)
   local window = player.gui.screen.add { 
     type = "frame", 
     direction = "vertical",
-		name = this.NAME,
-		tags = { sc = sc.unit_number }
+    name = this.NAME,
+    tags = { sc = sc.unit_number }
   }
 
-	-- Title bar
+  -- Title bar
   this.elements.window = window
   this.elements.title_bar.create(sc, window)
   this.elements.title_bar.close_button.name = this.CLOSE_BUTTON_NAME
 
-	-- Main content
+  -- Main content
   local contents = window.add({
     type = "frame",
     style = "entity_frame",
-		direction = "vertical",
-	})
+    direction = "vertical",
+  })
 
-	-- Status indicator & entity preview
-	this.elements.status.create(sc, contents)
-	this.elements.preview.create(sc, contents)
+  -- Status indicator & entity preview
+  this.elements.status.create(sc, contents)
+  this.elements.preview.create(sc, contents)
 
-	-- Input configuration
-	this.elements.input.create(sc, contents, sc_config)
-	this.elements.input.red.name = this.INVERT_RED_NAME
-	this.elements.input.green.name = this.INVERT_GREEN_NAME
+  -- Input configuration
+  this.elements.input.create(sc, contents, sc_config)
+  this.elements.input.red.name = this.INVERT_RED_NAME
+  this.elements.input.green.name = this.INVERT_GREEN_NAME
 
-	contents.add { type = "line" }
+  contents.add { type = "line" }
 
-	-- Output sigjnals
-	this.elements.output.create(sc, contents)
+  -- Output sigjnals
+  this.elements.output.create(sc, contents)
 
   window.force_auto_center()
   player.opened = window

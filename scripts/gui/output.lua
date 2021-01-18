@@ -7,7 +7,7 @@ local this = {
 }
 
 function this.tick(sc)
-	if not (this.signal_table) then return end
+  if not (this.signal_table) then return end
   this.signal_table.clear()
   local out = all_combinators[sc.unit_number].out
   local signals = out.get_circuit_network(
@@ -23,8 +23,8 @@ function this.tick(sc)
       type = "sprite-button",
       style = "slot_button",
       number = entry.count,
-			sprite = entry.signal.type .. "/" .. entry.signal.name,
-			enabled = false
+      sprite = entry.signal.type .. "/" .. entry.signal.name,
+      enabled = false
     })
     ::skip::
   end
@@ -38,21 +38,21 @@ function this.create(sc, parent, sc_config)
     style = "bold_label"
   })
 
-	local scroll_pane = parent.add({
+  local scroll_pane = parent.add({
     type = "scroll-pane",
-		style = "logistics_scroll_pane",
-	})
-	scroll_pane.style.minimal_height = 0
-	scroll_pane.style.margin = 0
-	
-	this.signal_table = scroll_pane.add({
-	  type = "frame",
-		style = "slot_button_deep_frame",
-	}).add({
+    style = "logistics_scroll_pane",
+  })
+  scroll_pane.style.minimal_height = 0
+  scroll_pane.style.margin = 0
+  
+  this.signal_table = scroll_pane.add({
+    type = "frame",
+    style = "slot_button_deep_frame",
+  }).add({
     type = "table",
     style = "slot_table",
-		column_count = 10,
-	})
+    column_count = 10,
+  })
 end
 
 return this
