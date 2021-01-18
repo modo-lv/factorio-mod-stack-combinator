@@ -13,12 +13,13 @@ on:
 env:
   VERSION_TAG: v${{ github.event.inputs.version }}
   FILENAME: stack-combinator_${{ github.event.inputs.version }}
-  ZIPNAME: ${{ FILENAME }}.zip
   GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 jobs:
   release:
     name: Tag, zip and publish release
     runs-on: ubuntu-latest
+    env:
+      ZIPNAME: ${{ env.FILENAME }}.zip
     
     steps:
       - uses: actions/checkout@master
@@ -37,7 +38,7 @@ jobs:
           allowUpdates: true
           tag: ${{ env.VERSION_TAG }}
           commit: ${{ github.event.inputs.commit }}
-          artifacts: ${{ env.FILENAME }}
+          artifacts: ${{ env.ZIPNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
 
