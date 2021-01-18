@@ -3,6 +3,10 @@ name: Publish a new version
 on: 
   workflow_dispatch:
     inputs:
+      commit:
+        description: Branch or commit to tag for release.
+        required: false
+        default: master
       version:
         description: Release version, format "1.2.3". Tag will be created as "v1.2.3", but release file will not (to comply with Factorio conventions).
         required: true
@@ -16,11 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Tag latest commit
-        uses: richardsimko/update-tag@v1.0.5
-        with:
-          tag_name: ${{ env.VERSION_TAG }}
       - uses: actions/checkout@master
+      - name: Create sub-folder
+        run: mkdir ${{ env.FILENAME }} && mv * ${{ env.FILENAME }}
       - name: Zip files
         uses: TheDoctor0/zip-release@0.4.1
         with:
@@ -33,6 +35,7 @@ jobs:
           omitBody: true
           allowUpdates: true
           tag: ${{ env.VERSION_TAG }}
+          commit: ${{ github.event.inputs.commit }}
           artifacts: ${{ env.FILENAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
