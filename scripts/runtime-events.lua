@@ -10,8 +10,8 @@ local this = {}
 
 --- Run on every tick
 function this.tick(ev)
-  if not (all_combinators) then return end
-  for _, entity in pairs(all_combinators) do
+  if not (global.all_combinators) then return end
+  for _, entity in pairs(global.all_combinators) do
     local sc, out = entity.sc, entity.out
     if not (sc and sc.valid) then goto next end
     if not (out and out.valid) then 

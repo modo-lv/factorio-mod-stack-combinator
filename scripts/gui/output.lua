@@ -9,7 +9,7 @@ local this = {
 function this.tick(sc)
   if not (this.signal_table) then return end
   this.signal_table.clear()
-  local out = all_combinators[sc.unit_number].out
+  local out = global.all_combinators[sc.unit_number].out
   local signals = out.get_circuit_network(
     -- Color doesn't matter since output is connected to both cables.
     defines.wire_type.red,
