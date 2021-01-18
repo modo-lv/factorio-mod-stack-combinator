@@ -14,19 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Tag latest master commit with ${{ env.VERSION-TAG }}
+      - name: Tag latest master commit with ${{ env.VERSION_TAG }}
         uses: tvdias/github-tagger@v0.0.1
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          tag: ${{ env.VERSION-TAG }}
+          tag: ${{ env.VERSION_TAG }}
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.VERSION-TAG }}
-          release_name: Release ${{ env.VERSION-TAG }}
+          tag_name: ${{ env.VERSION_TAG }}
+          release_name: Release ${{ env.VERSION_TAG }}
           draft: true
           prerelease: false
       - name: Zip files
