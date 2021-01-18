@@ -39,6 +39,7 @@ jobs:
       - name: Attach zip to release
         uses: ncipollo/release-action@v1
         with:
+          tag: ${{ env.VERSION_TAG }}
           artifacts: ${{ env.FILENAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
