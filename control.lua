@@ -22,6 +22,7 @@ end)
 event.on_tick(function(ev)
   entity.tick(ev)
   runtime.tick(ev)
+  gui.tick(ev)
 end)
 
 --[[ Scripts: Building ]]

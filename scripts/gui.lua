@@ -62,20 +62,22 @@ function this.create(sc, player)
 	local contents = window.add({
 		type = "frame",
 		style = "item_and_count_select_background",
-		direction = "horizontal",
-	}).add({
+		direction = "vertical",
+	})
+	
+	local config = contents.add({
 		type = "table",
 		column_count = 2,
 		vertical_centering = false,
 	})
 
-	contents.add {
+	config.add {
 		type = "label",
 		caption = {"gui.invert"},
 		tooltip = {"gui.invert-description"}
 	}
 
-	local checks = contents.add {
+	local checks = config.add {
 		type = "flow",
 		direction = "vertical"
 	}
@@ -96,11 +98,38 @@ function this.create(sc, player)
 		name = this.INVERT_GREEN_NAME,
 		caption = {"gui.invert-green"},
 		tooltip = {"gui.invert-green-description"}
-  }
+	}
+
+	contents.add({
+		type = "line",
+		direction = "horizontal"
+	})
+
+	contents.add({
+		type = "label",
+		caption = {"gui.output-signals"},
+		style = "caption_label"
+	})
+	
+	local signal_table = contents.add({
+		type = "scroll-pane",
+		style = "logistics_scroll_pane"
+	}).add({
+		type = "frame",
+		style = "slot_button_deep_frame",
+	})
+	.add({
+		type = "table",
+		style = "slot_table",
+		column_count = 10,
+		minimal_width = 100,
+		minimal_height = 100,
+	})
 
   window.force_auto_center()
 	player.opened = window
 	global.open_sc = sc
+	global.open_sc_table = signal_table
   return window
 end
 

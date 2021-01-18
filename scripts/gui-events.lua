@@ -11,6 +11,29 @@ local this = {
   window = nil
 }
 
+function this.tick(ev)
+  local sc = global.open_sc
+  local table = global.open_sc_table
+  if not (sc and table) then return end
+
+  table.clear()
+  local out = all_combinators[sc.unit_number].out
+  local signals = out.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.constant_combinator).signals
+
+  if not (signals) then return end
+
+  for _, entry in pairs(signals) do
+		table.add({
+			type = "sprite-button",
+      style = "slot_button",
+      number = entry.count,
+      sprite = entry.signal.type .. "/" .. entry.signal.name
+    })
+    ::skip::
+	end
+
+end
+
 --- Show the GUI when user opens the combinator
 function this.open(ev)
   local sc = ev.entity
