@@ -3,22 +3,35 @@ name: Publish a new version
 on: 
   workflow_dispatch:
     inputs:
-      version_tag:
+      version:
         description: Release version, format "1.2.3". Tag will be created as "v1.2.3", but release file will not (to comply with Factorio conventions).
         required: true
+env:
+  VERSION_TAG: "v${{ github.event.inputs.version }}"
 jobs:
   release:
     name: Tag, zip and publish release
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Tag commit
+      - name: Tag latest master commit with ${{ env.VERSION-TAG }}
         uses: tvdias/github-tagger@v0.0.1
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          tag: "v${{github.event.inputs.version_tag}}"
-      - name: Zip Release
+          tag: ${{ env.VERSION-TAG }}
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.VERSION-TAG }}
+          release_name: Release ${{ env.VERSION-TAG }}
+          draft: true
+          prerelease: false
+      - name: Zip files
         uses: TheDoctor0/zip-release@0.4.1
         with:
-          # Filename for archive
           filename: "stack-combinator_${{ github.event.inputs.version_tag }}.zip"
+          exclusions: "*.git*"
 
