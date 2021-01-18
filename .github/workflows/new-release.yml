@@ -15,31 +15,25 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Tag latest master commit with ${{ env.VERSION_TAG }}
+      - name: Tag master branch
         uses: tvdias/github-tagger@v0.0.1
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           tag: ${{ env.VERSION_TAG }}
       - uses: actions/checkout@master
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.VERSION_TAG }}
-          release_name: Release ${{ env.VERSION_TAG }}
-          draft: true
-          prerelease: false
       - name: Zip files
         uses: TheDoctor0/zip-release@0.4.1
         with:
           filename: ${{ env.FILENAME }}
           exclusions: "*.git*"
-      - name: Attach zip to release
+      - name: Create release draft
         uses: ncipollo/release-action@v1
         with:
+          name: Release ${{ env.VERSION_TAG }}
+          omitBody: true
+          allowUpdates: true
           tag: ${{ env.VERSION_TAG }}
           artifacts: ${{ env.FILENAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
 
