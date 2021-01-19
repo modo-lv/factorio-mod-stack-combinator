@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Create sub-folder
-        run: mkdir "${{ env.FILENAME }}" && git mv * "${{ env.FILENAME }}"
+        run: mkdir "${{ env.FILENAME }}" && git mv -k * "${{ env.FILENAME }}"
       - name: Zip files
         uses: TheDoctor0/zip-release@0.4.1
         with:
