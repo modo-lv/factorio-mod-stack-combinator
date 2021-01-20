@@ -9,7 +9,7 @@ local mod_config = require("mod-config")
 local this = {
   OUTPUT_FOLDER = MOD_NAME .. "/logs",
 }
-this.output_file = this.OUTPUT_FOLDER .. "/debug.log"
+this.output_file = nil
 
 --- Print to console and debug log file
 function this.print(text, without_space)
@@ -18,6 +18,10 @@ function this.print(text, without_space)
   -- Set an ID if we don't have one
   if not (global.dlog_id and global.dlog_id > 0) then
     global.dlog_id = event.generate_id()
+  end
+
+  -- Set the file name
+  if not (this.output_file) then
     this.output_file = this.OUTPUT_FOLDER .. "/" .. global.dlog_id .. "_debug.log"
   end
 
