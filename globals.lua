@@ -22,16 +22,16 @@ OUT_ENTITY_NAME = SC_ENTITY_NAME .. "-output"
 --------------------------------------------------------------------------------
 
 if (script) then
-  --- Have all combinators been (re)registered?
   g("combinators_listed")
+  --- Have all combinators been (re)registered?
   combinators_listed = false
 
-  --- Debug logger
   g("debug_log")
+  --- Debug logger
   debug_log = require("scripts.debug-log")
 
-  -- Convenience shorthand
   g("dlog")
+  -- Convenience shorthand
   dlog = debug_log.print
 
   g("signal_space_errors")
