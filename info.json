@@ -1,14 +1,15 @@
 {
   "name": "stack-combinator",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "title": "Stack Combinator",
   "author": "modo.lv",
-  "contact": "modo@modo.lv",
+  "contact": "http://modo.lv",
   "homepage": "https://github.com/modo-lv/factorio-mod-stack-combinator",
   "factorio_version": "1.1",
   "dependencies": [
     "base >= 1.1",
     "flib"
   ],
-  "description": "A combinator that multiplies item signal values by their stack sizes."
+  "description": "A combinator that multiplies item signal values by their stack sizes.",
+  "license": "[Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)"
 }

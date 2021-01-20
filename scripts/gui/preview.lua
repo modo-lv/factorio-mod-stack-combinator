@@ -15,10 +15,8 @@ function this.create(sc, parent)
 	
 	local ep = ep_frame.add {
 		type = "entity-preview",
+		style = "wide_entity_button"
 	}
-	ep.style.minimal_width = 400
-	ep.style.height = 146
-	ep.style.horizontally_stretchable = true
 	ep.entity = sc
 end
 
