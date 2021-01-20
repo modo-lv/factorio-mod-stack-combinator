@@ -19,29 +19,28 @@ function this.create(sc, parent, sc_config)
     type = "table",
     direction = "horizontal",
     column_count = 2,
-    --style = "control_settings_section_frame"
-    --style = "entity_frame"
-    tooltip = {"gui.invert-description"},
+    tooltip = { "gui.invert-description" },
   }
-  row.style.horizontally_stretchable = true
-
+  
   local cfg = sc_config.from_combinator(sc)
 
   this.red = row.add {
     type = "checkbox",
     tooltip = {"gui.invert-description"},
     state = (cfg and cfg.invert_red) == true,
-    caption = {"gui.invert-red"}
+    caption = { "", { "gui.invert-wire", "[item=red-wire]" } }
   }
   this.red.style.horizontally_stretchable = true
+  this.red.style.horizontally_squashable = false
 
   this.green = row.add {
     type = "checkbox",
     tooltip = {"gui.invert-description"},
     state = (cfg and cfg.invert_green) == true,
-    caption = {"gui.invert-green"}
+    caption = { "", { "gui.invert-wire", "[item=green-wire]" } }
   }
-  this.red.style.horizontally_stretchable = true
+  this.green.style.horizontally_stretchable = false
+  this.green.style.horizontally_squashable = false
 
 end
 

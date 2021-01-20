@@ -11,7 +11,7 @@ end
 
 --- Is an input set to be inverted by default?
 function this.invert(color)
-  local setting = settings.global[MOD_NAME .. "-defaults-invert"].value
+  local setting = settings.global[MOD_NAME .. "-invert"].value
   return setting == color or setting == "both"
 end
 

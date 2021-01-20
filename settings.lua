@@ -13,7 +13,7 @@ data:extend{
   -- Map
   {
     setting_type = "runtime-global",
-    name = MOD_NAME .. "-defaults-invert",
+    name = MOD_NAME .. "-invert",
     type = "string-setting",
     default_value = "none",
     allowed_values = {
