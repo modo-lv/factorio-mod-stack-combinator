@@ -1,80 +1,84 @@
 --------------------------------------------------------------------------------
---- # Main combinator logic
+--- # Runtime management
+-- @type Runtime
 --------------------------------------------------------------------------------
 
-local sc_config = require("entity-config")
+-- Game globals
+local _game = game
+local _global = global
+local _math = math
+-- Libraries
+local _event = require('__stdlib__/stdlib/event/event')
+local _table = require '__stdlib__/stdlib/utils/table'
+-- Components
+local StackCombinator = require("stack-combinator")
 
-local this = {}
 
---- Main combinator logic, process combinator inputs into stackified output
--- @param sc Stack combinator entity
--- @param input LuaArithmeticCombinatorControlBehavior
--- @param output LuaConstantCombinatorControlBehavior
-function this.process(sc, input, output)
-  local config_signal = sc_config.get_signal(input)
-  local red = input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
-  local green = input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
+local Runtime = {
+  --- List of all stack combinators on the map
+  combinators = nil,
 
-  local result = this.stackify(green, sc_config.is_inverted(green, config_signal),
-    this.stackify(red, sc_config.is_inverted(red, config_signal))
-  )
+  --- ID of a playthrough, remains unchanging within a save file.
+  game_id = nil
+}
 
-  --- Not enough signal space
-  if (table_size(result) > output.signals_count) then
-    if not (signal_space_errors[sc.unit_number]) then
-      signal_space_errors[sc.unit_number] = {"gui.signal-space-error-description", table_size(result), output.signals_count}
-    end
-    for _, player in pairs(game.players) do
-      player.add_custom_alert(sc, { type = "item", name = SC_ENTITY_NAME }, signal_space_errors[sc.unit_number], true)
-    end
 
-    output.parameters = {}
-    return
-  end
-
-  --- Clear the error if signal count is OK now
-  if (signal_space_errors[sc.unit_number]) then
-    signal_space_errors[sc.unit_number] = nil
-    for _, player in pairs(game.players) do
-      player.remove_alert {
-        entity = sc,
-        type = defines.alert_type.custom,
-        icon = { type = "item", name = SC_ENTITY_NAME }
-      }
-    end
-  end
-
-  local i = 1
-  for _, entry in pairs(result) do
-    entry.index = i
-    i = i + 1
-  end
-  
-  output.parameters = result
+--- Get the stack combinator data for an existing input entity
+function Runtime:sc(input)
+  return self.combinators[input.unit_name]
 end
 
---- Convert a circuit network signal values to their stack sizes
--- @param input LuaCircuitNetwork
--- @param invert Multiply all stackified signal values by -1?
--- @param result Already processed signals from the other wire
-function this.stackify(input, invert, result)
-  result = result or {}
-  if (not input or not input.signals) then return result end
-  local multiplier = 1 if (invert) then multiplier = -1 end
+--- Find and register all existing stack combinators on the map
+function Runtime:register_combinators()
+  local start = _game.ticks_played
+  self.combinators = {}
 
-  for _, entry in ipairs(input.signals) do
-    local name = entry.signal.name
-    local stack = entry.count
-    if (entry.signal.type == "item") then
-      stack = stack * game.item_prototypes[name].stack_size * multiplier
-    end
-    if (result[name]) then
-      result[name].count = result[name].count + stack
-    else
-      result[name] = { signal = entry.signal, count = stack }
+  for _, surface in pairs(_game.surfaces) do
+    -- Find all SC entities
+    local scs = surface.find_entities_filtered({ name = StackCombinator.INPUT_NAME })
+    -- Find each SC's output and store both in the list
+    for _, input in pairs(scs) do
+      local output = surface.find_entity(StackCombinator.Output.NAME, input.position)
+      if not output then 
+        error("Stack Combinator " .. input.id 
+        .. " (at {" .. input.position.x .. ", " .. input.position.y .. "} on " 
+        .. surface.name  .. ") has no output!") 
+      end
+
+      self.register_sc(StackCombinator.created(input, output))
     end
   end
-  return result
+
+  local delta = game.ticks_played - start
+  self.save()
+  dlog("(Re-)registered " .. table_size(global.all_combinators) .. " stack combinator(s) in " .. delta .. " tick(s).")
 end
 
-return this
+
+--- Register an existing stack combinator
+-- @tparam LuaEntity input Stack combinator entity
+-- @tparam LuaEntity output Stack combinator output entity
+function Runtime:register_sc(sc)
+  if not (self.combinators) then self.combinators = {} end
+  self.combinators[sc.id] = sc
+  self:save()
+end
+
+
+--- Unregister a no longer existing stack combinator.
+-- @tparam StackCombinator Stack combinator to unregister
+function Runtime:unregister_sc(sc)
+  self.combinators[sc.id] = nil
+  self:save()
+end
+
+
+--- Update persistent data
+function Runtime:save()
+  global.combinators = _table.map(self.combinators, function(sc) return true end)
+  global.game_id = self.game_id
+end
+
+
+--------------------------------------------------------------------------------
+return Runtime
