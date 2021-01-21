@@ -2,9 +2,9 @@
 --- # Entity preview "window" in the combinator GUI
 --------------------------------------------------------------------------------
 
-local this = {}
+local GuiPreview = {}
 
-function this.create(sc, parent)
+function GuiPreview:create(sc, parent)
 	local ep_frame = parent.add {
 		type = "frame",
 		style = "deep_frame_in_shallow_frame",
@@ -17,7 +17,7 @@ function this.create(sc, parent)
 		type = "entity-preview",
 		style = "wide_entity_button"
 	}
-	ep.entity = sc
+	ep.entity = sc.input
 end
 
-return this
+return GuiPreview

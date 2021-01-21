@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
---- # Mod metadata
+--- # Mod globals
 -- @type Mod
 --------------------------------------------------------------------------------
 
@@ -10,19 +10,16 @@ local Mod = {
   settings = nil
 }
 
---- Initialize mod
+--- Initialize basic mod-level stuff
 function Mod.init()
   Game = game
   Mod.settings:load()
-  Mod.events:unregister_init()
   Mod.debug:log("Mod initialized.")
 end
 
-
---- Unique(-ish) ID for the current save, so that debug logging can keep up
--- with switching between different save files.
+--- Unique(-ish) ID for the current save, so that we can have one persistent
+-- log file per savegame
 local game_id = nil
-
 --- Get (generating if necessary) game ID
 function Mod:game_id()
   if (game_id) then return game_id end
@@ -34,7 +31,6 @@ function Mod:game_id()
   end
   return game_id
 end
-
 
 --------------------------------------------------------------------------------
 return Mod

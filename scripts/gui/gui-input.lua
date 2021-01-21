@@ -2,17 +2,17 @@
 --- # Input (configuration)
 --------------------------------------------------------------------------------
 
-local this = {
+local GuiInput = {
   red = nil,
   green = nil,
 }
 
-function this.create(sc, parent, sc_config)
+function GuiInput:create(sc, parent)
   parent.add {
     type = "label",
     style = "bold_label",
     -- Built-in localisation
-    caption = {"gui-arithmetic.input"}
+    caption = { "gui-arithmetic.input" }
   }
 
   local row = parent.add {
@@ -22,26 +22,26 @@ function this.create(sc, parent, sc_config)
     tooltip = { "gui.invert-description" },
   }
   
-  local cfg = sc_config.from_combinator(sc)
-
-  this.red = row.add {
+  GuiInput.red = row.add {
     type = "checkbox",
     tooltip = {"gui.invert-description"},
-    state = (cfg and cfg.invert_red) == true,
+    state = sc.config.invert_red,
     caption = { "", { "gui.invert-wire", "[item=red-wire]" } }
   }
-  this.red.style.horizontally_stretchable = true
-  this.red.style.horizontally_squashable = false
+  GuiInput.red.style.horizontally_stretchable = true
+  GuiInput.red.style.horizontally_squashable = false
 
-  this.green = row.add {
+  GuiInput.green = row.add {
     type = "checkbox",
     tooltip = {"gui.invert-description"},
-    state = (cfg and cfg.invert_green) == true,
+    state = sc.config.invert_green,
     caption = { "", { "gui.invert-wire", "[item=green-wire]" } }
   }
-  this.green.style.horizontally_stretchable = false
-  this.green.style.horizontally_squashable = false
+  GuiInput.green.style.horizontally_stretchable = false
+  GuiInput.green.style.horizontally_squashable = false
 
 end
 
-return this
+--------------------------------------------------------------------------------
+
+return GuiInput

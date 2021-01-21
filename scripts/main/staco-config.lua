@@ -41,7 +41,9 @@ function StackCombinatorConfig:save()
   self.sc.input.get_or_create_control_behavior().parameters = {
     first_signal = signal
   }
-  self.sc:debug_log("Configured: ")
+  local output = _table.deep_copy(self)
+  output.sc = nil
+  self.sc:debug_log("Configured: " .. _serpent.line(output))
 end
 
 
@@ -52,7 +54,7 @@ function StackCombinatorConfig:load_or_default()
     self.invert_red = signal.name == "signal-red" or signal.name == "signal-yellow"
     self.invert_green = signal.name == "signal-green" or signal.name == "signal-yellow"
   else
-    self.sc:debug_log("Combinator has no [valid] configuration (signal is " .. _serpent.line(signal) .. "), resetting to defaults.")
+    self.sc:debug_log("No valid configuration (signal is " .. _serpent.line(signal) .. "), resetting to defaults.")
     _table.merge(self, Mod.settings.default_config)
     self:save()
   end

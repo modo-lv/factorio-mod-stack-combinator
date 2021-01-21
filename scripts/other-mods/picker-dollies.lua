@@ -9,7 +9,7 @@ local _remote = remote
 local _event = require('__stdlib__/stdlib/event/event')
 
 -- Classes
-local StackCombinator = require("stack-combinator")
+local StackCombinator = require("staco")
 
 
 local PickerDollies = {}
@@ -22,12 +22,12 @@ function PickerDollies:init()
 end
 
 local function filter(ev)
-  return ev.moved_entity and ev.moved_entity.name == StackCombinator.INPUT_NAME
+  return ev.moved_entity and ev.moved_entity.name == StackCombinator.NAME
 end
 
 --- Move the output after moving stack combinator
 function PickerDollies:moved(ev)
-  _runtime.sc(ev.moved_entity).moved()
+  _runtime:sc(ev.moved_entity).moved()
 end
 
 return PickerDollies

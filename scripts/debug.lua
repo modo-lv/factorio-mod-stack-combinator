@@ -1,8 +1,10 @@
 --------------------------------------------------------------------------------
 --- # Debugging features
 --------------------------------------------------------------------------------
+
 -- Global imports
 local _event = require('__stdlib__/stdlib/event/event')
+
 
 local Debug = {
   --- Where to write the debug logs (relative to ~/factorio/script-output)
@@ -30,7 +32,7 @@ function Debug:log(message)
   -- local prefix = "[" .. Mod.game_id() .. " - " ..   .. "] "
   -- local output = prefix .. message
   local time = self:tiks_to_timestring()
-  Game.print({"debug.log-format", time, Mod.NAME, Mod:game_id(), message})
+  Game.print({"debug.console-format", time, Mod.NAME, Mod:game_id(), message})
 
   local output = "[" .. time .. "] (" .. Mod:game_id() .. ") " .. message .. "\n"
   Game.write_file(self.output_file, output, true)
@@ -52,7 +54,7 @@ function Debug:tiks_to_timestring(tick)
     local hours = math.floor(total_seconds / 3600)
     return string.format("%d:%02d:%02d", hours, minutes, seconds)
   else
-    return string.format("%d:%02d", minutes, seconds)
+    return string.format("%02d:%02d", minutes, seconds)
   end
 end
 

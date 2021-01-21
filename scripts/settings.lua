@@ -3,15 +3,14 @@
 -- @type ModSettings
 --------------------------------------------------------------------------------
 
--- Global imports
-local _settings = settings
+--- Default inversion setting name
+local DEFAULTS_INVERT = Mod.NAME .. "-defaults-invert"
+local DEBUG_MODE = Mod.NAME .. "-debug-mode"
 
----
+--- Have settings been loaded from game's configuration into mod runtime?
+local loaded = false
+
 local ModSettings = {
-  DEFAULTS_INVERT = Mod.NAME .. "-defaults-invert",
-
-  loaded = false,
-
   --- Is debug mode enabled?
   is_debug = false,
 
@@ -20,16 +19,20 @@ local ModSettings = {
 }
 
 --- Load settings from the game
+-- @tparam Boolean force Reload settings if they've been loaded before?
 function ModSettings:load(force)
   if (loaded and not force) then return end
-  self.is_debug = _settings.global[Mod.NAME .. "-debug-mode"].value == true
-  local invert = _settings.global[self.DEFAULTS_INVERT].value
+
+  self.is_debug = Settings.global[DEBUG_MODE].value == true
+  local invert = Settings.global[DEFAULTS_INVERT].value
+  local prefix = (loaded and force) and "re" or ""
   self.default_config = { 
     invert_red = invert == "red" or invert == "both",
     invert_green = invert == "green" or invert == "both"
   }
-  self.loaded = true
-  Mod.debug:log("Settings loaded.")
+  loaded = true
+  Mod.debug:log("Settings "..prefix.."loaded.")
+
   return self
 end
 

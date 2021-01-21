@@ -1,10 +1,10 @@
-require("globals")
+local Mod = require("scripts/mod")
 
 data:extend{
   -- Startup
   {
     setting_type = "startup",
-    name = MOD_NAME .. "-signal-capacity",
+    name = Mod.NAME .. "-signal-capacity",
     type = "int-setting",
     default_value = 40,
     minimum_value = 20,
@@ -13,7 +13,7 @@ data:extend{
   -- Map
   {
     setting_type = "runtime-global",
-    name = MOD_NAME .. "-defaults-invert",
+    name = Mod.NAME .. "-defaults-invert",
     type = "string-setting",
     default_value = "none",
     allowed_values = {
@@ -26,7 +26,7 @@ data:extend{
   },
   {
     setting_type = "runtime-global",
-    name = MOD_NAME .. "-debug-mode",
+    name = Mod.NAME .. "-debug-mode",
     type = "bool-setting",
     default_value = false,
     order = "z"

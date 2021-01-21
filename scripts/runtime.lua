@@ -3,55 +3,54 @@
 -- @type Runtime
 --------------------------------------------------------------------------------
 
--- Game globals
-local _game = game
-local _global = global
-local _math = math
 -- Libraries
-local _event = require('__stdlib__/stdlib/event/event')
 local _table = require '__stdlib__/stdlib/utils/table'
 -- Components
-local StackCombinator = require("stack-combinator")
+local StaCo = require("main/staco")
 
+--------------------------------------------------------------------------------
 
 local Runtime = {
   --- List of all stack combinators on the map
   combinators = nil,
 
   --- ID of a playthrough, remains unchanging within a save file.
-  game_id = nil
+  game_id = nil,
+
+  --- Errors/alerts about overloaded StaCos
+  signal_space_errors = {}
 }
 
 
 --- Get the stack combinator data for an existing input entity
 function Runtime:sc(input)
-  return self.combinators[input.unit_name]
+  return self.combinators[input.unit_number]
 end
 
 --- Find and register all existing stack combinators on the map
 function Runtime:register_combinators()
-  local start = _game.ticks_played
+  local start = Game.ticks_played
   self.combinators = {}
 
-  for _, surface in pairs(_game.surfaces) do
+  for _, surface in pairs(Game.surfaces) do
     -- Find all SC entities
-    local scs = surface.find_entities_filtered({ name = StackCombinator.INPUT_NAME })
+    local scs = surface.find_entities_filtered({ name = StaCo.NAME })
     -- Find each SC's output and store both in the list
     for _, input in pairs(scs) do
-      local output = surface.find_entity(StackCombinator.Output.NAME, input.position)
+      local output = surface.find_entity(StaCo.Output.NAME, input.position)
       if not output then 
         error("Stack Combinator " .. input.id 
         .. " (at {" .. input.position.x .. ", " .. input.position.y .. "} on " 
         .. surface.name  .. ") has no output!") 
       end
 
-      self.register_sc(StackCombinator.created(input, output))
+      self:register_sc(StaCo.created(input, output))
     end
   end
 
   local delta = game.ticks_played - start
-  self.save()
-  dlog("(Re-)registered " .. table_size(global.all_combinators) .. " stack combinator(s) in " .. delta .. " tick(s).")
+  self:save()
+  Mod.debug:log("(Re-)registered " .. table_size(self.combinators) .. " stack combinator(s) in " .. delta .. " tick(s).")
 end
 
 
@@ -66,10 +65,11 @@ end
 
 
 --- Unregister a no longer existing stack combinator.
--- @tparam StackCombinator Stack combinator to unregister
+-- @tparam StaCo Stack combinator to unregister
 function Runtime:unregister_sc(sc)
   self.combinators[sc.id] = nil
   self:save()
+  sc:debug_log("Combinator unregistered.")
 end
 
 

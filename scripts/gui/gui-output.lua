@@ -30,7 +30,7 @@ function this.tick(sc)
   end
 end
 
-function this.create(sc, parent, sc_config)
+function this:create(sc, parent, sc_config)
   parent.add({
     type = "label",
     -- Built-in localisation

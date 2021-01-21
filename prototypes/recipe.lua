@@ -23,11 +23,4 @@ local recipe = {
   }
 }
 
--- Everything costs double in expensive mode
-recipe.expensive = table.deepcopy(recipe.normal)
-for _, ingredient in ipairs(recipe.expensive.ingredients) do
-  ingredient[2] = ingredient[2] * 2
-end
-recipe.expensive.energy_required = recipe.expensive.energy_required * 2
-
 data:extend{recipe}
