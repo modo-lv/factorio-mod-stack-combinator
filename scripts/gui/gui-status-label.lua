@@ -55,7 +55,7 @@ function GuiStatusLabel:create(sc, parent)
   }
   spacer.style.horizontally_stretchable = true
 
-  id = flow.add {
+  flow.add {
     type = "label",
     caption = "ID: " .. sc.id
   }

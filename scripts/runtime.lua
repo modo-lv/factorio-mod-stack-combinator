@@ -21,6 +21,14 @@ local Runtime = {
   signal_space_errors = {}
 }
 
+--- Run the main logic on all StaCos
+-- For binding to the on_tick event
+function Runtime:run_combinators()
+  if not (self.combinators) then self.register_combinators() end
+  for _, sc in pairs(self.combinators) do
+    sc:run()
+  end
+end
 
 --- Get the stack combinator data for an existing input entity
 function Runtime:sc(input)
@@ -29,6 +37,8 @@ end
 
 --- Find and register all existing stack combinators on the map
 function Runtime:register_combinators()
+  if (not Game and game) then Game = game end
+
   local start = Game.ticks_played
   self.combinators = {}
 

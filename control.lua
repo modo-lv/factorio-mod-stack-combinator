@@ -5,7 +5,7 @@
 
 -- Avoid DebugAdapter warnings in VS Code Factorio Mod Debug.
 if (__DebugAdapter and __DebugAdapter.defineGlobal) then
-  for _, var in ipairs({"Game", "Settings", "Mod"}) do
+  for _, var in ipairs({"Game", "Settings", "Mod", "Remote"}) do
     __DebugAdapter.defineGlobal(var)
   end
 end
@@ -13,6 +13,7 @@ end
 -- Consistent global naming
 Game = nil -- unavailable until game started
 Settings = settings
+Remote = remote
 
 -- Sequence matters! Mod.* objects depend on Mod & other Mod.* objects.
 Mod = require("scripts/mod")
@@ -23,9 +24,9 @@ Mod.gui = require("scripts/gui/gui")
 
 -- Register mod events
 require("scripts/mod-events").register_all()
-require("scripts/runtime-events"):register_all()
-require("scripts/main/staco-events"):register_all()
+require("scripts/runtime-events").register_all()
+require("scripts/main/staco-events").register_all()
 require("scripts/gui/gui-events"):register_all()
 
 -- Compatibility
-require("scripts/other-mods/picker-dollies"):init()
+require("scripts/other-mods/picker-dollies").register_all()

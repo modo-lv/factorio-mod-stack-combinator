@@ -29,7 +29,7 @@ end
 
 --- Rotation
 local function rotate(ev)
-  Mod.runtime:sc(ev.entity).rotated()
+  Mod.runtime:sc(ev.entity):rotated()
 end
 
 
@@ -47,9 +47,16 @@ local function purge(ev)
   Mod.runtime:register_combinators()
 end
 
+local function run()
+  Mod.runtime:run_combinators()
+end
+
 
 --- Register all stack combinator lifecycle events
-function StackCombinatorEvents:register_all()
+function StackCombinatorEvents.register_all()
+  -- Run
+  _event.register(defines.events.on_tick, run)
+
   -- Creation
   _event.register(defines.events.on_built_entity, create, event_filter,
     "created_entity")
@@ -57,8 +64,8 @@ function StackCombinatorEvents:register_all()
     "created_entity")
   _event.register(defines.events.on_entity_cloned, create, event_filter,
     "destination")
-  _event.register(defines.events.script_raised_built, create)
-  _event.register(defines.events.script_raised_revive, create)
+  _event.register(defines.events.script_raised_built, create, event_filter)
+  _event.register(defines.events.script_raised_revive, create, event_filter)
   -- Handling
   _event.register(defines.events.on_player_rotated_entity, rotate, event_filter)
   -- Removal

@@ -38,17 +38,21 @@ function StackCombinator:run()
     defines.wire_type.green, 
     defines.circuit_connector_id.combinator_input
   )
-  local cfg = self.config:load()
-
+  
   local result = 
-    this.stackify(green, cfg.invert_green, 
-      this.stackify(red, cfg.invert_red))
+    self.stackify(green, self.config.invert_green, 
+      self.stackify(red, self.config.invert_red)
+    )
+
+  local output = self.output.get_control_behavior()
 
   --- Not enough signal space
-  if (table_size(result) > self.output.signals_count) then
+  local max = self.output.prototype.item_slot_count
+  local total = table_size(result)
+  if (total > max) then
     if not (Mod.runtime.signal_space_errors[sc.unit_number]) then
       Mod.runtime.signal_space_errors[sc.unit_number] = 
-        { "gui.signal-space-error-description", table_size(result), output.signals_count }
+        { "gui.signal-space-error-description", total, max }
     end
     for _, player in pairs(game.players) do
       player.add_custom_alert(
@@ -59,7 +63,7 @@ function StackCombinator:run()
       )
     end
 
-    self.output.parameters = {}
+    output.parameters = {}
     return
   end
 
@@ -81,7 +85,7 @@ function StackCombinator:run()
     i = i + 1
   end
   
-  self.output.parameters = result
+  output.parameters = result
 end
 
 
@@ -135,7 +139,7 @@ end
 function StackCombinator:rotated()
   -- Rotate output as well
   self:debug_log("Input rotated, rotating output to match.")
-  self.output.direction = self.direction
+  self.output.direction = self.input.direction
 end
 
 

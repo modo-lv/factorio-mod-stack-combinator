@@ -2,15 +2,14 @@
 --- # Output (signals)
 --------------------------------------------------------------------------------
 
-local this = {
+local GuiOutput = {
   signal_table = nil
 }
 
-function this.tick(sc)
-  if not (this.signal_table) then return end
-  this.signal_table.clear()
-  local out = global.all_combinators[sc.unit_number].out
-  local signals = out.get_circuit_network(
+function GuiOutput:tick(sc)
+  if not (self.signal_table) then return end
+  self.signal_table.clear()
+  local signals = sc.output.get_circuit_network(
     -- Color doesn't matter since output is connected to both cables.
     defines.wire_type.red,
     defines.circuit_connector_id.constant_combinator
@@ -19,7 +18,7 @@ function this.tick(sc)
   if not (signals) then return end
 
   for _, entry in pairs(signals) do
-    this.signal_table.add({
+    self.signal_table.add({
       type = "sprite-button",
       style = "slot_button",
       number = entry.count,
@@ -30,11 +29,11 @@ function this.tick(sc)
   end
 end
 
-function this:create(sc, parent, sc_config)
+function GuiOutput:create(sc, parent)
   parent.add({
     type = "label",
     -- Built-in localisation
-    caption = {"gui-constant.output-signals"},
+    caption = { "gui-constant.output-signals" },
     style = "bold_label"
   })
 
@@ -45,14 +44,13 @@ function this:create(sc, parent, sc_config)
   scroll_pane.style.minimal_height = 0
   scroll_pane.style.margin = 0
   
-  this.signal_table = scroll_pane.add({
+  self.signal_table = scroll_pane.add({
     type = "frame",
     style = "slot_button_deep_frame",
-  }).add({
+  }).add {
     type = "table",
-    style = "slot_table",
-    column_count = 10,
-  })
+    column_count = 10
+  }
 end
 
-return this
+return GuiOutput

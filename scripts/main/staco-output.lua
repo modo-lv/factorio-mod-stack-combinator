@@ -10,7 +10,7 @@ local StackCombinatorOutput = {
 -- @treturn LuaEntity The output combinator attached to the given SC input.
 function StackCombinatorOutput.create(sc)
   local input = sc.input
-  local output = input.surface:create_entity {
+  local output = input.surface.create_entity {
     name = StackCombinatorOutput.NAME,
     position = input.position,
     force = input.force,

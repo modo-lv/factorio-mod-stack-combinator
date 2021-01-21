@@ -11,21 +11,23 @@ local StaCo = require("staco")
 
 local GuiEvents = {}
 
+--- Every tick updates (status & signals)
+local function tick(ev)
+  local sc = Mod.gui.staco
+  Mod.gui.elements.status:tick(sc)
+  Mod.gui.elements.output:tick(sc)
+end
+
+
 --- Show the GUI when user opens the combinator
-function GuiEvents.open(ev)
+local function open(ev)
   Mod.gui:create(
     Mod.runtime:sc(ev.entity),
     game.get_player(ev.player_index)
   )
-end
 
---- Every tick updates (status & signals)
-function GuiEvents.tick(ev)
-  local sc = Mod.gui.staco
-  if not (sc) then return end
-
-  Mod.gui.elements.status:tick(sc)
-  Mod.gui.elements.output:tick(sc)
+  -- Tick
+  _event.register(defines.events.on_tick, tick)
 end
 
 --- Update combinator's settings when user changes them
@@ -49,14 +51,14 @@ end
 --- Remove the GUI when its closed
 function GuiEvents.close(ev)
   Mod.gui:destroy(Game.get_player(ev.player_index))
+
+  _event.remove(defines.events.on_tick, tick)
 end
 
 --- Register handlers to their events
 function GuiEvents.register_all()
   -- Open
-  _event.register(
-    defines.events.on_gui_opened,
-    GuiEvents.open, 
+  _event.register(defines.events.on_gui_opened, open, 
     function(ev) return ev.entity and ev.entity.name == StaCo.NAME end
   )
 
