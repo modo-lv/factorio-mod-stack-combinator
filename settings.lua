@@ -1,4 +1,4 @@
-local Mod = require("scripts/mod")
+local Mod = require("mod")
 
 local startup = {
   {

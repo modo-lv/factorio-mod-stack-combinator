@@ -3,6 +3,10 @@
 local RuntimeSettings = {
   invert_signals = "none",
 
+  NAMES = {
+    invert_signals = Mod.NAME .. "-defaults-invert"
+  },
+
   default_staco_config = nil,
 }
 

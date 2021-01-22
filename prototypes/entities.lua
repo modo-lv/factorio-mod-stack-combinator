@@ -12,10 +12,10 @@ local out = table.deepcopy(data.raw["constant-combinator"]["constant-combinator"
 out.name = StaCo.Output.NAME
 out.minable = nil
 out.collision_mask = {}
-out.item_slot_count = Mod.settings.startup().signal_capacity
+out.item_slot_count = Mod.settings:startup().signal_capacity
 table.insert(out.flags, "placeable-off-grid")
 
-Mod.logger.debug("Entity `" .. out.name .. "` defined, signal capacity: " .. out.item_slot_count)
+Mod.logger:debug("Entity `" .. out.name .. "` defined, signal capacity: " .. out.item_slot_count)
 
 
 -- Main combinator
@@ -76,6 +76,6 @@ sc.power_symbol_sprites = display
 sc.right_shift_symbol_sprites = display
 sc.xor_symbol_sprites = display
 
-Mod.logger.debug("Entity `" .. sc.name .. "` defined.")
+Mod.logger:debug("Entity `" .. sc.name .. "` defined.")
 
 data:extend { sc, out }
