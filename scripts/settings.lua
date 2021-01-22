@@ -1,41 +1,44 @@
---------------------------------------------------------------------------------
---- # Mod runtime settings
--- @type ModSettings
---------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+--- Access to all mod settings
+local Settings = {}
+local StartupSettings = require("settings-startup")
+local RuntimeSettings = require("settings-runtime")
 
---- Default inversion setting name
-local DEFAULTS_INVERT = Mod.NAME .. "-defaults-invert"
+local SIGNAL_CAPACITY = Mod.NAME .. "-signal-capacity"
 local DEBUG_MODE = Mod.NAME .. "-debug-mode"
 
---- Have settings been loaded from game's configuration into mod runtime?
-local loaded = false
+local INVERT_SIGNALS = Mod.NAME .. "-defaults-invert"
 
-local ModSettings = {
-  --- Is debug mode enabled?
-  is_debug = false,
+--- Startup settings
+local startup = nil
+--- Runtime settings
+local runtime = nil
 
-  --- Default configuration for new stack combinators
-  default_config = { invert_red = false, invert_green = false }
-}
 
---- Load settings from the game
--- @tparam Boolean force Reload settings if they've been loaded before?
-function ModSettings:load(force)
-  if (loaded and not force) then return end
-
-  self.is_debug = Settings.global[DEBUG_MODE].value == true
-  local invert = Settings.global[DEFAULTS_INVERT].value
-  local prefix = (loaded and force) and "re" or ""
-  self.default_config = { 
-    invert_red = invert == "red" or invert == "both",
-    invert_green = invert == "green" or invert == "both"
-  }
-  loaded = true
-  Mod.debug:log("Settings "..prefix.."loaded.")
-
-  return self
+--- Access mod's startup settings
+-- @treturn StartupSettings
+function Settings.startup()
+  if (not startup) then
+    startup = {
+      debug_mode = settings.startup[DEBUG_MODE].value or StartupSettings.debug_mode,
+      signal_capacity = settings.startup[SIGNAL_CAPACITY].value or StartupSettings.signal_capacity
+    }
+    Mod.logger.debug("Startup settings: " .. serpent.line(startup))
+  end
+  return startup or error("Failed to load startup settings.")
 end
 
+--- Access mod's runtime settings
+-- @treturn RuntimeSettings
+function Settings.runtime(reload)
+  if (not runtime) or (reload) then
+    runtime = RuntimeSettings.new {
+      invert_signals = settings.global[INVERT_SIGNALS].value
+    }
+    Mod.logger.debug("Runtime settings: " .. serpent.line(runtime))
+  end
+  return runtime or error("Failed to load runtime settings.")
+end
 
---------------------------------------------------------------------------------
-return ModSettings
+----------------------------------------------------------------------------------------------------
+return Settings

@@ -1,4 +1,4 @@
-local StaCo = require("scripts/main/staco")
+local StaCo = require("scripts/staco/staco")
 
 local sc = table.deepcopy(data.raw["item"]["arithmetic-combinator"])
 

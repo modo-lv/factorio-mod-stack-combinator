@@ -50,7 +50,7 @@ end
 
 --- Remove the GUI when its closed
 function GuiEvents.close(ev)
-  Mod.gui:destroy(Game.get_player(ev.player_index))
+  Mod.gui:destroy(game.get_player(ev.player_index))
 
   _event.remove(defines.events.on_tick, tick)
 end

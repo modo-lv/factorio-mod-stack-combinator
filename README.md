@@ -18,7 +18,7 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 * **Crafting costs** are an *arithmetic combinator* and a *repair pack*.
 * Can be **moved around with [Picker Dollies](https://mods.factorio.com/mod/PickerDollies)**.
 * **Multiplayer** hasn't been tested, but the mod was written to function as close to the vanilla arithmetic combinator as possible, so it *should* be OK.
-* Suppports **expensive mode**.
+* Takes twice as long long to build in **expensive mode**.
 
 ## Limitations
 * Due to the way game works, the **maximum amount of output signals** is initially limited to 20 (the signal capacity of the vanilla *constant combinator*). You can increase the limit in startup settings, but it may affect performance (according to [Larger Constant Combinator's changelog](https://mods.factorio.com/mod/Larger-Constant-Combinator/changelog); I haven't done any large-scale testing myself).

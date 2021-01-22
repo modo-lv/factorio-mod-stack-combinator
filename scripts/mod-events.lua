@@ -1,35 +1,29 @@
---------------------------------------------------------------------------------
---- # Mod events
--- @type ModEvents
---------------------------------------------------------------------------------
-
-local _event = require('__stdlib__/stdlib/event/event')
-
---------------------------------------------------------------------------------
-
+---------------------------------------------------------------------------------------------------
+--- Mod events
+---------------------------------------------------------------------------------------------------
 local ModEvents = {}
 
---- Initialize the mod runtime
+--- Initialize the mod runtime.
+-- Since our initialization needs the Game object, we have to initialize
+-- on the first available tick (and then immediately unregister)
 local function init()
   Mod:init()
-  _event.remove(defines.events.on_tick, init)
+  Std.events.remove(defines.events.on_tick, init)
 end
 
---- Reload mod settings
+--- Read the new runtime settings when they've been changed during a game.
 local function reload()
   Mod.settings:load(true)
 end
 
+---------------------------------------------------------------------------------------------------
 
---- Register mod-level runtime events
+--- Register all mod-level runtime event handlers.
 function ModEvents.register_all()
-  _event.register(defines.events.on_runtime_mod_setting_changed, reload)
-  -- Since our initialization needs the Game object, the only reliable way
-  -- to do it on every load is to call in on the first tick 
-  -- (and then immediately unregister)
-  _event.register(defines.events.on_tick, init)    
-  _event.on_configuration_changed(init)
+  Std.events.register(defines.events.on_runtime_mod_setting_changed, reload)
+  Std.events.register(defines.events.on_tick, init)
+  Std.events.on_configuration_changed(init)
 end
 
---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 return ModEvents

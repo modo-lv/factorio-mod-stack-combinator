@@ -1,93 +1,46 @@
 --------------------------------------------------------------------------------
---- # Main stack combinator class
+--- Main stack combinator class
 --------------------------------------------------------------------------------
-
--- Game globals
-local _serpent = serpent
-
 local StackCombinator = {
   --[[ Constants ]]
   NAME = "stack-combinator",
-  
   --[[ Classes ]]
   Output = require("staco-output"),
   Config = require("staco-config"),
-
   --[[ Instance fields ]]
-
   --- Unique ID for this SC
   id = nil,
-
   --- The in-game stack-combinator entity
   input = nil,
-
   --- The in-game stack-combinator-output entity
   output = nil,
-
   --- SC configuration
   config = nil
 }
 
 --- Main combinator logic, process inputs into stackified output
 function StackCombinator:run()
-  local red = self.input.get_circuit_network(
-    defines.wire_type.red,
-    defines.circuit_connector_id.combinator_input
-  )
-  local green = self.input.get_circuit_network(
-    defines.wire_type.green, 
-    defines.circuit_connector_id.combinator_input
-  )
-  
-  local result = 
-    self.stackify(green, self.config.invert_green, 
-      self.stackify(red, self.config.invert_red)
-    )
+  local red = self.input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
+  local green = self.input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
+
+  local result = self.stackify(green, self.config.invert_green, self.stackify(red, self.config.invert_red))
 
   local output = self.output.get_control_behavior()
 
-  --- Not enough signal space
-  local max = self.output.prototype.item_slot_count
   local total = table_size(result)
-  if (total > max) then
-    if not (Mod.runtime.signal_space_errors[sc.unit_number]) then
-      Mod.runtime.signal_space_errors[sc.unit_number] = 
-        { "gui.signal-space-error-description", total, max }
-    end
-    for _, player in pairs(game.players) do
-      player.add_custom_alert(
-        self.input,                               -- Entity
-        { type = "item", name = SC_ENTITY_NAME }, -- Icon (signal)
-        signal_space_errors[sc.unit_number],      -- Text
-        true                                      -- Show on map
-      )
+  if (Mod.runtime.signal_overflow(self, total)) then
+    --- Not enough signal space
+    output.parameters = nil
+  else
+    local i = 1
+    for _, entry in pairs(result) do
+      entry.index = i
+      i = i + 1
     end
 
-    output.parameters = {}
-    return
+    output.parameters = result
   end
-
-  --- Clear the error if signal count is OK now
-  if (Mod.runtime.signal_space_errors[self.id]) then
-    Mod.runtime.signal_space_errors[self.id] = nil
-    for _, player in pairs(game.players) do
-      player.remove_alert {
-        entity = self.input,
-        type = defines.alert_type.custom,
-        icon = { type = "item", name = SC_ENTITY_NAME }
-      }
-    end
-  end
-
-  local i = 1
-  for _, entry in pairs(result) do
-    entry.index = i
-    i = i + 1
-  end
-  
-  output.parameters = result
 end
-
 
 --- Convert circuit network signal values to their stack sizes
 -- @tparam LuaCircuitNetwork input
@@ -95,8 +48,13 @@ end
 -- @param[opt] result Already processed signals from the other wire, if any
 function StackCombinator.stackify(input, invert, result)
   result = result or {}
-  if (not input or not input.signals) then return result end
-  local multiplier = 1 if (invert) then multiplier = -1 end
+  if (not input or not input.signals) then
+    return result
+  end
+  local multiplier = 1
+  if (invert) then
+    multiplier = -1
+  end
 
   for _, entry in ipairs(input.signals) do
     local name = entry.signal.name
@@ -107,12 +65,11 @@ function StackCombinator.stackify(input, invert, result)
     if (result[name]) then
       result[name].count = result[name].count + stack
     else
-      result[name] = { signal = entry.signal, count = stack }
+      result[name] = {signal = entry.signal, count = stack}
     end
   end
   return result
 end
-
 
 --- Create a StackCombinator instance for a placed SC entity
 -- @tparam LuaEntity input In-game combinator entity
@@ -126,14 +83,13 @@ function StackCombinator.created(input, output)
   end
 
   local sc = {}
-  setmetatable(sc, { __index = StackCombinator })
+  setmetatable(sc, {__index = StackCombinator})
   sc.id = input.unit_number
   sc.input = input
   sc.output = output or StackCombinator.Output.create(sc)
   sc.config = StackCombinator.Config.create(sc)
   return sc
 end
-
 
 --- In-game entity rotated
 function StackCombinator:rotated()
@@ -142,28 +98,24 @@ function StackCombinator:rotated()
   self.output.direction = self.input.direction
 end
 
-
 function StackCombinator:moved()
-  -- Move output as well  
-  self:debug_log("Input moved to " .. _serpent.line(self.input.position) .. ", moving output to match.")
+  -- Move output as well
+  self:debug_log("Input moved to " .. serpent.line(self.input.position) .. ", moving output to match.")
   self.output.teleport(self.input.position)
 end
-
 
 --- In-game entity removed
 function StackCombinator:destroyed()
   -- Input entity has already been destroyed, we need to remove the output
-  self.output.destroy({ raise_destroy = false })
+  self.output.destroy({raise_destroy = false})
   self:debug_log("Output destroyed.")
 end
-
 
 --- Output a combinator-specific debug log message
 -- @param message [LocalisedString] Text to output.
 function StackCombinator:debug_log(message)
   Mod.debug:log("[SC-" .. self.id .. "] " .. message)
 end
-
 
 --------------------------------------------------------------------------------
 return StackCombinator

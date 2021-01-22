@@ -24,14 +24,10 @@ end
 --- Wire up the event handler
 -- Has to be called from within an event otherwise remote.call doesn't work
 local function register()
-  _event.register(Remote.call("PickerDollies", "dolly_moved_entity_id"), moved, filter)
+  _event.register(remote.call("PickerDollies", "dolly_moved_entity_id"), moved, filter)
 end
 
 function PickerDollies.register_all()
-  if not (Remote.interfaces["PickerDollies"] and 
-    Remote.interfaces["PickerDollies"]["dolly_moved_entity_id"]
-  ) then return end
-  
   _event.on_init(register)
   _event.on_load(register)
 end

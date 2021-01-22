@@ -2,7 +2,7 @@
 --- # Title bar of the stack combinator GUI
 --------------------------------------------------------------------------------
 
-local StaCo = require("scripts/main/staco")
+local StaCo = require("scripts/staco/staco")
 
 --------------------------------------------------------------------------------
 

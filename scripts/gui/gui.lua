@@ -2,7 +2,7 @@
 --- # GUI layout: the main StaCo config window and all its contents
 --------------------------------------------------------------------------------
 
-local StaCo = require("scripts/main/staco")
+local StaCo = require("scripts/staco/staco")
 
 local Gui = {
   NAME = StaCo.NAME .. "-gui",
@@ -50,7 +50,7 @@ function Gui:create(sc, player)
   self.elements.preview:create(sc, contents)
 
   -- Input configuration
-  self.elements.input:create(sc, contents, sc_config)
+  self.elements.input:create(sc, contents)
   self.elements.input.red.name = self.INVERT_RED_NAME
   self.elements.input.green.name = self.INVERT_GREEN_NAME
 

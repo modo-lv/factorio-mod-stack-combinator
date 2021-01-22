@@ -1,5 +1,10 @@
-local Mod = require("scripts/mod")
-local StaCo = require("scripts/main/staco")
+----------------------------------------------------------------------------------------------------
+--- Define the main StaCo entity prototypes
+----------------------------------------------------------------------------------------------------
+
+local StaCo = require("scripts/staco/staco")
+
+----------------------------------------------------------------------------------------------------
 
 -- Hidden constant combinator for outputting signals to the network
 -- Automatically de/constructed along with the stack combinator
@@ -7,8 +12,11 @@ local out = table.deepcopy(data.raw["constant-combinator"]["constant-combinator"
 out.name = StaCo.Output.NAME
 out.minable = nil
 out.collision_mask = {}
-out.item_slot_count = settings.startup[Mod.NAME .. "-signal-capacity"].value
+out.item_slot_count = Mod.settings.startup().signal_capacity
 table.insert(out.flags, "placeable-off-grid")
+
+Mod.logger.debug("Entity `" .. out.name .. "` defined, signal capacity: " .. out.item_slot_count)
+
 
 -- Main combinator
 local sc = table.deepcopy(data.raw["arithmetic-combinator"]["arithmetic-combinator"])
@@ -68,5 +76,6 @@ sc.power_symbol_sprites = display
 sc.right_shift_symbol_sprites = display
 sc.xor_symbol_sprites = display
 
-data:extend{sc}
-data:extend{out}
+Mod.logger.debug("Entity `" .. sc.name .. "` defined.")
+
+data:extend { sc, out }

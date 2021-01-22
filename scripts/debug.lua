@@ -16,7 +16,7 @@ local Debug = {
 
 
 --- Print to console and debug log file
--- @param [LocalisedString] message Text to output.
+--- @param message LocalisedString Test
 function Debug:log(message)
   if not (Mod.settings.is_debug) then return end
 
@@ -32,31 +32,14 @@ function Debug:log(message)
   -- local prefix = "[" .. Mod.game_id() .. " - " ..   .. "] "
   -- local output = prefix .. message
   local time = self:tiks_to_timestring()
-  Game.print({"debug.console-format", time, Mod.NAME, Mod:game_id(), message})
+  game.print({"debug.console-format", time, Mod.NAME, Mod:game_id(), message})
 
   local output = "[" .. time .. "] (" .. Mod:game_id() .. ") " .. message .. "\n"
-  Game.write_file(self.output_file, output, true)
+  game.write_file(self.output_file, output, true)
 end
 
 
---- Convert given tick or game.tick into "[hh:]mm:ss" format.
--- Copied from Factorio Library
--- (https://github.com/factoriolib/flib/blob/master/misc.lua),
--- because I'm not including a whole mod dependency for a single function.
--- @tparam[opt=game.ticks_played] number tick
--- @treturn string
-function Debug:tiks_to_timestring(tick)
-  local total_seconds = math.floor((tick or Game.ticks_played) / 60)
-  local seconds = total_seconds % 60
-  local minutes = math.floor(total_seconds / 60)
-  if minutes > 59 then
-    minutes = minutes % 60
-    local hours = math.floor(total_seconds / 3600)
-    return string.format("%d:%02d:%02d", hours, minutes, seconds)
-  else
-    return string.format("%02d:%02d", minutes, seconds)
-  end
-end
+
 
 
 --------------------------------------------------------------------------------

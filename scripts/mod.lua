@@ -1,18 +1,20 @@
---------------------------------------------------------------------------------
---- # Mod globals
--- @type Mod
---------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
+--- Mod object access point
+-- The only global singleton in this mod, defines globally used data and provides access to all
+-- other components.
 local Mod = {
-  --[[ Constants ]]
+  --- The non-localised name (textual ID) of this mod, used in filenames, localisation keys etc.
   NAME = "stack-combinator",
 
-  settings = nil
+  --- @see ModDebug
+  debug = nil,
+  --- @see ModSettings
+  settings = nil,
 }
 
 --- Initialize basic mod-level stuff
 function Mod.init()
-  Game = game
   Mod.settings:load()
   Mod.debug:log("Mod initialized.")
 end
@@ -32,5 +34,5 @@ function Mod:game_id()
   return game_id
 end
 
---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 return Mod

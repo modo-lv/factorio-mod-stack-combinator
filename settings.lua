@@ -1,7 +1,6 @@
 local Mod = require("scripts/mod")
 
-data:extend{
-  -- Startup
+local startup = {
   {
     setting_type = "startup",
     name = Mod.NAME .. "-signal-capacity",
@@ -10,7 +9,16 @@ data:extend{
     minimum_value = 20,
     maximum_value = 10000
   },
-  -- Map
+  {
+    setting_type = "startup",
+    name = Mod.NAME .. "-debug-mode",
+    type = "bool-setting",
+    default_value = false,
+    order = "z"
+  },
+}
+
+local runtime = {
   {
     setting_type = "runtime-global",
     name = Mod.NAME .. "-defaults-invert",
@@ -24,11 +32,7 @@ data:extend{
     },
     order = "a"
   },
-  {
-    setting_type = "runtime-global",
-    name = Mod.NAME .. "-debug-mode",
-    type = "bool-setting",
-    default_value = false,
-    order = "z"
-  },
 }
+
+data:extend(startup)
+data:extend(runtime)
