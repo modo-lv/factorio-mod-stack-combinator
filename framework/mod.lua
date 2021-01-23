@@ -23,7 +23,11 @@ local Mod = {
   runtime = nil,
 }
 
-function Mod:init()
+function Mod:init(mod_name)
+  if (not mod_name or mod_name == "") then
+    error("Can't initialize mod without a name.")
+  end
+  self.NAME = mod_name
   self.settings = require("framework/settings")
   self.logger = require("framework/logger")
   if (script) then

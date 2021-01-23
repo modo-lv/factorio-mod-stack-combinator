@@ -12,8 +12,8 @@ local Settings = {
     startup = {
       debug_mode = { Mod.NAME .. "-debug-mode", false }
     },
-    runtime = {},
-    player = {},
+    runtime = { },
+    player = { },
   }
 }
 
@@ -26,28 +26,31 @@ local loaded = {
   player = nil,
 }
 
---- Add setting definitions of the given type to the corresponding table
-function Settings:add_all(type, definition) table.merge(self.definitions[type], definition) end
+--- Add setting definitions of the given setting_type to the corresponding table
+function Settings:add_all(setting_type, definitions) table.merge(self.definitions[setting_type], definitions) end
 --- Add setting definitions to the startup table
-function Settings:add_startup(definition) self:add_all("startup", definition) end
+function Settings:add_startup(definitions) self:add_all("startup", definitions) end
 --- Add setting definitions to the runtime table
-function Settings:add_runtime(definition) self:add_all("runtime", definition) end
+function Settings:add_runtime(definitions) self:add_all("runtime", definitions) end
 --- Add setting definitions to the player table
-function Settings:add_player(definition) self:add_all("player", definition) end
+function Settings:add_player(definitions) self:add_all("player", definitions) end
 
 --- Access the mod's settings
--- @tparam string type Setting type. Valid values are "startup", "runtime" and "player"
+-- @tparam string setting_type Setting setting_type. Valid values are "startup", "runtime" and "player"
 -- @tparam boolean reload Reload the settings from in-game?
-function Settings:load(type, reload)
-  if (not loaded[type] or reload) then
-    local definition = self.definitions[type]
-    loaded[type] = {}
+function Settings:load(setting_type, reload)
+  if (not loaded[setting_type] or reload) then
+    local definition = self.definitions[setting_type]
+    loaded[setting_type] = {}
+    local t = (setting_type == "runtime" and "global") or setting_type
     for key, setting_def in pairs(definition) do
-      loaded[type][key] = settings[type][setting_def[1]].value or setting_def[2]
+      if (type(setting_def) == "table") then
+        loaded[setting_type][key] = settings[t][setting_def[1]].value or setting_def[2]
+      end
     end
-    Mod.logger:debug("Loaded " .. type .. " settings: " .. serpent.line(loaded[type]))
+    Mod.logger:debug("Loaded " .. setting_type .. " settings: " .. serpent.line(loaded[setting_type]))
   end
-  return loaded[type] or error("Failed to load " .. type .. " settings.")
+  return loaded[setting_type] or error("Failed to load " .. setting_type .. " settings.")
 end
 
 --- Access the mod's startup settings.

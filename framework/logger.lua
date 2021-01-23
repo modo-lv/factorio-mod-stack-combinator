@@ -5,6 +5,9 @@ local Logger = {
   --- Folder where runtime output logs are stored
   OUTPUT_FOLDER = Mod.NAME .. "/logs",
 
+  --- What to use as the identifier for the mod in console logs. Rich text & localisation supported.
+  MOD_TAG = { Mod.NAME },
+
   --- File to write
   output_file = nil
 }
@@ -41,7 +44,7 @@ function Logger:log(message)
     end
     local time = ticks_to_timestring()
     --game.print({"framework-logger.console-format", time, Mod.NAME, Mod.runtime:game_id(), message})
-    game.print("[" .. time .."] [img=item/stack-combinator] (" .. Mod.runtime:game_id() .. ") " .. message)
+    game.print("[" .. time .."] " .. self.MOD_TAG .." (" .. Mod.runtime:game_id() .. ") " .. message)
     local output = "[" .. time .. "] (" .. Mod.runtime:game_id() .. ") " .. message .. "\n"
     game.write_file(self.output_file, output, true)
   else

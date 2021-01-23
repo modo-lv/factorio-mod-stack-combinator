@@ -13,8 +13,8 @@ end
 
 -- Framework
 Mod = require("framework/mod")
-Mod.NAME = "stack-combinator"
-Mod:init()
+Mod:init("stack-combinator")
+Mod.logger.MOD_TAG = "[img=item/stack-combinator]"
 
 -- Mod
 This = require("scripts/this")
