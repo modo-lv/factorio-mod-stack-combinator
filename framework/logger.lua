@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------------------------
 
 --- Logging
-local Logging = {
+local Logger = {
   --- Folder where runtime output logs are stored
   OUTPUT_FOLDER = Mod.NAME .. "/logs",
 
@@ -31,15 +31,17 @@ local function ticks_to_timestring(tick)
 end
 
 --- Log a message.
--- Logs to the game console & script log file at runtime, and to the game log during startup.
+-- During startup, logs to the game log.
+-- During runtime, logs to the game console & script log file
 -- @tparam LocalisedString message Message to send to the game log.
-function Logging:log(message)
+function Logger:log(message)
   if (Mod.runtime) then
     if not (self.output_file) then
       self.output_file = self.OUTPUT_FOLDER .. "/" .. Mod.runtime:game_id() .. ".log"
     end
     local time = ticks_to_timestring()
-    game.print({"framework-logger.console-format", time, Mod.NAME, Mod.runtime:game_id(), message})
+    --game.print({"framework-logger.console-format", time, Mod.NAME, Mod.runtime:game_id(), message})
+    game.print("[" .. time .."] [img=item/stack-combinator] (" .. Mod.runtime:game_id() .. ") " .. message)
     local output = "[" .. time .. "] (" .. Mod.runtime:game_id() .. ") " .. message .. "\n"
     game.write_file(self.output_file, output, true)
   else
@@ -47,12 +49,10 @@ function Logging:log(message)
   end
 end
 
---- Log a message only if debug mode is on.
--- @see Logging.log
-function Logging:debug(message)
+function Logger:debug(message)
   if (Mod.settings:startup().debug_mode) then self:log(message) end
 end
 
 ----------------------------------------------------------------------------------------------------
 
-return Logging
+return Logger

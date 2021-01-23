@@ -10,7 +10,7 @@ local GuiInput = {
 function GuiInput:create(sc, parent)
   parent.add {
     type = "label",
-    style = "bold_label",
+    style = "heading_3_label",
     -- Built-in localisation
     caption = { "gui-arithmetic.input" }
   }

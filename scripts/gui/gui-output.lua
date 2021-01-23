@@ -1,6 +1,6 @@
---------------------------------------------------------------------------------
---- # Output (signals)
---------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+--- Output (signals)
+----------------------------------------------------------------------------------------------------
 
 local GuiOutput = {
   signal_table = nil
@@ -20,21 +20,20 @@ function GuiOutput:tick(sc)
   for _, entry in pairs(signals) do
     self.signal_table.add({
       type = "sprite-button",
-      style = "slot_button",
+      style = "inventory_slot",
       number = entry.count,
       sprite = entry.signal.type .. "/" .. entry.signal.name,
       enabled = false
     })
-    ::skip::
   end
 end
 
-function GuiOutput:create(sc, parent)
+function GuiOutput:create(parent)
   parent.add({
     type = "label",
     -- Built-in localisation
     caption = { "gui-constant.output-signals" },
-    style = "bold_label"
+    style = "heading_3_label"
   })
 
   local scroll_pane = parent.add({
@@ -44,11 +43,9 @@ function GuiOutput:create(sc, parent)
   scroll_pane.style.minimal_height = 0
   scroll_pane.style.margin = 0
   
-  self.signal_table = scroll_pane.add({
-    type = "frame",
-    style = "slot_button_deep_frame",
-  }).add {
+  self.signal_table = scroll_pane.add {
     type = "table",
+    style = "slot_table",
     column_count = 10
   }
 end

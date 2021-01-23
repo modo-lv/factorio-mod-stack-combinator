@@ -1,7 +1,12 @@
-local Mod = require("mod")
+require("globals")
+
+----------------------------------------------------------------------------------------------------
+--- Mod setting prototype definitions
+----------------------------------------------------------------------------------------------------
 
 local startup = {
   {
+    -- Signal capacity
     setting_type = "startup",
     name = Mod.NAME .. "-signal-capacity",
     type = "int-setting",
@@ -10,6 +15,7 @@ local startup = {
     maximum_value = 10000
   },
   {
+    -- Debug mode
     setting_type = "startup",
     name = Mod.NAME .. "-debug-mode",
     type = "bool-setting",
@@ -20,6 +26,7 @@ local startup = {
 
 local runtime = {
   {
+    -- Default signal inversion
     setting_type = "runtime-global",
     name = Mod.NAME .. "-defaults-invert",
     type = "string-setting",
@@ -33,6 +40,8 @@ local runtime = {
     order = "a"
   },
 }
+
+----------------------------------------------------------------------------------------------------
 
 data:extend(startup)
 data:extend(runtime)

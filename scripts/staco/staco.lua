@@ -28,7 +28,7 @@ function StackCombinator:run()
   local output = self.output.get_control_behavior()
 
   local total = table_size(result)
-  if (Mod.runtime.signal_overflow(self, total)) then
+  if (This.runtime:signal_overflow(self, total)) then
     --- Not enough signal space
     output.parameters = nil
   else
@@ -114,7 +114,7 @@ end
 --- Output a combinator-specific debug log message
 -- @param message [LocalisedString] Text to output.
 function StackCombinator:debug_log(message)
-  Mod.debug:log("[SC-" .. self.id .. "] " .. message)
+  Mod.logger:debug("[SC-" .. self.id .. "] " .. message)
 end
 
 --------------------------------------------------------------------------------

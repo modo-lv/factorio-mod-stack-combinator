@@ -1,32 +1,37 @@
+local runtime = require("framework/runtime")
+
 ----------------------------------------------------------------------------------------------------
 
 --- Mod object access point
--- The main global singleton in this mod, defines globally used data and provides access to all
+-- The main global singleton in the mod, defines globally used data and provides access to all
 -- other components.
 local Mod = {
   --- The non-localised name (textual ID) of this mod, used in filenames, localisation keys etc.
-  -- Must be set as the
+  -- Must be set as the earliest possible time, as virtually all other framework parts use this.
   NAME = nil,
+
+  --- Name of the field in `global` to store framework persistent runtime data.
+  STORAGE = "framework",
 
   --- @see Settings
   settings = nil,
+
+  --- @see Logger
+  logger = nil,
+
+  --- @see Runtime
+  runtime = nil,
 }
 
-----------------------------------------------------------------------------------------------------
-
---- Unique(-ish) ID for the current save, so that we can have one persistent log file per savegame
-local game_id = nil
---- Get (generating if necessary) game ID
-function Mod:game_id()
-  if (game_id) then return game_id end
-  if (global.game_id) then
-    game_id = global.game_id 
-  else 
-    game_id = math.random(100, 999)
-    global.game_id = game_id
+function Mod:init()
+  self.settings = require("framework/settings")
+  self.logger = require("framework/logger")
+  if (script) then
+    self.runtime = runtime
+    require("framework/event-setup"):register_all()
   end
-  return game_id
 end
 
 ---------------------------------------------------------------------------------------------------
+
 return Mod

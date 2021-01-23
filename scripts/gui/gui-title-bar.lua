@@ -19,7 +19,7 @@ function GuiTitleBar:create(sc, parent)
   title_bar.drag_target = parent
 
   -- Title text
-  local title = title_bar.add {
+  title_bar.add {
     type = "label",
     caption = { "entity-name." .. StaCo.NAME },
     style = "frame_title",
@@ -29,7 +29,7 @@ function GuiTitleBar:create(sc, parent)
   -- Fill the space between title and close button
   local spacer = title_bar.add {
     type = "empty-widget",
-    style = "draggable_space",
+    style = "draggable_space_header",
     ignored_by_interaction = true
   }
   spacer.style.horizontally_stretchable = true

@@ -27,8 +27,8 @@ Gui.INVERT_GREEN_NAME = Gui.NAME .. "-invert-green"
 --- Create and show the the GUI
 function Gui:create(sc, player)
 
-  local window = player.gui.screen.add { 
-    type = "frame", 
+  local window = player.gui.screen.add {
+    type = "frame",
     direction = "vertical",
     name = Gui.NAME,
   }
@@ -56,8 +56,8 @@ function Gui:create(sc, player)
 
   contents.add { type = "line" }
 
-  -- Output sigjnals
-  self.elements.output:create(sc, contents)
+  -- Output signals
+  self.elements.output:create(contents)
 
   window.force_auto_center()
   player.opened = window
@@ -70,10 +70,10 @@ end
 function Gui:destroy(player)
   -- Since only one combinator GUI is supposed to be open at a time, we don't
   -- need to store any specific references; just remove everything that's ours.
-  for _, g in ipairs(player.gui.screen.children) do 
+  for _, g in ipairs(player.gui.screen.children) do
     if g.name == Gui.NAME then
       player.opened = nil
-      Mod.gui.staco = nil
+      This.gui.staco = nil
       g.destroy()
     end
   end

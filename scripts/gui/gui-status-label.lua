@@ -1,26 +1,23 @@
---------------------------------------------------------------------------------
+local table = require('__stdlib__/stdlib/utils/table')
+
+----------------------------------------------------------------------------------------------------
 --- # Entity status indicator of the stack combinator GUI
---------------------------------------------------------------------------------
-
-local _table = require('__stdlib__/stdlib/utils/table')
-
---------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
 local GuiStatusLabel = {
   STATUS_SPRITES = nil,
   STATUS_NAMES = nil,
 
   indicator = nil,
-
   text = nil,
 }
 
 --- Update status indicator on every tick
 function GuiStatusLabel:tick(sc)
-  if (Mod.runtime.signal_space_errors[sc.id]) then
+  if (This.runtime.signal_overflows[sc.id]) then
     self.indicator.sprite = "utility/status_not_working"
-    self.text.caption = { "gui.signal-space-error" }
-    self.text.tooltip = Mod.runtime.signal_space_errors[sc.unit_number]
+    self.text.caption = { "gui.signal-overflow-status" }
+    self.text.tooltip = This.runtime.signal_overflows[sc.id]
   else
     self.indicator.sprite = "utility/" .. self.STATUS_SPRITES[sc.input.status]
     self.text.caption = { "entity-status." .. self.STATUS_NAMES[sc.input.status] }

@@ -9,7 +9,7 @@
 local _serpent = serpent
 local _table = require('__stdlib__/stdlib/utils/table')
 
-local StackCombinatorConfig = {
+local StaCoConfig = {
   --- Static combinator that this configuration is for
   sc = nil,
 
@@ -23,32 +23,31 @@ local StackCombinatorConfig = {
 
 
 --- Instantiate a configuration object for a stack combinator
--- @tparam StackCombinator Stack combinator that this configuration is for
--- @treturn StackCombinatorConfig Created configuration object
-function StackCombinatorConfig.create(sc)
+-- @tparam StaCo Stack combinator that this configuration is for
+-- @treturn StaCoConfig Created configuration object
+function StaCoConfig.create(sc)
   local config = { sc = sc }
-  setmetatable(config, { __index = StackCombinatorConfig })
+  setmetatable(config, { __index = StaCoConfig })
   config:load_or_default()
   return config
 end
 
-
 --- Write SC's configuration
-function StackCombinatorConfig:save()
+function StaCoConfig:save()
   local r, g = self.invert_red, self.invert_green
   local name = (r and g and "yellow") or (r and "red") or (g and "green") or ("black")
   local signal = { type = "virtual", name = "signal-" .. name }
-  self.sc.input.get_or_create_control_behavior().parameters = {
-    first_signal = signal
-  }
+  self.sc.input.get_or_create_control_behavior().parameters = { first_signal = signal }
   local output = _table.deep_copy(self)
   output.sc = nil
-  self.sc:debug_log("Configured: " .. _serpent.line(output))
+  self.sc:debug_log("Configured:\n"
+    .. "    Invert [img=item/red-wire] = " .. r .. "\n"
+    .. "    Invert [img=item/green-wire] = " .. g
+  )
 end
 
-
 --- Read SC's configuration, or create the default if there isn't one
-function StackCombinatorConfig:load_or_default()
+function StaCoConfig:load_or_default()
   local signal = self.sc.input.get_control_behavior().parameters.first_signal
   if (signal and signal.type == "virtual") then
     self.invert_red = signal.name == "signal-red" or signal.name == "signal-yellow"
@@ -62,6 +61,5 @@ function StackCombinatorConfig:load_or_default()
   return self
 end
 
-
 --------------------------------------------------------------------------------
-return StackCombinatorConfig
+return StaCoConfig
