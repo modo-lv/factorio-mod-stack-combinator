@@ -20,8 +20,6 @@ local StaCoConfig = {
   invert_green = nil
 }
 
-
-
 --- Instantiate a configuration object for a stack combinator
 -- @tparam StaCo Stack combinator that this configuration is for
 -- @treturn StaCoConfig Created configuration object
@@ -40,9 +38,9 @@ function StaCoConfig:save()
   self.sc.input.get_or_create_control_behavior().parameters = { first_signal = signal }
   local output = _table.deep_copy(self)
   output.sc = nil
-  self.sc:debug_log("Configured:\n"
-    .. "    Invert [img=item/red-wire] = " .. r .. "\n"
-    .. "    Invert [img=item/green-wire] = " .. g
+  self.sc:debug_log("Configured:\n  Invert: "
+    .. "[img=item/red-wire] = " .. tostring(r) .. ", "
+    .. "[img=item/green-wire] = " .. tostring(g)
   )
 end
 

@@ -1,16 +1,11 @@
-local table = require "__stdlib__/stdlib/utils/table"
-
-local StaCo = require("staco/staco")
-
 ----------------------------------------------------------------------------------------------------
 
 --- Runtime management
 local Runtime = {
   --- Combinator registry
   combinators = nil,
-  --- A table with StaCo.id keys and `true` values, indicating which StaCos' signals have
-  --- overflowed.
-  signal_overflows = {},
+
+  signal_overflows = nil,
 }
 
 --- Run the main logic on all StaCos
@@ -25,19 +20,17 @@ end
 -- @tparam number total          Total amount of signals received by the StaCo.
 function Runtime:signal_overflow(staco, total)
   local max = staco.output.prototype.item_slot_count
-  self.signal_overflows = self.signal_overflows or {}
+  self.signal_overflows = self.signal_overflows or { }
 
   if (total > max) then
-    if not (self.signal_overflows[staco.id]) then
-      self.signal_overflows[staco.id] = { "gui.signal-overflow-message", total, max }
-    end
+    self.signal_overflows[staco.id] = { "gui.signal-overflow-message", total, max }
     -- Raise alarm
     for _, player in pairs(game.players) do
       player.add_custom_alert(
       -- Entity
         staco.input,
       -- Icons
-        { type = "item", name = StaCo.NAME },
+        { type = "item", name = This.StaCo.NAME },
       -- Text
         self.signal_overflows[staco.id],
       -- Show on map?
@@ -51,9 +44,9 @@ function Runtime:signal_overflow(staco, total)
     --- Clear the alarm if signal count is OK now
     for _, player in pairs(game.players) do
       player.remove_alert {
-        entity = self.input,
+        entity = staco.input,
         type = defines.alert_type.custom,
-        icon = { type = "item", name = StaCo.NAME }
+        icon = { type = "item", name = This.StaCo.NAME }
       }
     end
     self.signal_overflows[staco.id] = nil
@@ -74,10 +67,10 @@ function Runtime:register_combinators()
 
   for _, surface in pairs(game.surfaces) do
     -- Find all SC entities
-    local scs = surface.find_entities_filtered({ name = StaCo.NAME })
+    local scs = surface.find_entities_filtered({ name = This.StaCo.NAME })
     -- Find each SC's output and store both in the list
     for _, input in pairs(scs) do
-      local output = surface.find_entity(StaCo.Output.NAME, input.position)
+      local output = surface.find_entity(This.StaCo.Output.NAME, input.position)
       if not output then
         error(
           "Stack Combinator " .. input.id ..
@@ -85,7 +78,7 @@ function Runtime:register_combinators()
             "} on " .. surface.name .. ") has no output."
         )
       end
-      self:register_sc(StaCo.created(input, output))
+      self:register_sc(This.StaCo.created(input, output))
     end
   end
 

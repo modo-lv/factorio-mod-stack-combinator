@@ -2,10 +2,8 @@
 --- # GUI layout: the main StaCo config window and all its contents
 --------------------------------------------------------------------------------
 
-local StaCo = require("scripts/staco/staco")
-
 local Gui = {
-  NAME = StaCo.NAME .. "-gui",
+  NAME = This.StaCo.NAME .. "-gui",
 
   --- Static combinator that this GUI is opened for
   staco = nil,

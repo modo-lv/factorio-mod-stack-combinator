@@ -20,7 +20,7 @@ function GuiOutput:tick(sc)
   for _, entry in pairs(signals) do
     self.signal_table.add({
       type = "sprite-button",
-      style = "inventory_slot",
+      style = "compact_slot",
       number = entry.count,
       sprite = entry.signal.type .. "/" .. entry.signal.name,
       enabled = false
@@ -42,11 +42,18 @@ function GuiOutput:create(parent)
   })
   scroll_pane.style.minimal_height = 0
   scroll_pane.style.margin = 0
-  
-  self.signal_table = scroll_pane.add {
+
+  local flow = scroll_pane.add {
+    type = "flow",
+    direction = "horizontal"
+  }
+  flow.style.horizontal_align = "center"
+  flow.style.horizontally_stretchable = true
+
+  self.signal_table = flow.add {
     type = "table",
     style = "slot_table",
-    column_count = 10
+    column_count = 11
   }
 end
 

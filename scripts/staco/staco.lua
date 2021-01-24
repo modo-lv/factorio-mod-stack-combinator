@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 --- Main stack combinator class
 --------------------------------------------------------------------------------
-local StackCombinator = {
+local StaCo = {
   --[[ Constants ]]
   NAME = "stack-combinator",
   --[[ Classes ]]
@@ -19,7 +19,7 @@ local StackCombinator = {
 }
 
 --- Main combinator logic, process inputs into stackified output
-function StackCombinator:run()
+function StaCo:run()
   local red = self.input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
   local green = self.input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
 
@@ -46,7 +46,7 @@ end
 -- @tparam LuaCircuitNetwork input
 -- @tparam Boolean invert Multiply all stackified signal values by -1?
 -- @param[opt] result Already processed signals from the other wire, if any
-function StackCombinator.stackify(input, invert, result)
+function StaCo.stackify(input, invert, result)
   result = result or {}
   if (not input or not input.signals) then
     return result
@@ -74,38 +74,38 @@ end
 --- Create a StackCombinator instance for a placed SC entity
 -- @tparam LuaEntity input In-game combinator entity
 -- @tparam[opt] LuaEntity output In-game output combinator entity if one exists
-function StackCombinator.created(input, output)
-  if not (input and input.name == StackCombinator.NAME) then
+function StaCo.created(input, output)
+  if not (input and input.name == StaCo.NAME) then
     error("Tried to configure " .. input.name .. " as a static combinator.")
   end
-  if (output and output.name ~= StackCombinator.Output.NAME) then
+  if (output and output.name ~= StaCo.Output.NAME) then
     error("Tried to configure " .. output.name .. " as a static combinator output.")
   end
 
   local sc = {}
-  setmetatable(sc, {__index = StackCombinator})
+  setmetatable(sc, {__index = StaCo })
   sc.id = input.unit_number
   sc.input = input
-  sc.output = output or StackCombinator.Output.create(sc)
-  sc.config = StackCombinator.Config.create(sc)
+  sc.output = output or StaCo.Output.create(sc)
+  sc.config = StaCo.Config.create(sc)
   return sc
 end
 
 --- In-game entity rotated
-function StackCombinator:rotated()
+function StaCo:rotated()
   -- Rotate output as well
   self:debug_log("Input rotated, rotating output to match.")
   self.output.direction = self.input.direction
 end
 
-function StackCombinator:moved()
+function StaCo:moved()
   -- Move output as well
   self:debug_log("Input moved to " .. serpent.line(self.input.position) .. ", moving output to match.")
   self.output.teleport(self.input.position)
 end
 
 --- In-game entity removed
-function StackCombinator:destroyed()
+function StaCo:destroyed()
   -- Input entity has already been destroyed, we need to remove the output
   self.output.destroy({raise_destroy = false})
   self:debug_log("Output destroyed.")
@@ -113,9 +113,9 @@ end
 
 --- Output a combinator-specific debug log message
 -- @param message [LocalisedString] Text to output.
-function StackCombinator:debug_log(message)
+function StaCo:debug_log(message)
   Mod.logger:debug("[SC-" .. self.id .. "] " .. message)
 end
 
 --------------------------------------------------------------------------------
-return StackCombinator
+return StaCo
