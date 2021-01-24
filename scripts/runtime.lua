@@ -86,7 +86,7 @@ function Runtime:register_combinators()
   self:save()
   Mod.logger:debug(
     "(Re-)registered " .. table_size(self.combinators) ..
-      " stack combinator(s) in " .. delta .. " tick(s)."
+      " stack combinator(s) in " .. (delta > 0 and delta or 1) .. " tick(s)."
   )
 end
 

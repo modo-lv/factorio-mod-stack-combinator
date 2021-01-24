@@ -30,7 +30,14 @@ local game_id
 -- Unique(-ish) ID for the current save, so that we can have one persistent log file per savegame.
 function Runtime:game_id()
   if (game_id) then return game_id end
-  game_id = Mod.runtime:storage().game_id or math.random(100, 999)
+  if (global[Mod.STORAGE] and global[Mod.STORAGE].game_id) then
+    game_id = global[Mod.STORAGE].game_id
+    Mod.logger:debug("Game ID loaded.")
+  else
+    game_id = Mod.runtime:storage().game_id or math.random(100, 999)
+    global[Mod.STORAGE].game_id = game_id
+    Mod.logger:debug("Game ID generated and saved.")
+  end
   return game_id
 end
 
