@@ -37,6 +37,8 @@ function GuiOutputNetwork:create(parent)
     column_count = 2,
     tooltip = { "gui.output-networks-description" }
   }
+  table.style.column_alignments[1] = "left"
+  table.style.column_alignments[2] = "right"
 
   -- Red
   for _, color in ipairs { "red", "green" } do
@@ -52,19 +54,30 @@ function GuiOutputNetwork:create(parent)
       caption = { "gui.output-network", "[item="..color.."-wire]"},
     }
 
-    local scroll = pane.add {
-      type = "scroll-pane",
-      style = "logistics_scroll_pane",
+    local flow = pane.add {
+      type = "flow",
+      direction = "horizontal",
+      maximum_horizontal_squash_size = 0,
     }
-    scroll.style.minimal_height = 0
+    flow.style.horizontally_stretchable = true
+    flow.style.horizontal_align = color == "red" and "left" or "right"
+
+    local scroll = flow.add {
+      type = "scroll-pane",
+      style = "naked_scroll_pane",
+    }
+    scroll.style.minimal_height = 36
     scroll.style.margin = 0
     scroll.style.maximal_height = 36 * 4
+    scroll.style.padding = 0
+
 
     self[color] = scroll.add {
       type = "table",
       style = "slot_table",
       column_count = 5,
     }
+    self[color].style.horizontally_squashable = true
   end
 
 end

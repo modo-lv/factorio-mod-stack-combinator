@@ -38,9 +38,9 @@ function GuiOutput:create(parent)
 
   local scroll_pane = parent.add({
     type = "scroll-pane",
-    style = "logistics_scroll_pane",
+    style = "naked_scroll_pane",
   })
-  scroll_pane.style.minimal_height = 0
+  scroll_pane.style.minimal_height = 36
   scroll_pane.style.margin = 0
   scroll_pane.style.maximal_height = 36 * 4
 
