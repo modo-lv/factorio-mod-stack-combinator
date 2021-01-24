@@ -9,9 +9,7 @@ local GuiEvents = {}
 
 --- Every tick updates (status & signals)
 local function tick()
-  local sc = This.gui.staco
-  This.gui.elements.status:tick(sc)
-  This.gui.elements.output:tick(sc)
+  This.gui:tick()
 end
 
 --- Show the GUI when user opens the combinator
@@ -21,7 +19,8 @@ local function open(ev)
     game.get_player(ev.player_index)
   )
   -- Enable real-time updates
-  events.register(defines.events.on_tick, tick)
+  --events.register(defines.events.on_tick, tick)
+  events.on_nth_tick(-10, tick)
 end
 
 --- Update combinator's settings when user changes them
@@ -40,7 +39,8 @@ end
 local function close(ev)
   This.gui:destroy(game.get_player(ev.player_index))
   -- Disable real-time updates
-  events.remove(defines.events.on_tick, tick)
+  --events.remove(defines.events.on_tick, tick)
+  events.remove(-10, tick)
 end
 
 --- Close GUI if user clicks the `X` button

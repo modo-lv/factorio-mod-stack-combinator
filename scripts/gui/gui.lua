@@ -14,12 +14,19 @@ local Gui = {
     status = require("gui-status-label"),
     preview = require("gui-preview"),
     input = require("gui-input"),
-    output = require("gui-output")
+    output = require("gui-output"),
+    output_network = require("gui-output-network")
   }
 }
 Gui.CLOSE_BUTTON_NAME = Gui.NAME .. "-close"
 Gui.INVERT_RED_NAME = Gui.NAME .. "-invert-red"
 Gui.INVERT_GREEN_NAME = Gui.NAME .. "-invert-green"
+
+function Gui:tick()
+  self.elements.status:tick(self.staco)
+  self.elements.output:tick(self.staco)
+  self.elements.output_network:tick(self.staco)
+end
 
 
 --- Create and show the the GUI
@@ -56,11 +63,13 @@ function Gui:create(sc, player)
 
   -- Output signals
   self.elements.output:create(contents)
+  self.elements.output_network:create(contents)
 
-  window.force_auto_center()
   player.opened = window
   -- Keep for reference
   self.staco = sc
+  self:tick()
+  window.force_auto_center()
   return window
 end
 

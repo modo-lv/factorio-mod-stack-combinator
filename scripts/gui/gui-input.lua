@@ -26,7 +26,7 @@ function GuiInput:create(sc, parent)
     type = "checkbox",
     tooltip = {"gui.invert-description"},
     state = sc.config.invert_red,
-    caption = { "", { "gui.invert-wire", "[item=red-wire]" } }
+    caption = { "", { "gui.invert-wire", "[item=red-wire]" }, " [img=info]" }
   }
   GuiInput.red.style.horizontally_stretchable = true
   GuiInput.red.style.horizontally_squashable = false
@@ -35,7 +35,7 @@ function GuiInput:create(sc, parent)
     type = "checkbox",
     tooltip = {"gui.invert-description"},
     state = sc.config.invert_green,
-    caption = { "", { "gui.invert-wire", "[item=green-wire]" } }
+    caption = { "", { "gui.invert-wire", "[item=green-wire]" }, " [img=info]" }
   }
   GuiInput.green.style.horizontally_stretchable = false
   GuiInput.green.style.horizontally_squashable = false

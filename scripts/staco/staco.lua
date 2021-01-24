@@ -36,6 +36,11 @@ function StaCo:run()
     for _, entry in pairs(result) do
       entry.index = i
       i = i + 1
+      if (entry.count > 2147483647) then
+        entry.count = 2147483647
+      elseif (entry.count < -2147483647) then
+        entry.count = -2147483647
+      end
     end
 
     output.parameters = result

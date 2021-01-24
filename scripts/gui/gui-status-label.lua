@@ -41,6 +41,7 @@ function GuiStatusLabel:create(sc, parent)
     type = "sprite",
     style = "status_image",
   }
+  self.indicator.style.stretch_image_to_widget_size = true
 
   -- Status text
   self.text = flow.add {

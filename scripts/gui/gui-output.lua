@@ -23,7 +23,7 @@ function GuiOutput:tick(sc)
       style = "compact_slot",
       number = entry.count,
       sprite = entry.signal.type .. "/" .. entry.signal.name,
-      enabled = false
+      --enabled = false
     })
   end
 end
@@ -42,6 +42,7 @@ function GuiOutput:create(parent)
   })
   scroll_pane.style.minimal_height = 0
   scroll_pane.style.margin = 0
+  scroll_pane.style.maximal_height = 36 * 4
 
   local flow = scroll_pane.add {
     type = "flow",
