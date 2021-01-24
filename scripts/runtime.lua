@@ -1,80 +1,116 @@
---------------------------------------------------------------------------------
---- # Main combinator logic
---------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-local sc_config = require("entity-config")
+--- Runtime management
+local Runtime = {
+  --- Combinator registry
+  combinators = nil,
 
-local this = {}
+  signal_overflows = nil,
+}
 
---- Main combinator logic, process combinator inputs into stackified output
--- @param sc Stack combinator entity
--- @param input LuaArithmeticCombinatorControlBehavior
--- @param output LuaConstantCombinatorControlBehavior
-function this.process(sc, input, output)
-  local config_signal = sc_config.get_signal(input)
-  local red = input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
-  local green = input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
+--- Run the main logic on all StaCos
+-- For binding to the on_tick event
+function Runtime:run_combinators()
+  if not (self.combinators) then self.register_combinators() end
+  for _, sc in pairs(self.combinators) do sc:run() end
+end
 
-  local result = this.stackify(green, sc_config.is_inverted(green, config_signal),
-    this.stackify(red, sc_config.is_inverted(red, config_signal))
-  )
+--- Raise an alarm if a StaCo is receiving more signals than it can output.
+-- @tparam StackCombinator staco The StaCo to check.
+-- @tparam number total          Total amount of signals received by the StaCo.
+function Runtime:signal_overflow(staco, total)
+  local max = staco.output.prototype.item_slot_count
+  self.signal_overflows = self.signal_overflows or { }
 
-  --- Not enough signal space
-  if (table_size(result) > output.signals_count) then
-    if not (signal_space_errors[sc.unit_number]) then
-      signal_space_errors[sc.unit_number] = {"gui.signal-space-error-description", table_size(result), output.signals_count}
-    end
+  if (total > max) then
+    self.signal_overflows[staco.id] = { "gui.signal-overflow-message", total, max }
+    -- Raise alarm
     for _, player in pairs(game.players) do
-      player.add_custom_alert(sc, { type = "item", name = SC_ENTITY_NAME }, signal_space_errors[sc.unit_number], true)
+      player.add_custom_alert(
+      -- Entity
+        staco.input,
+      -- Icons
+        { type = "item", name = This.StaCo.NAME },
+      -- Text
+        self.signal_overflows[staco.id],
+      -- Show on map?
+        true
+      )
     end
-
-    output.parameters = {}
-    return
+    return true
   end
 
-  --- Clear the error if signal count is OK now
-  if (signal_space_errors[sc.unit_number]) then
-    signal_space_errors[sc.unit_number] = nil
+  if (self.signal_overflows[staco.id]) then
+    --- Clear the alarm if signal count is OK now
     for _, player in pairs(game.players) do
       player.remove_alert {
-        entity = sc,
+        entity = staco.input,
         type = defines.alert_type.custom,
-        icon = { type = "item", name = SC_ENTITY_NAME }
+        icon = { type = "item", name = This.StaCo.NAME }
       }
     end
+    self.signal_overflows[staco.id] = nil
   end
 
-  local i = 1
-  for _, entry in pairs(result) do
-    entry.index = i
-    i = i + 1
-  end
-  
-  output.parameters = result
+  return false
 end
 
---- Convert a circuit network signal values to their stack sizes
--- @param input LuaCircuitNetwork
--- @param invert Multiply all stackified signal values by -1?
--- @param result Already processed signals from the other wire
-function this.stackify(input, invert, result)
-  result = result or {}
-  if (not input or not input.signals) then return result end
-  local multiplier = 1 if (invert) then multiplier = -1 end
-
-  for _, entry in ipairs(input.signals) do
-    local name = entry.signal.name
-    local stack = entry.count
-    if (entry.signal.type == "item") then
-      stack = stack * game.item_prototypes[name].stack_size * multiplier
-    end
-    if (result[name]) then
-      result[name].count = result[name].count + stack
-    else
-      result[name] = { signal = entry.signal, count = stack }
-    end
-  end
-  return result
+--- Get the stack combinator data for an existing input entity
+function Runtime:sc(input)
+  return self.combinators[input.unit_number]
 end
 
-return this
+--- Find and register all existing stack combinators on the map
+function Runtime:register_combinators()
+  local start = game.ticks_played
+  self.combinators = {}
+
+  for _, surface in pairs(game.surfaces) do
+    -- Find all SC entities
+    local scs = surface.find_entities_filtered({ name = This.StaCo.NAME })
+    -- Find each SC's output and store both in the list
+    for _, input in pairs(scs) do
+      local output = surface.find_entity(This.StaCo.Output.NAME, input.position)
+      if not output then
+        error(
+          "Stack Combinator " .. input.id ..
+            " (at {" .. input.position.x .. ", " .. input.position.y ..
+            "} on " .. surface.name .. ") has no output."
+        )
+      end
+      self:register_sc(This.StaCo.created(input, output))
+    end
+  end
+
+  local delta = game.ticks_played - start
+  self:save()
+  Mod.logger:debug(
+    "(Re-)registered " .. table_size(self.combinators) ..
+      " stack combinator(s) in " .. (delta > 0 and delta or 1) .. " tick(s)."
+  )
+end
+
+--- Register an existing stack combinator
+-- @tparam StaCo Static combinator to register.
+function Runtime:register_sc(sc)
+  if not (self.combinators) then self.combinators = {} end
+  self.combinators[sc.id] = sc
+  self:save()
+end
+
+--- Unregister a no longer existing stack combinator.
+-- @tparam StaCo Stack combinator to unregister
+function Runtime:unregister_sc(sc)
+  self.combinators[sc.id] = nil
+  self:save()
+  sc:debug_log("Combinator unregistered.")
+end
+
+--- Update persistent data
+function Runtime:save()
+  Mod.runtime.save { combinators = self.combinators }
+end
+
+----------------------------------------------------------------------------------------------------
+
+return Runtime
