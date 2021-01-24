@@ -40,14 +40,15 @@ function GuiOutputNetwork:create(parent)
   table.style.column_alignments[1] = "left"
   table.style.column_alignments[2] = "right"
 
-  -- Red
   for _, color in ipairs { "red", "green" } do
-
     local pane = table.add {
       type = "flow",
       direction = "vertical",
     }
     pane.style.horizontal_align = color == "red" and "left" or "right"
+    pane.style.vertical_align = "top"
+    pane.style.vertically_stretchable = true
+
     pane.add {
       type = "label",
       style = "heading_3_label_yellow",
