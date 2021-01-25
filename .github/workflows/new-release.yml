@@ -28,7 +28,7 @@ jobs:
         uses: TheDoctor0/zip-release@0.4.1
         with:
           filename: ${{ env.ZIPNAME }}
-          exclusions: "*.git*"
+          exclusions: "*.git* screenshots/"
       - name: Create release draft
         uses: ncipollo/release-action@v1
         with:
