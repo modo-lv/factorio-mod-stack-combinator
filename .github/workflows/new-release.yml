@@ -24,17 +24,17 @@ jobs:
       - uses: actions/checkout@master
       - name: Create sub-folder
         run: mkdir "${{ env.FILENAME }}" && git mv -k * "${{ env.FILENAME }}"
-      - name: Zip files
-        uses: TheDoctor0/zip-release@0.4.1
-        with:
-          filename: ${{ env.ZIPNAME }}
-          exclusions: "*.git* ${{ env.FILENAME}}/screenshots"
       - name: Create/update tag
         uses: richardsimko/update-tag@v1
         with:
           tag_name: ${{ env.VERSION_TAG }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Zip files
+        uses: TheDoctor0/zip-release@0.4.1
+        with:
+          filename: ${{ env.ZIPNAME }}
+          exclusions: "*.git* */screenshots/*"
       - name: Create release draft
         uses: ncipollo/release-action@v1
         with:
