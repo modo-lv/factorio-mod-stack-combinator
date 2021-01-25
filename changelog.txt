@@ -1,4 +1,26 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2021.01.25
+  Info:
+    - Initial "proper" release.
+  Features:
+    - Display for all signals on the circuit network that the stack combinator's output is
+      connected to (to easily see resulting combined signals).
+  Minor Features:
+    - Support for modified signal wire colors: now using in-game wire images instead of "red" and 
+      "green" text and colors.
+  Gui:
+    - Some layout changes.
+    - Fixed status indicator not resizing with increased UI scaling.
+  Bugfixes:
+    - Game ID was resetting on each load.
+    - Runtime settings weren't being updated while playing.
+    - Fixed crash when outputting a signal with value outside the -2147483647 .. 2147483647 range.
+  Optimisations:
+    - Reduced GUI update speed to 10 ticks (6 times a second).
+  Other:
+    - Lots of code rewrites and improvements.
+---------------------------------------------------------------------------------------------------
 Version: 0.9.0
 Date: 2021.01.19
   Info:
