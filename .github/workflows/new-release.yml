@@ -29,10 +29,17 @@ jobs:
         with:
           filename: ${{ env.ZIPNAME }}
           exclusions: "*.git* ${{ env.FILENAME}}/screenshots"
+      - name: Create/update tag
+        uses: richardsimko/update-tag@v1
+        with:
+          tag_name: ${{ env.VERSION_TAG }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create release draft
         uses: ncipollo/release-action@v1
         with:
           name: Release ${{ env.VERSION_TAG }}
+          omitNameDuringUpdate: true
           omitBody: true
           allowUpdates: true
           tag: ${{ env.VERSION_TAG }}
