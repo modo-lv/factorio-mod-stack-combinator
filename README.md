@@ -39,6 +39,6 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 
 
 ## Screenshots
-![](screenshots/red.jpg)
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/red.jpg)
 
-![](screenshots/green.jpg)
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/green.jpg)

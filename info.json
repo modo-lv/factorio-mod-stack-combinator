@@ -10,6 +10,6 @@
     "base >= 1.1",
     "stdlib"
   ],
-  "description": "A combinator that multiplies item signal values by their stack sizes.",
+  "description": "A combinator that multiplies item signal values by their stack sizes. Features signal inversion and output display, supports Picker Dollies.",
   "license": "[Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)"
 }
