@@ -1,14 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2021.01.25
+  Bugfixes:
+    - Fixed a crash when trying to open GUI for a newly placed combinator: https://mods.factorio.com/mod/stack-combinator/discussion/600f1158b39430e7636e9168
+---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2021.01.25
   Info:
     - Initial "proper" release.
   Features:
-    - Display for all signals on the circuit network that the stack combinator's output is
-      connected to (to easily see resulting combined signals).
+    - Display for all signals on the circuit network that the stack combinator's output is connected to (to easily see resulting combined signals).
   Minor Features:
-    - Support for modified signal wire colors: now using in-game wire images instead of "red" and 
-      "green" text and colors.
+    - Support for modified signal wire colors: now using in-game wire images instead of "red" and "green" text and colors.
   Gui:
     - Some layout changes.
     - Fixed status indicator not resizing with increased UI scaling.

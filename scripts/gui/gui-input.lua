@@ -21,7 +21,7 @@ function GuiInput:create(sc, parent)
     column_count = 2,
     tooltip = { "gui.invert-description" },
   }
-  
+
   GuiInput.red = row.add {
     type = "checkbox",
     tooltip = {"gui.invert-description"},

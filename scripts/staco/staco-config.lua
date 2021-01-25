@@ -39,8 +39,8 @@ function StaCoConfig:save()
   local output = _table.deep_copy(self)
   output.sc = nil
   self.sc:debug_log("Configured:\n  Invert: "
-    .. "[img=item/red-wire] = " .. tostring(r) .. ", "
-    .. "[img=item/green-wire] = " .. tostring(g)
+    .. "[img=item/red-wire] = " .. tostring(self.invert_red) .. ", "
+    .. "[img=item/green-wire] = " .. tostring(self.invert_green)
   )
 end
 
@@ -52,11 +52,19 @@ function StaCoConfig:load_or_default()
     self.invert_green = signal.name == "signal-green" or signal.name == "signal-yellow"
   else
     self.sc:debug_log("No valid configuration (signal is " .. _serpent.line(signal) .. "), resetting to defaults.")
-    _table.merge(self, Mod.settings.default_config)
-    self:save()
+    _table.merge(self, self.defaults())
   end
 
+  self:save()
   return self
+end
+
+function StaCoConfig.defaults()
+  local cfg = Mod.settings:runtime()
+  return {
+    invert_red = cfg.invert_signals == "red" or cfg.invert_signals == "both",
+    invert_green = cfg.invert_signals == "green" or cfg.invert_signals == "both"
+  }
 end
 
 --------------------------------------------------------------------------------
