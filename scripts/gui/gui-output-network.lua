@@ -13,9 +13,11 @@ function GuiOutputNetwork:tick(sc)
     local control = sc.output.get_control_behavior(defines.wire_type[color])
     local network = control.get_circuit_network(defines.wire_type[color])
     for _, signal in ipairs(network.signals or { }) do
+      local st = signal.signal.type == "virtual" and "virtual-signal" or signal.signal.type
+
       self[color].add {
         type = "sprite-button",
-        sprite = signal.signal.type .. "/" .. signal.signal.name,
+        sprite = st .. "/" .. signal.signal.name,
         number = signal.count,
         style = color .. "_circuit_network_content_slot",
       }
