@@ -9,20 +9,17 @@ local GuiOutput = {
 function GuiOutput:tick(sc)
   if not (self.signal_table) then return end
   self.signal_table.clear()
-  local signals = sc.output.get_circuit_network(
-    -- Color doesn't matter since output is connected to both cables.
-    defines.wire_type.red,
-    defines.circuit_connector_id.constant_combinator
-  ).signals
+  local signals = sc.output.get_control_behavior().parameters
 
   if not (signals) then return end
 
   for _, entry in pairs(signals) do
+    local st = entry.signal.type == "virtual" and "virtual-signal" or entry.signal.type
     self.signal_table.add({
       type = "sprite-button",
       style = "compact_slot",
       number = entry.count,
-      sprite = entry.signal.type .. "/" .. entry.signal.name,
+      sprite = st .. "/" .. entry.signal.name,
       --enabled = false
     })
   end

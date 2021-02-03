@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2021.02.04
+  Bugfixes:
+    - Fixed a second crash when connecting a stack combinator to a network containing virtual signals: https://mods.factorio.com/mod/stack-combinator/discussion/601b19fc067e93916960c181
+    - Fixed main output display also including signals from output networks.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2021.02.04
   Bugfixes:
