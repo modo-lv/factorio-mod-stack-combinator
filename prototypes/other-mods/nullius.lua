@@ -6,21 +6,19 @@ if (mods["nullius"]) then
   --- Tech
   local tech = data.raw["technology"]["stack-combinator"]
   tech.order = "nullius-" .. (tech.order or "s")
-  tech.prerequisites = {
-    "nullius-computation",
-    "nullius-actuation-2"
-  }
+  tech.prerequisites = { "nullius-computation" }
 
   --- Recipe
   local base = data.raw["recipe"]["stack-combinator"]
   local recipe = table.deepcopy(data.raw["recipe"]["nullius-arithmetic-circuit"])
 
-  -- Nullius hides any recipes that it doesn't recognize
   recipe.name = base.name
   recipe.result = base.result
+  -- In Nullius, Repair pack is too expensive and complicated to manufacture to be considered a
+  -- simple tool, so instead we make SC require 4 insulated wires (for wiring up the extra logic).
   recipe.ingredients = {
     { "arithmetic-combinator", 1 },
-    { "turbo-inserter", 1 }
+    { "nullius-insulated-wire-1", 4 }
   }
   recipe.energy_required = math.ceil(recipe.energy_required / 2)
 
@@ -29,7 +27,6 @@ if (mods["nullius"]) then
   item.order = "nullius-f-s"
   -- Remove hidden flag, if set
   item.flags = table.filter(item.flags, function(flag) return not flag == "hidden" end)
-
 
   data:extend { tech, recipe, item }
 end
