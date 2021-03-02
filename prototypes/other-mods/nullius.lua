@@ -14,12 +14,13 @@ if (mods["nullius"]) then
 
   recipe.name = base.name
   recipe.result = base.result
-  -- In Nullius, Repair pack is too expensive and complicated to manufacture to be considered a
+  -- Repair pack is too expensive and complicated to manufacture to be considered a
   -- simple tool, so instead we make SC require 4 insulated wires (for wiring up the extra logic).
   recipe.ingredients = {
     { "arithmetic-combinator", 1 },
     { "nullius-insulated-wire-1", 4 }
   }
+  -- Basic combinator takes 4 seconds to craft, modifying it should take less time.
   recipe.energy_required = math.ceil(recipe.energy_required / 2)
 
   --- Item
