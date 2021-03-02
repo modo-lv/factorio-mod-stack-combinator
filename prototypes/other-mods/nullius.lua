@@ -18,7 +18,7 @@ if (mods["nullius"]) then
   -- simple tool, so instead we make SC require 4 insulated wires (for wiring up the extra logic).
   recipe.ingredients = {
     { "arithmetic-combinator", 1 },
-    { "nullius-insulated-wire-1", 4 }
+    { "copper-cable", 4 }
   }
   -- Basic combinator takes 4 seconds to craft, modifying it should take less time.
   recipe.energy_required = math.ceil(recipe.energy_required / 2)
