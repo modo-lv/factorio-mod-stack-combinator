@@ -1,6 +1,6 @@
 {
   "name": "stack-combinator",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "title": "Stack Combinator",
   "author": "modo.lv",
   "contact": "http://modo.lv",
@@ -8,8 +8,11 @@
   "factorio_version": "1.1",
   "dependencies": [
     "base >= 1.1",
-    "stdlib"
+    "stdlib",
+
+    "? nullius",
+    "? PickerDollies"
   ],
-  "description": "A combinator that multiplies item signal values by their stack sizes. Features signal inversion and output display, supports Picker Dollies.",
+  "description": "A combinator that multiplies item signal values by their stack sizes. Features signal inversion and output display, works in Nullius.",
   "license": "[Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)"
 }

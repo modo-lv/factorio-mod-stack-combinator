@@ -14,7 +14,7 @@ local GuiStatusLabel = {
 
 --- Update status indicator on every tick
 function GuiStatusLabel:tick(sc)
-  if (This.runtime.signal_overflows[sc.id]) then
+  if (This.runtime.signal_overflows and This.runtime.signal_overflows[sc.id]) then
     self.indicator.sprite = "utility/status_not_working"
     self.text.caption = { "gui.signal-overflow-status" }
     self.text.tooltip = This.runtime.signal_overflows[sc.id]

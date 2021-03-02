@@ -22,6 +22,9 @@ Mod.logger:debug("Entity `" .. out.name .. "` defined, signal capacity: " .. out
 local sc = table.deepcopy(data.raw["arithmetic-combinator"]["arithmetic-combinator"])
 sc.name = StaCo.NAME
 sc.minable.result = StaCo.NAME
+-- Prevent other mods overriding AC's localisation from propagating to StaCo
+sc.localised_name = nil
+sc.localised_description = nil
 
 -- Graphics
 local display_base = {
