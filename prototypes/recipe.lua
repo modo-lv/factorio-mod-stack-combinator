@@ -12,5 +12,8 @@ recipe.ingredients = {
   { "arithmetic-combinator", 1 },
   { "repair-pack", 1 }
 }
+-- Prevent other mods overriding AC's localisation from propagating to StaCo
+recipe.localised_name = nil
+recipe.localised_description = nil
 
 data:extend{recipe}
