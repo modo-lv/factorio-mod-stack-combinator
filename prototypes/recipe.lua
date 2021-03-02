@@ -1,26 +1,16 @@
 --------------------------------------------------------------------------------
---- # Recipes for building stack combiantors
+--- # Recipes for building stack combinators
 --------------------------------------------------------------------------------
 
-local parent = data.raw["recipe"]["arithmetic-combinator"]
+local recipe = table.deepcopy(data.raw["recipe"]["arithmetic-combinator"])
 
-local recipe = {
-  type = "recipe",
-  name = "stack-combinator",
-  normal = {
-    enabled = false,
-    result = "stack-combinator",
-    -- A stack combinator is basically a hacked AC, so the crafting price should 
-    -- reflect that.
-    ingredients = { 
-      -- One arithmetic combinator
-      { parent.name, 1 },
-      -- A repair pack (closest thing Factorio has to a generit "tool" item)
-      { "repair-pack", 1 }
-    },
-    -- And a little effort
-    energy_required = 2.5,
-  }
+recipe.name = "stack-combinator"
+recipe.enabled = false
+recipe.result = "stack-combinator"
+-- A stack combinator is basically a hacked AC, so the crafting price should reflect that.
+recipe.ingredients = {
+  { "arithmetic-combinator", 1 },
+  { "repair-pack", 1 }
 }
 
 data:extend{recipe}

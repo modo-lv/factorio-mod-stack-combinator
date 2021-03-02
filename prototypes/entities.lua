@@ -20,6 +20,7 @@ Mod.logger:debug("Entity `" .. out.name .. "` defined, signal capacity: " .. out
 
 -- Main combinator
 local sc = table.deepcopy(data.raw["arithmetic-combinator"]["arithmetic-combinator"])
+sc.localised_name = nil
 sc.name = StaCo.NAME
 sc.minable.result = StaCo.NAME
 
