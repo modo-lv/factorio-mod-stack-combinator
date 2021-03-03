@@ -14,13 +14,12 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 * Works with **blueprints**.
 * **Shouldn't break anything**. Stack combinator is based on the *arithmetic and constant combinators*, and does not involve any other entities or game objects.
 * Other mods:
-  * Works in **[Nullius](https://mods.factorio.com/mod/nullius)**. 
-  * Can be **moved around with [Picker Dollies](https://mods.factorio.com/mod/PickerDollies)**.
-  * Works with **mods that change circuit wire colors**, such as [Colorblind Circuit Network](https://mods.factorio.com/mod/ColorblindCircuitNetwork) and [Almost Invisible Electric Wires](https://mods.factorio.com/mod/AlmostInvisibleElectricWires).
+    * Works in **[Nullius](https://mods.factorio.com/mod/nullius)**. 
+    * Can be **moved around with [Picker Dollies](https://mods.factorio.com/mod/PickerDollies)**.
+    * Works with **mods that change circuit wire colors**, such as [Colorblind Circuit Network](https://mods.factorio.com/mod/ColorblindCircuitNetwork) and [Almost Invisible Electric Wires](https://mods.factorio.com/mod/AlmostInvisibleElectricWires).
 * **Research costs** are calculated dynamically based on *circuit network* technology costs, so it should fit in naturally with balance changes introduced by other mods.
 * **Crafting costs** are an *arithmetic combinator* and a *repair pack*.
 * **Multiplayer** hasn't been tested, but the mod doesn't do anything incompatible that I know of, so it *should* be OK.
-* Takes twice as long to build in **expensive mode**.
 
 ## Limitations
 * Due to the way game works, the **maximum amount of output signals** is initially limited to 40 (twice the capacity of a vanilla *constant combinator*). You can increase the limit in startup settings, but it may affect performance (according to [Larger Constant Combinator's changelog](https://mods.factorio.com/mod/Larger-Constant-Combinator/changelog); I haven't tested any large amounts myself).
