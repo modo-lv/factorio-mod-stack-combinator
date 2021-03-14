@@ -21,23 +21,7 @@ function StackCombinatorOutput.create(sc)
   output.destructible = false
   output.operable = false
 
-  -- Connect the output combinator to the stack combinator's output
-  -- so that when player connects to the SC's output (which outputs nothing),
-  -- the OC's signals are on the same wires.
-  input.connect_neighbour({
-    wire = defines.wire_type.red, 
-    target_entity = output, 
-    source_circuit_id = defines.circuit_connector_id.combinator_output,
-    target_circuit_id = defines.circuit_connector_id.constant_combinator
-  })
-  input.connect_neighbour({
-      wire = defines.wire_type.green,
-      target_entity = output,
-      source_circuit_id = defines.circuit_connector_id.combinator_output,
-      target_circuit_id = defines.circuit_connector_id.constant_combinator
-  })
-
-  sc:debug_log("Output constructed and connected.")
+  sc:debug_log("Output constructed.")
 
   return output
 end

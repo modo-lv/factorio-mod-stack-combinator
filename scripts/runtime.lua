@@ -57,12 +57,13 @@ end
 
 --- Get the stack combinator data for an existing input entity
 function Runtime:sc(input)
+  if not self.combinators then self:register_combinators() end
   return self.combinators[input.unit_number]
 end
 
 --- Find and register all existing stack combinators on the map
 function Runtime:register_combinators()
-  local start = game.ticks_played
+  local start = (game and game.ticks_played) or -1
   self.combinators = {}
 
   for _, surface in pairs(game.surfaces) do
@@ -73,7 +74,7 @@ function Runtime:register_combinators()
       local output = surface.find_entity(This.StaCo.Output.NAME, input.position)
       if not output then
         error(
-          "Stack Combinator " .. input.id ..
+          "Stack Combinator " .. input.unit_number ..
             " (at {" .. input.position.x .. ", " .. input.position.y ..
             "} on " .. surface.name .. ") has no output."
         )
@@ -82,7 +83,7 @@ function Runtime:register_combinators()
     end
   end
 
-  local delta = game.ticks_played - start
+  local delta = (game and game.ticks_played or 0) - start
   self:save()
   Mod.logger:debug(
     "(Re-)registered " .. table_size(self.combinators) ..

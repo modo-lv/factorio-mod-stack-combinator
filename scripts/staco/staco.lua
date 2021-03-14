@@ -70,7 +70,7 @@ function StaCo.stackify(input, invert, result)
     if (result[name]) then
       result[name].count = result[name].count + stack
     else
-      result[name] = {signal = entry.signal, count = stack}
+      result[name] = { signal = entry.signal, count = stack }
     end
   end
   return result
@@ -88,12 +88,32 @@ function StaCo.created(input, output)
   end
 
   local sc = {}
-  setmetatable(sc, {__index = StaCo })
+  setmetatable(sc, { __index = StaCo })
   sc.id = input.unit_number
   sc.input = input
   sc.output = output or StaCo.Output.create(sc)
+  sc:connect()
   sc.config = StaCo.Config.create(sc)
   return sc
+end
+
+--- Connect the output combinator to the stack combinator's output
+--- so that when player connects to the SC's output (which outputs nothing),
+--- the OC's signals are on the same wires.
+function StaCo:connect()
+  self.input.connect_neighbour({
+    wire = defines.wire_type.red,
+    target_entity = self.output,
+    source_circuit_id = defines.circuit_connector_id.combinator_output,
+    target_circuit_id = defines.circuit_connector_id.constant_combinator
+  })
+  self.input.connect_neighbour({
+    wire = defines.wire_type.green,
+    target_entity = self.output,
+    source_circuit_id = defines.circuit_connector_id.combinator_output,
+    target_circuit_id = defines.circuit_connector_id.constant_combinator
+  })
+  self:debug_log("Output connected to input.")
 end
 
 --- In-game entity rotated
@@ -112,7 +132,7 @@ end
 --- In-game entity removed
 function StaCo:destroyed()
   -- Input entity has already been destroyed, we need to remove the output
-  self.output.destroy({raise_destroy = false})
+  self.output.destroy({ raise_destroy = false })
   self:debug_log("Output destroyed.")
 end
 
