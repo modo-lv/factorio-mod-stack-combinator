@@ -62,7 +62,7 @@ end
 
 --- Find and register all existing stack combinators on the map
 function Runtime:register_combinators()
-  local start = game.ticks_played
+  local start = (game and game.ticks_played) or -1
   self.combinators = {}
 
   for _, surface in pairs(game.surfaces) do
@@ -82,7 +82,7 @@ function Runtime:register_combinators()
     end
   end
 
-  local delta = game.ticks_played - start
+  local delta = (game and game.ticks_played or 0) - start
   self:save()
   Mod.logger:debug(
     "(Re-)registered " .. table_size(self.combinators) ..

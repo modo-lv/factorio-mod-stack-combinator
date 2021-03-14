@@ -21,6 +21,9 @@ end
 
 --- Individual removal.
 local function remove(ev)
+  if (not This.runtime.combinators) then
+    This.runtime:register_combinators()
+  end
   local sc = This.runtime:sc(ev.entity)
   sc:destroyed()
   This.runtime:unregister_sc(sc)
