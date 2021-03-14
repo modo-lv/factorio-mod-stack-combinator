@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021.03.14
+  Bugfixes:
+    - Crash when trying to remove StaCos in map editor.
+    - Moving StaCo with Picker Dollies in map editor no longer leaves behind the internal constant combinator.
+    - Cut internal wiring (such as with a wire cutter tool) is now automatically restored when opening a StaCo's GUI or picking a circuit wire.
+  Balancing:
+    - Tweaked tech research costs in Nullius.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2021.03.02
   Bugfixes:
