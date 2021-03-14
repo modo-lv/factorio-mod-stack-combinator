@@ -57,6 +57,7 @@ end
 
 --- Get the stack combinator data for an existing input entity
 function Runtime:sc(input)
+  if not self.combinators then self:register_combinators() end
   return self.combinators[input.unit_number]
 end
 
@@ -73,7 +74,7 @@ function Runtime:register_combinators()
       local output = surface.find_entity(This.StaCo.Output.NAME, input.position)
       if not output then
         error(
-          "Stack Combinator " .. input.id ..
+          "Stack Combinator " .. input.unit_number ..
             " (at {" .. input.position.x .. ", " .. input.position.y ..
             "} on " .. surface.name .. ") has no output."
         )

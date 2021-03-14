@@ -14,7 +14,6 @@ end
 --- Wire up the event handler
 -- Has to be called from within another event otherwise remote.call doesn't work
 local function register()
-  events.remove(defines.events.on_tick, register)
   if not (game.active_mods["PickerDollies"]) then return end
   Mod.logger:debug("Picker Dollies detected, registering move handler.")
   events.register(remote.call("PickerDollies", "dolly_moved_entity_id"), moved,
@@ -25,7 +24,7 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function PickerDollies.register_all()
-  events.register(defines.events.on_tick, register)
+  events.register(defines.events.on_player_joined_game, register)
 end
 
 ----------------------------------------------------------------------------------------------------
