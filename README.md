@@ -34,6 +34,7 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 ## Acknowledgements
 * This is my first serious mod ([Declutter](http://mods.factorio.com/mod/declutter) was a trivial couple of lines), and the mod that helped me figure out most of what I needed to get started was **[Filter Combinator](https://mods.factorio.com/mod/Filter_Combinator) by [gcascaes](https://mods.factorio.com/user/gcascaes)**.
 * Big thanks to [Picker Dollies](https://mods.factorio.com/mod/PickerDollies) for making it not only possible, but trivially easy to add support for it in other mods.
+* Thanks to [therax](https://mods.factorio.com/user/therax) for the idea on how to semi-automatically restore circuit wiring if it's removed.
 * I also had a look at:
     * [Larger Constant Combinator](https://mods.factorio.com/mod/Larger-Constant-Combinator) for output signal capacity increase.
     * [Circuit HUD](https://mods.factorio.com/mod/CircuitHUD) for signal display GUI styles.

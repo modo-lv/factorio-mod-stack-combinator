@@ -11,7 +11,7 @@ local Runtime = {
 --- Run the main logic on all StaCos
 -- For binding to the on_tick event
 function Runtime:run_combinators()
-  if not (self.combinators) then self.register_combinators() end
+  if not (self.combinators) then self:register_combinators() end
   for _, sc in pairs(self.combinators) do sc:run() end
 end
 
