@@ -7,6 +7,10 @@ if (mods["nullius"]) then
   local tech = data.raw["technology"]["stack-combinator"]
   tech.order = "nullius-" .. (tech.order or "s")
   tech.prerequisites = { "nullius-computation" }
+  tech.unit = table.deepcopy(data.raw["technology"]["nullius-computation"].unit)
+  -- Use a fraction of the main technology costs to remain balanced
+  tech.unit.count = math.ceil(tech.unit.count / 4)
+  tech.unit.time = math.ceil(tech.unit.time / 4)
 
   --- Recipe
   local base = data.raw["recipe"]["stack-combinator"]

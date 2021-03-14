@@ -12,9 +12,12 @@ local out = table.deepcopy(data.raw["constant-combinator"]["constant-combinator"
 out.name = StaCo.Output.NAME
 out.minable = nil
 out.collision_mask = {}
+out.selection_box = nil
+out.allow_copy_paste = false
 out.item_slot_count = Mod.settings:startup().signal_capacity
 table.insert(out.flags, "placeable-off-grid")
-
+table.insert(out.flags, "not-selectable-in-game")
+table.insert(out.flags, "not-flammable")
 Mod.logger:debug("Entity `" .. out.name .. "` defined, signal capacity: " .. out.item_slot_count)
 
 

@@ -38,6 +38,29 @@ local function run()
   This.runtime:run_combinators()
 end
 
+--- Ensure that all StaCos are connected to their output combinators.
+-- Any tool that cuts circuit wires of entities will also cut the ones connecting StaCo to its output.
+-- There is no clean way to check for wire removal; the best we can do is leave the StaCo disconnected until the player
+-- picks up another wire (possibly intending to reconnect the StaCo to something), and then check if any need fixing.
+local function ensure_internal_connections(ev)
+  local player_index = ev.player_index
+  local cursor_stack = game.players[player_index].cursor_stack
+  if cursor_stack.valid_for_read then
+    local name = cursor_stack.name
+    if name == "red-wire" or name == "green-wire" then
+      for _, sc in pairs(This.runtime.combinators) do
+        for _, color in pairs({ "red", "green" }) do
+          local control = sc.output.get_control_behavior(defines.wire_type[color])
+          local network = control.get_circuit_network(defines.wire_type[color])
+          if not network then
+            sc:connect()
+          end
+        end
+      end
+    end
+  end
+end
+
 --------------------------------------------------------------------------------
 
 -- Filter events for stack combinator
@@ -49,6 +72,7 @@ end
 function StackCombinatorEvents.register_all()
   -- Run
   events.register(defines.events.on_tick, run)
+  events.register(defines.events.on_player_cursor_stack_changed, ensure_internal_connections)
   -- Creation
   events.register(defines.events.on_built_entity, create, event_filter, "created_entity")
   events.register(defines.events.on_robot_built_entity, create, event_filter, "created_entity")

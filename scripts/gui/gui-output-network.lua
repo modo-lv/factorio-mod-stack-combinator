@@ -12,6 +12,11 @@ function GuiOutputNetwork:tick(sc)
     self[color].clear()
     local control = sc.output.get_control_behavior(defines.wire_type[color])
     local network = control.get_circuit_network(defines.wire_type[color])
+    -- If the wires between input & output have been cut, restore them.
+    if not network then
+      sc:connect()
+      network = control.get_circuit_network(defines.wire_type[color])
+    end
     for _, signal in ipairs(network.signals or { }) do
       local st = signal.signal.type == "virtual" and "virtual-signal" or signal.signal.type
 
