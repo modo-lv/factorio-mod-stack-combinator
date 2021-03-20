@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2021.03.20
+  Features:
+    - Added division and rounding operations.
+  Bugfixes:
+    - Combinator no longer works without power.
+    - Fixed Picker Dollies not working in map editor.
+    - Partially failed Picker Dollies oblong rectangle rotation is now handled correctly.
+    - Fixed crash when removing a StaCo while its GUI is open.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2021.03.15
   Bugfixes:

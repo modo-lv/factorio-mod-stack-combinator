@@ -14,6 +14,7 @@ local Gui = {
     status = require("gui-status-label"),
     preview = require("gui-preview"),
     input = require("gui-input"),
+    input_op = require("gui-input-op"),
     output = require("gui-output"),
     output_network = require("gui-output-network")
   }
@@ -21,6 +22,8 @@ local Gui = {
 Gui.CLOSE_BUTTON_NAME = Gui.NAME .. "-close"
 Gui.INVERT_RED_NAME = Gui.NAME .. "-invert-red"
 Gui.INVERT_GREEN_NAME = Gui.NAME .. "-invert-green"
+Gui.INPUT_OP_NAME = Gui.NAME .. "-input-op"
+Gui.INPUT_OP_DESC = Gui.NAME .. "-input-op-description"
 
 function Gui:tick()
   self.elements.status:tick(self.staco)
@@ -58,6 +61,11 @@ function Gui:create(sc, player)
   self.elements.input:create(sc, contents)
   self.elements.input.red.name = self.INVERT_RED_NAME
   self.elements.input.green.name = self.INVERT_GREEN_NAME
+
+  -- Operation
+  self.elements.input_op:create(sc, contents)
+  self.elements.input_op.selector.name = self.INPUT_OP_NAME
+  self.elements.input_op.description.name = self.INPUT_OP_DESC
 
   contents.add { type = "line" }
 

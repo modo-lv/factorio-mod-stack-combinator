@@ -23,12 +23,18 @@ function StaCo:run()
   local red = self.input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
   local green = self.input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
 
-  local result = self.stackify(green, self.config.invert_green, self.stackify(red, self.config.invert_red))
+  local op = self.config.operation
+  local result = self.stackify(green, self.config.invert_green, op, self.stackify(red, self.config.invert_red, op))
 
   local output = self.output.get_control_behavior()
 
   local total = table_size(result)
-  if (This.runtime:signal_overflow(self, total)) then
+  if (
+    self.input.status == defines.entity_status.no_power
+      or self.input.status == defines.entity_status.low_power
+  ) then
+    output.parameters = nil
+  elseif (This.runtime:signal_overflow(self, total)) then
     --- Not enough signal space
     output.parameters = nil
   else
@@ -50,27 +56,48 @@ end
 --- Convert circuit network signal values to their stack sizes
 -- @tparam LuaCircuitNetwork input
 -- @tparam Boolean invert Multiply all stackified signal values by -1?
+-- @tparam Int op Operation to perform
 -- @param[opt] result Already processed signals from the other wire, if any
-function StaCo.stackify(input, invert, result)
+function StaCo.stackify(input, invert, operation, result)
   result = result or {}
   if (not input or not input.signals) then
     return result
   end
-  local multiplier = 1
-  if (invert) then
-    multiplier = -1
-  end
+  local multiplier = invert and -1 or 1
 
   for _, entry in ipairs(input.signals) do
     local name = entry.signal.name
-    local stack = entry.count
+    local value = entry.count
     if (entry.signal.type == "item") then
-      stack = stack * game.item_prototypes[name].stack_size * multiplier
+      local stack = game.item_prototypes[name].stack_size
+      local op = operation
+      if (op == 1) then
+        -- Multiply
+        value = value * stack * multiplier
+      elseif (op == 2) then
+        -- Divide
+        value = value / stack * multiplier
+      elseif (op == 3) then
+        -- Round
+        op = math.abs(value) >= stack / 2 and 4 or 5
+      end
+
+      if (op == 4 or op == 5) then
+        local func = nil
+        if (op == 4 and value >= 0) or (op == 5 and value < 0) then
+          func = math.ceil
+        else
+          func = math.floor
+        end
+
+        value = func(value / stack) * stack * multiplier
+      end
     end
+
     if (result[name]) then
-      result[name].count = result[name].count + stack
+      result[name].count = result[name].count + value
     else
-      result[name] = { signal = entry.signal, count = stack }
+      result[name] = { signal = entry.signal, count = value }
     end
   end
   return result
@@ -131,6 +158,12 @@ end
 
 --- In-game entity removed
 function StaCo:destroyed()
+  -- Close GUI for all players
+  if (This.gui.staco == self) then
+    for _, player in pairs(game.players) do
+      This.gui:destroy(player)
+    end
+  end
   -- Input entity has already been destroyed, we need to remove the output
   self.output.destroy({ raise_destroy = false })
   self:debug_log("Output destroyed.")

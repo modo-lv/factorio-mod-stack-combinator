@@ -9,6 +9,8 @@
 local _serpent = serpent
 local _table = require('__stdlib__/stdlib/utils/table')
 
+local GuiInputOp = require("scripts/gui/gui-input-op")
+
 local StaCoConfig = {
   --- Static combinator that this configuration is for
   sc = nil,
@@ -17,7 +19,10 @@ local StaCoConfig = {
   invert_red = nil,
 
   --- Invert green inputs?
-  invert_green = nil
+  invert_green = nil,
+
+  --- Input operation
+  operation = 1,
 }
 
 --- Instantiate a configuration object for a stack combinator
@@ -30,23 +35,44 @@ function StaCoConfig.create(sc)
   return config
 end
 
+local op_map_write = {
+  "*", -- 1
+  "/", -- 2
+  "AND", -- 3
+  "OR", -- 4
+  "XOR", -- 5
+}
+
 --- Write SC's configuration
 function StaCoConfig:save()
   local r, g = self.invert_red, self.invert_green
   local name = (r and g and "yellow") or (r and "red") or (g and "green") or ("black")
   local signal = { type = "virtual", name = "signal-" .. name }
-  self.sc.input.get_or_create_control_behavior().parameters = { first_signal = signal }
+  self.sc.input.get_or_create_control_behavior().parameters = {
+    first_signal = signal,
+    operation = op_map_write[self.operation]
+  }
   local output = _table.deep_copy(self)
   output.sc = nil
-  self.sc:debug_log("Configured:\n  Invert: "
-    .. "[img=item/red-wire] = " .. tostring(self.invert_red) .. ", "
-    .. "[img=item/green-wire] = " .. tostring(self.invert_green)
+  self.sc:debug_log("Config: "
+    .. "[img=item/red-wire] " .. tostring(self.invert_red) .. ", "
+    .. "[img=item/green-wire] " .. tostring(self.invert_green) .. ", "
+    .. "op = " .. GuiInputOp.item_names[self.operation] .. " (" .. self.operation ..")"
   )
 end
 
+local op_map_read = {
+  ["*"] = 1,
+  ["/"] = 2,
+  ["AND"] = 3,
+  ["OR"] = 4,
+  ["XOR"] = 5,
+}
+
 --- Read SC's configuration, or create the default if there isn't one
 function StaCoConfig:load_or_default()
-  local signal = self.sc.input.get_control_behavior().parameters.first_signal
+  local params = self.sc.input.get_control_behavior().parameters
+  local signal = params.first_signal
   if (signal and signal.type == "virtual") then
     self.invert_red = signal.name == "signal-red" or signal.name == "signal-yellow"
     self.invert_green = signal.name == "signal-green" or signal.name == "signal-yellow"
@@ -54,6 +80,10 @@ function StaCoConfig:load_or_default()
     self.sc:debug_log("No valid configuration (signal is " .. _serpent.line(signal) .. "), resetting to defaults.")
     _table.merge(self, self.defaults())
   end
+
+  -- Operation
+  local op = params.operation
+  self.operation = op_map_read[op]
 
   self:save()
   return self
