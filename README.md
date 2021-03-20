@@ -44,6 +44,12 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 
 
 ## Screenshots
-![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/red.jpg)
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/multi.jpg)
 
-![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/green.jpg)
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/invert.jpg)
+
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/div.jpg)
+
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/round.jpg)
+
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/roundup.jpg)
