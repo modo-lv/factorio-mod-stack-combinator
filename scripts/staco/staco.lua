@@ -158,6 +158,12 @@ end
 
 --- In-game entity removed
 function StaCo:destroyed()
+  -- Close GUI for all players
+  if (This.gui.staco == self) then
+    for _, player in pairs(game.players) do
+      This.gui:destroy(player)
+    end
+  end
   -- Input entity has already been destroyed, we need to remove the output
   self.output.destroy({ raise_destroy = false })
   self:debug_log("Output destroyed.")
