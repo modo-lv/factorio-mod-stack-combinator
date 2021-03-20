@@ -29,7 +29,12 @@ function StaCo:run()
   local output = self.output.get_control_behavior()
 
   local total = table_size(result)
-  if (This.runtime:signal_overflow(self, total)) then
+  if (
+    self.input.status == defines.entity_status.no_power
+      or self.input.status == defines.entity_status.low_power
+  ) then
+    output.parameters = nil
+  elseif (This.runtime:signal_overflow(self, total)) then
     --- Not enough signal space
     output.parameters = nil
   else
