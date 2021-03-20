@@ -32,7 +32,7 @@ function GuiInputOp:create(sc, parent)
 
   self.selector = parent.add {
     type = "drop-down",
-    items = item_names,
+    items = self.item_names,
     selected_index = sc.config.operation
   }
   self.selector.style.width = 60
