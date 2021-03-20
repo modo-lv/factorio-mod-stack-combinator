@@ -1,6 +1,6 @@
 {
   "name": "stack-combinator",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "title": "Stack Combinator",
   "author": "modo.lv",
   "contact": "http://modo.lv",
@@ -13,6 +13,6 @@
     "? nullius",
     "? PickerDollies"
   ],
-  "description": "A combinator that multiplies item signal values by their stack sizes. Features signal inversion and output display, works in Nullius.",
+  "description": "An arithmetic combinator that performs stack size multiplication/division/rounding on item signals. Features signal inversion and output display, compatible with Picker Dollies and Nullius.",
   "license": "[Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)"
 }
