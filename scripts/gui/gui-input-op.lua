@@ -12,6 +12,14 @@ local GuiInputOp = {
     "round",
     "ceil",
     "floor",
+  },
+
+  item_names = {
+    " *",
+    " /",
+    "↕",
+    "↑",
+    "↓",
   }
 }
 
@@ -24,13 +32,7 @@ function GuiInputOp:create(sc, parent)
 
   self.selector = parent.add {
     type = "drop-down",
-    items = {
-      " *",
-      " /",
-      "↕",
-      "↑",
-      "↓",
-    },
+    items = item_names,
     selected_index = sc.config.operation
   }
   self.selector.style.width = 60

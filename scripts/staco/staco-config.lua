@@ -9,6 +9,8 @@
 local _serpent = serpent
 local _table = require('__stdlib__/stdlib/utils/table')
 
+local GuiInputOp = require("scripts/gui/gui-input-op")
+
 local StaCoConfig = {
   --- Static combinator that this configuration is for
   sc = nil,
@@ -52,10 +54,10 @@ function StaCoConfig:save()
   }
   local output = _table.deep_copy(self)
   output.sc = nil
-  self.sc:debug_log("Configured:\n  Invert: "
-    .. "[img=item/red-wire] = " .. tostring(self.invert_red) .. ", "
-    .. "[img=item/green-wire] = " .. tostring(self.invert_green) .. ", "
-    .. "op = " .. self.operation
+  self.sc:debug_log("Config: "
+    .. "[img=item/red-wire] " .. tostring(self.invert_red) .. ", "
+    .. "[img=item/green-wire] " .. tostring(self.invert_green) .. ", "
+    .. "op = " .. GuiInputOp.item_names[self.operation] .. " (" .. self.operation ..")"
   )
 end
 
