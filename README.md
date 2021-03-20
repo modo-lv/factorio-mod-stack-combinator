@@ -6,9 +6,9 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 
 ## Features
 * **Item signal *stackification***. Each item signal sent to the stack combinator input is output with its amount modified according to that item's stack size (non-item signals are output unchanged), depending on the selected operation:
-  * Multiplication
-  * Division
-  * Rounding to full stack: up (away from zero), down (towards zero) or both (whichever is closer) 
+    * Multiplication
+    * Division
+    * Rounding to full stack: up (away from zero), down (towards zero) or both (whichever is closer) 
 * **Signal inversion**. Each combinator can also be configured to *invert* input signals (green, red or both), which treats positive input signal amounts as negative and vice-versa.
 * **Output signal display**. Opening the stack combinator shows all output signals, even if the combinator's output isn't connected to anything. The display includes "raw" output signals — what stack combinator is sending (displayer in silver), and "network" output signals — what the final signals are on the output wire, taking into account any other connected signal sources.
 
