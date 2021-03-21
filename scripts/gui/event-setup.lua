@@ -81,21 +81,20 @@ function GuiEvents.register_all()
     end
   )
 
-  -- Checkboxes & drop-down
-  events.register(
-    {
-      defines.events.on_gui_checked_state_changed,
-      defines.events.on_gui_selection_state_changed
-    },
-    config,
+  -- Checkboxes
+  events.register(defines.events.on_gui_checked_state_changed, config,
     function(ev)
       return ev.element and (
         ev.element.name == This.gui.INVERT_RED_NAME or
-          ev.element.name == This.gui.INVERT_GREEN_NAME or
-          ev.element.name == This.gui.INPUT_OP_NAME
+          ev.element.name == This.gui.INVERT_GREEN_NAME
       )
     end
   )
+
+  -- Dropdown
+  events.register(defines.events.on_gui_selection_state_changed, config, function(ev)
+    return ev.element and ev.element.name == This.gui.INPUT_OP_NAME
+  end)
 
   -- Click
   events.register(defines.events.on_gui_click, click,
