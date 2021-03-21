@@ -27,8 +27,9 @@ local function config(ev)
 
   -- Update op description
   local op = This.gui.elements.input_op
+  local selector = This.gui.elements.input_op.selector
   op.description.caption = {
-    "gui.input-op-" .. op.description_keys[op.selector.selected_index]
+    "gui.input-op-" .. op.description_keys[selector and selector.selected_index or sc.config.operation or 1]
   }
 
   -- Update op selection
