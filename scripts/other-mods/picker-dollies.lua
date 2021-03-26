@@ -31,7 +31,7 @@ local function register()
 
     -- Log that we've registered
     events.register(defines.events.on_player_joined_game, function()
-      Mod.logger:debug("Picker Dollies detected, registering move handlers.")
+      Mod.logger:debug("Picker Dollies detected, move & rotation handlers registered.")
     end)
   end
 end
