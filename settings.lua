@@ -15,6 +15,13 @@ local startup = {
     maximum_value = 10000
   },
   {
+    -- Power requirement toggle
+    setting_type = "startup",
+    name = Mod.NAME .. "-require-power",
+    type = "bool-setting",
+    default_value = true
+  },
+  {
     -- Debug mode
     setting_type = "startup",
     name = Mod.NAME .. "-debug-mode",

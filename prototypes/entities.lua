@@ -28,6 +28,7 @@ sc.minable.result = StaCo.NAME
 -- Prevent other mods overriding AC's localisation from propagating to StaCo
 sc.localised_name = nil
 sc.localised_description = nil
+sc.energy_source.type = Mod.settings:startup().require_power and "electric" or "void"
 
 -- Graphics
 local display_base = {

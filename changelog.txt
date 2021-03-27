@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 2021.03.27
+  Minor Features:
+    - Startup setting to toggle whether StaCos require electricity.
+  Bugfixes:
+    - Fixed an internal issue with reading boolean startup settings that are `true` by default.
+---------------------------------------------------------------------------------------------------
 Version: 1.2.4
 Date: 2021.03.26
   Bugfixes:
