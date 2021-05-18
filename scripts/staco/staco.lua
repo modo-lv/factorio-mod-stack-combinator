@@ -20,6 +20,8 @@ local StaCo = {
 
 --- Main combinator logic, process inputs into stackified output
 function StaCo:run()
+  if not (self.input.valid and self.output.valid) then return end
+
   local red = self.input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
   local green = self.input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
 
