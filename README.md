@@ -29,7 +29,7 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
     * If a static combinator receives more signals than it can output, it won't output anything and raise an alert (so you can see on the map which combinator is having the problem and where).
 
 ## Discussion & bug reports
-* The main dicussion and bug report place is [the mod's **discussion page**](https://mods.factorio.com/mod/stack-combinator/discussion).
+* The main discussion and bug report place is [the mod's **discussion page**](https://mods.factorio.com/mod/stack-combinator/discussion).
 * There's also a [thread on the forums](https://forums.factorio.com/viewtopic.php?f=190&t=94655).
 * Bugs can be reported directly [on GitHub](http://github.com/modo-lv/factorio-mod-stack-combinator/issues), but other users are less likely to go there.
 * A [Discord](https://discord.gg/K3aHYvak9M) exists as well.
