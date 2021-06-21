@@ -36,7 +36,7 @@ end
 --- Log a message.
 -- During startup, logs to the game log.
 -- During runtime, logs to the game console & script log file
--- @tparam LocalisedString message Message to send to the game log.
+-- @tparam String message Message to send to the game log.
 function Logger:log(message)
   if (Mod.runtime) then
     if not (self.output_file) then
