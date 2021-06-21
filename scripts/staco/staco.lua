@@ -120,7 +120,19 @@ function StaCo.created(input, output)
   setmetatable(sc, { __index = StaCo })
   sc.id = input.unit_number
   sc.input = input
-  sc.output = output or StaCo.Output.create(sc)
+
+  if (output) then
+    sc:debug_log("Output " .. output.unit_number .. " already exists, (re)connecting.")
+  else
+    output = sc.input.surface.find_entity(This.StaCo.Output.NAME, input.position)
+    if (output) then
+      sc:debug_log("Found existing output (" .. output.unit_number .. "), connecting.")
+    else
+      output = StaCo.Output.create(sc)
+    end
+  end
+
+  sc.output = output
   sc:connect()
   sc.config = StaCo.Config.create(sc)
   return sc

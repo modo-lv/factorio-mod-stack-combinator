@@ -11,8 +11,12 @@ local Runtime = {
 --- Run the main logic on all StaCos
 -- For binding to the on_tick event
 function Runtime:run_combinators()
-  if not (self.combinators) then self:register_combinators() end
-  for _, sc in pairs(self.combinators) do sc:run() end
+  if not (self.combinators) then
+    self:register_combinators()
+  end
+  for _, sc in pairs(self.combinators) do
+    sc:run()
+  end
 end
 
 --- Raise an alarm if a StaCo is receiving more signals than it can output.
@@ -57,7 +61,9 @@ end
 
 --- Get the stack combinator data for an existing input entity
 function Runtime:sc(input)
-  if not self.combinators then self:register_combinators() end
+  if not self.combinators then
+    self:register_combinators()
+  end
   return self.combinators[input.unit_number]
 end
 
@@ -67,7 +73,10 @@ function Runtime:register_combinators()
   self.combinators = {}
 
   for _, surface in pairs(game.surfaces) do
-    -- Find all SC entities
+    -- Find all SC outputs
+    local outputs = surface.find_entities_filtered({ name = This.StaCo.Output.NAME })
+
+    -- Find all SCs
     local scs = surface.find_entities_filtered({ name = This.StaCo.NAME })
     -- Find each SC's output and store both in the list
     for _, input in pairs(scs) do
@@ -80,21 +89,31 @@ function Runtime:register_combinators()
         )
       end
       self:register_sc(This.StaCo.created(input, output))
+      for i, v in ipairs(outputs) do
+        if v == output then
+          table.remove(outputs, i)
+          break
+        end
+      end
+    end
+    if (#outputs > 0) then
+      Mod.logger:debug("Found " .. #outputs .. " orphan SC outputs, removing.")
+      for _, output in pairs(outputs) do
+        output.destroy()
+      end
     end
   end
 
-  local delta = game.ticks_played - start
   self:save()
-  Mod.logger:log(
-    "(Re-)registered " .. table_size(self.combinators) ..
-      " stack combinator(s)" .. (game.ticks_played > 0 and " in " .. math.max(1, delta) .. " tick(s)." or ".")
-  )
+  Mod.logger:log("(Re-)registered " .. table_size(self.combinators) .. " stack combinator(s).")
 end
 
 --- Register an existing stack combinator
 -- @tparam StaCo Static combinator to register.
 function Runtime:register_sc(sc)
-  if not (self.combinators) then self.combinators = {} end
+  if not (self.combinators) then
+    self.combinators = {}
+  end
   self.combinators[sc.id] = sc
   self:save()
 end
