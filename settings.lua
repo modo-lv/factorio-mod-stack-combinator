@@ -46,6 +46,16 @@ local runtime = {
     },
     order = "a"
   },
+  {
+    -- Update frequency
+    setting_type = "runtime-global",
+    name = Mod.NAME .. "-update-delay",
+    type = "int-setting",
+    default_value = 0,
+    maximum_value = 60,
+    minimum_value = 0,
+    order = "z"
+  }
 }
 
 ----------------------------------------------------------------------------------------------------

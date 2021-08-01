@@ -22,11 +22,16 @@ local StaCo = {
 function StaCo:run()
   if not (self.input.valid and self.output.valid) then return end
 
-  local red = self.input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
-  local green = self.input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
+  local red = self.input.get_circuit_network(defines.wire_type.red,
+    defines.circuit_connector_id.combinator_input)
+  local green = self.input.get_circuit_network(defines.wire_type.green,
+    defines.circuit_connector_id.combinator_input)
 
   local op = self.config.operation
-  local result = self.stackify(green, self.config.invert_green, op, self.stackify(red, self.config.invert_red, op))
+
+  local result = {}
+  result = self.stackify(red, self.config.invert_red, op, result)
+  result = self.stackify(green, self.config.invert_green, op, result)
 
   local output = self.output.get_control_behavior()
 
@@ -61,9 +66,8 @@ end
 -- @tparam Int op Operation to perform
 -- @param[opt] result Already processed signals from the other wire, if any
 function StaCo.stackify(input, invert, operation, result)
-  result = result or {}
   if (not input or not input.signals) then
-    return result
+    return result or {}
   end
   local multiplier = invert and -1 or 1
 
@@ -85,7 +89,7 @@ function StaCo.stackify(input, invert, operation, result)
       end
 
       if (op == 4 or op == 5) then
-        local func = nil
+        local func
         if (op == 4 and value >= 0) or (op == 5 and value < 0) then
           func = math.ceil
         else
