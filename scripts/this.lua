@@ -10,8 +10,10 @@ function This:init()
 
   self.StaCo = require("scripts/staco/staco")
 
-  self.runtime = require("scripts/runtime")
-  self.gui = require("scripts/gui/gui")
+  if (script) then
+    self.runtime = require("scripts/runtime")
+    self.gui = require("scripts/gui/gui")
+  end
 end
 
 ----------------------------------------------------------------------------------------------------
