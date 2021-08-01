@@ -4,6 +4,7 @@
 
 local RuntimeSettings = {
   invert_signals = { Mod.NAME .. "-defaults-invert", "none" },
+  update_delay = { Mod.NAME .. "-update-delay", 0 }
 }
 
 ----------------------------------------------------------------------------------------------------

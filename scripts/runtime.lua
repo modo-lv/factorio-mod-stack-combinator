@@ -1,3 +1,4 @@
+local events = require('__stdlib__/stdlib/event/event')
 ----------------------------------------------------------------------------------------------------
 
 --- Runtime management
@@ -6,7 +7,25 @@ local Runtime = {
   combinators = nil,
 
   signal_overflows = nil,
+
+  update_delay = nil,
 }
+
+local function run()
+  Runtime:run_combinators()
+end
+
+function Runtime:register_run()
+  if (self.update_delay) then
+    events.remove(-self.update_delay, run)
+    self.update_delay = nil
+  end
+
+  local cfg = Mod.settings:runtime()
+  self.update_delay = cfg.update_delay + 1
+  Mod.logger:debug("Update delay is " .. cfg.update_delay .. ", (re-)registering update events...")
+  events.register(-self.update_delay, run)
+end
 
 --- Run the main logic on all StaCos
 -- For binding to the on_tick event

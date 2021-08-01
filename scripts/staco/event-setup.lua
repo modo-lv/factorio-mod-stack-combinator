@@ -5,7 +5,9 @@ local events = require('__stdlib__/stdlib/event/event')
 -- Creation, destruction, etc.
 --------------------------------------------------------------------------------
 
-local StackCombinatorEvents = {}
+local StackCombinatorEvents = {
+  run_delay = nil
+}
 
 --- Creation
 local function create(ev)
@@ -33,9 +35,11 @@ local function purge()
   This.runtime:register_combinators()
 end
 
---- Main StaCo signal processing.
-local function run()
-  This.runtime:run_combinators()
+--- A wrapper function for actually registering the run method
+--- Call this on the first tick (and then unregister self) because we need to access runtime settings
+local function start()
+  events.remove(defines.events.on_tick, start)
+  This.runtime:register_run()
 end
 
 --- Ensure that all StaCos are connected to their output combinators.
@@ -71,7 +75,7 @@ end
 
 function StackCombinatorEvents.register_all()
   -- Run
-  events.register(defines.events.on_tick, run)
+  events.register(defines.events.on_tick, start)
   events.register(defines.events.on_player_cursor_stack_changed, ensure_internal_connections)
   -- Creation
   events.register(defines.events.on_built_entity, create, event_filter, "created_entity")
