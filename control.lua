@@ -7,7 +7,6 @@ require("globals")
 --------------------------------------------------------------------------------
 
 -- This mod
-require("scripts/runtime-event-setup").register_all()
 require("scripts/staco/event-setup").register_all()
 require("scripts/gui/event-setup"):register_all()
 
