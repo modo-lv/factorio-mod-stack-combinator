@@ -3,38 +3,28 @@ local events = require('__stdlib__/stdlib/event/event')
 
 --- Runtime management
 local Runtime = {
-  --- Combinator registry
-  combinators = nil,
-
   signal_overflows = nil,
 
   update_delay = nil,
 }
 
-local function run()
-  Runtime:run_combinators()
-end
-
-function Runtime:register_run()
-  if (self.update_delay) then
-    events.remove(-self.update_delay, run)
-    self.update_delay = nil
-  end
-
+function Runtime:cfg_update()
   local cfg = Mod.settings:runtime()
-  self.update_delay = cfg.update_delay + 1
-  Mod.logger:debug("Update delay is " .. cfg.update_delay .. ", (re-)registering update events...")
-  events.register(-self.update_delay, run)
+  self.update_delay = cfg.update_delay
+  Mod.logger:debug("Update delay: " .. self.update_delay .. " tick(s).")
 end
 
 --- Run the main logic on all StaCos
 -- For binding to the on_tick event
-function Runtime:run_combinators()
-  if not (self.combinators) then
-    self:register_combinators()
+function Runtime:run_combinators(tick)
+  if (not self.update_delay) then
+    self:cfg_update()
   end
-  for _, sc in pairs(self.combinators) do
-    sc:run()
+
+  if (self.update_delay == 0 or tick % self.update_delay == 0) then
+    for _, sc in pairs(self:combinators()) do
+      sc:run()
+    end
   end
 end
 
@@ -80,17 +70,17 @@ end
 
 --- Get the stack combinator data for an existing input entity
 function Runtime:sc(input)
-  if not self.combinators then
-    self:register_combinators()
-  end
-  return self.combinators[input.unit_number]
+  return self:combinators()[input.unit_number]
 end
 
 --- Find and register all existing stack combinators on the map
-function Runtime:register_combinators()
-  local start = game.ticks_played
-  self.combinators = {}
+-- @tparam boolean force_update Recreate the StaCo registry from scratch?
+function Runtime:combinators(force_update)
+  if (global.combinators) and (not force_update) then
+    return global.combinators
+  end
 
+  global.combinators = {}
   for _, surface in pairs(game.surfaces) do
     -- Find all SC outputs
     local outputs = surface.find_entities_filtered({ name = This.StaCo.Output.NAME })
@@ -123,31 +113,22 @@ function Runtime:register_combinators()
     end
   end
 
-  self:save()
-  Mod.logger:log("(Re-)registered " .. table_size(self.combinators) .. " stack combinator(s).")
+  Mod.logger:log("Registry updated: " .. table_size(global.combinators) .. " stack combinator(s).")
+  return global.combinators
 end
 
 --- Register an existing stack combinator
 -- @tparam StaCo Static combinator to register.
 function Runtime:register_sc(sc)
-  if not (self.combinators) then
-    self.combinators = {}
-  end
-  self.combinators[sc.id] = sc
-  self:save()
+  global.combinators[sc.id] = sc
+  sc:debug_log("Combinator registered.")
 end
 
 --- Unregister a no longer existing stack combinator.
 -- @tparam StaCo Stack combinator to unregister
 function Runtime:unregister_sc(sc)
-  self.combinators[sc.id] = nil
-  self:save()
+  global.combinators[sc.id] = nil
   sc:debug_log("Combinator unregistered.")
-end
-
---- Update persistent data
-function Runtime:save()
-  Mod.runtime.save { combinators = self.combinators }
 end
 
 ----------------------------------------------------------------------------------------------------

@@ -32,7 +32,7 @@ end
 -- In case of removed chunks or surfaces, SCs get removed fully (including the output), so all
 -- that's left to do is to update the registry.
 local function purge()
-  This.runtime:register_combinators()
+  This.runtime:combinators(true)
 end
 
 --- Ensure that all StaCos are connected to their output combinators.
@@ -58,14 +58,21 @@ local function ensure_internal_connections(ev)
   end
 end
 
-local function init()
-  This.runtime:register_combinators()
-  This.runtime:register_run()
+local function run(ev)
+  This.runtime:run_combinators(ev.tick)
 end
 
 local function cfg_update(ev)
   if (ev.setting == Mod.NAME .. "-update-delay") then
-    This.runtime:register_run()
+    This.runtime:cfg_update()
+  end
+end
+
+local function load()
+  if (global.combinators) then
+    for id, sc in pairs(global.combinators) do
+      This.runtime:register_sc(This.StaCo.created(sc.input, sc.output))
+    end
   end
 end
 
@@ -79,7 +86,8 @@ end
 
 function StackCombinatorEvents.register_all()
   -- Start/run
-  events.register(defines.events.on_player_joined_game, init)
+  events.on_load(load)
+  events.register(defines.events.on_tick, run)
   events.register(defines.events.on_player_cursor_stack_changed, ensure_internal_connections)
   -- Config change
   events.register(defines.events.on_runtime_mod_setting_changed, cfg_update)
