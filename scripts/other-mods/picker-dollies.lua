@@ -24,7 +24,7 @@ local function register()
     events.register("dolly-rotate-rectangle", function(ev)
       -- Figuring out which entity was being rotated would require accessing PD's game data etc., so
       -- instead let's just ensure *all* StaCos are lined up with their outputs
-      for _, sc in pairs(This.runtime.combinators) do
+      for _, sc in pairs(global.combinators) do
         moved({ moved_entity = sc.input })
       end
     end)
