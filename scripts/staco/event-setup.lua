@@ -70,7 +70,7 @@ end
 
 local function load()
   if (global.combinators) then
-    for id, sc in pairs(global.combinators) do
+    for _, sc in pairs(global.combinators) do
       This.runtime:register_sc(This.StaCo.created(sc.input, sc.output))
     end
   end
