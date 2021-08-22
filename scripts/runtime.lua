@@ -120,7 +120,9 @@ end
 --- Register an existing stack combinator
 -- @tparam StaCo Static combinator to register.
 function Runtime:register_sc(sc)
-  global.combinators[sc.id] = sc
+  if (not global.combinators[sc.id]) or (not global.combinators[sc.id].run) then
+    global.combinators[sc.id] = sc
+  end
   sc:debug_log("Combinator registered.")
 end
 
