@@ -23,6 +23,9 @@ function Runtime:run_combinators(tick)
 
   if (self.update_delay == 0 or tick % self.update_delay == 0) then
     for _, sc in pairs(self:combinators()) do
+      if (not sc.run) then
+        sc = This.runtime:register_sc(This.StaCo.created(sc.input, sc.output))
+      end
       sc:run()
     end
   end
@@ -124,6 +127,7 @@ function Runtime:register_sc(sc)
     global.combinators[sc.id] = sc
   end
   sc:debug_log("Combinator registered.")
+  return sc
 end
 
 --- Unregister a no longer existing stack combinator.

@@ -68,14 +68,6 @@ local function cfg_update(ev)
   end
 end
 
-local function load()
-  if (global.combinators) then
-    for _, sc in pairs(global.combinators) do
-      This.runtime:register_sc(This.StaCo.created(sc.input, sc.output))
-    end
-  end
-end
-
 --------------------------------------------------------------------------------
 
 -- Filter events for stack combinator
@@ -85,8 +77,6 @@ local function event_filter(ev, entity_field)
 end
 
 function StackCombinatorEvents.register_all()
-  -- Start/run
-  events.on_load(load)
   events.register(defines.events.on_tick, run)
   events.register(defines.events.on_player_cursor_stack_changed, ensure_internal_connections)
   -- Config change
