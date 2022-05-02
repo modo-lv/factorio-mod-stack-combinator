@@ -95,9 +95,9 @@ function StackCombinatorEvents.register_all()
   events.register(defines.events.script_raised_destroy, remove, event_filter)
   events.register(defines.events.on_entity_died, remove, event_filter)
   -- Batch removal
-  events.register(defines.events.on_chunk_deleted, purge, event_filter)
-  events.register(defines.events.on_surface_cleared, purge, event_filter)
-  events.register(defines.events.on_surface_deleted, purge, event_filter)
+  events.register(defines.events.on_chunk_deleted, purge)
+  events.register(defines.events.on_surface_cleared, purge)
+  events.register(defines.events.on_surface_deleted, purge)
 end
 
 --------------------------------------------------------------------------------
