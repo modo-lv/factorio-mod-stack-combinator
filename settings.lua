@@ -51,9 +51,18 @@ local runtime = {
     setting_type = "runtime-global",
     name = Mod.NAME .. "-update-delay",
     type = "int-setting",
-    default_value = 0,
+    default_value = 6,
     maximum_value = 60,
     minimum_value = 0,
+    order = "y"
+  },
+  {
+    -- Update limit
+    setting_type = "runtime-global",
+    name = Mod.NAME .. "-update-limit",
+    type = "int-setting",
+    default_value = 100,
+    minimum_value = 1,
     order = "z"
   }
 }

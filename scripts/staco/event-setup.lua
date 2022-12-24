@@ -63,7 +63,10 @@ local function run(ev)
 end
 
 local function cfg_update(ev)
-  if (ev.setting == Mod.NAME .. "-update-delay") then
+  if (
+    ev.setting == Mod.NAME .. "-update-delay"
+      or ev.setting == Mod.NAME .. "-update-limit"
+  ) then
     This.runtime:cfg_update()
   end
 end
