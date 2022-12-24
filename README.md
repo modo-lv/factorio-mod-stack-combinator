@@ -2,7 +2,7 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/modo-lv/factorio-mod-stack-combinator?label=latest%20release)
 
-A mod for [Factorio](http://factorio.com) that adds a new type of circuit network combinator to research and craft: a stack combinator. This combinator modifies each item signal it receives according to that item's stack size and selected operation. For example, if the stack size for Coal is 50 and you send a Coal signal with value 2 and `*` (multiplication) selected, a stack combinator will output Coal×100 signal.
+A mod for [Factorio](http://factorio.com) that adds a new type of circuit network combinator to research and craft: a stack combinator. This combinator modifies each item signal it receives according to that item's stack size and selected operation. For example, if the stack size for Coal is 50, and you send a Coal signal with value 2 and `*` (multiplication) selected, a stack combinator will output Coal×100 signal.
 
 ## Features
 * **Item signal *stackification***. Each item signal sent to the stack combinator input is output with its amount modified according to that item's stack size (non-item signals are output unchanged), depending on the selected operation:
@@ -24,9 +24,15 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 * **Crafting costs** are an *arithmetic combinator* and a *repair pack* (*copper cable* in Nullius).
 * **Multiplayer** hasn't been tested, but the mod doesn't do anything incompatible that I know of, so it *should* be OK.
 
-## Limitations
-* Due to the way game works, the **maximum amount of output signals** is initially limited to 40 — twice the capacity of a vanilla *constant combinator*, meaning one StaCo can process up to two full constant combinator outputs. You can increase the limit in startup settings, but it may affect performance (according to [Larger Constant Combinator's changelog](https://mods.factorio.com/mod/Larger-Constant-Combinator/changelog); I haven't tested any large amounts myself).
+## Limitations & performance
+* Due to the way game works, the **maximum amount of output signals** is initially limited to 40 — twice the capacity of a vanilla *constant combinator*, meaning one StaCo can process signals from two full constant combinators. You can increase the limit in startup settings, but it may affect performance, depending on how many StaCos you have.
     * If a static combinator receives more signals than it can output, it won't output anything and raise an alert (so you can see on the map which combinator is having the problem and where).
+* Unfortunately due to how Factorio is built, the only way to achieve this functionality is to manually modify circuit signals in a mod script, which can impact game performance. There are two map settings to let you mitigate this, at the cost of update speeds:
+ 
+  * **Update delay** determines how frequently updates happen. The game runs 60 ticks per second, and you can use this setting to slow down stack combinator updates so that they don't happen on every tick, but, say, every 6 (10 times per second; this is the default value).
+  * **Update limit** controls how many stack combinators are processed in each update.
+
+  As an example, with the default values of 6 (delay) and 100 (limit), 1000 combinators would be updated over the course of 1 second: first 100 of the combinators would get updated, then nothing for 0.1 seconds, then the next 100 and so on. As a vague benchmark, with an Intel i5-8400 CPU, on a completely empty map with nothing but a thousand stack combinators on it, processing each update takes about half of a millisecond.
 
 ## Discussion & bug reports
 * The main discussion and bug report place is [the mod's **discussion page**](https://mods.factorio.com/mod/stack-combinator/discussion).

@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2022.12.24
+  Optimizations:
+    - Mod now splits updates across multiple ticks (configurable).
+    - Default update delay increased from 0 to 6 ticks.
+---------------------------------------------------------------------------------------------------
 Version: 1.2.13
 Date: 2022.05.02
   Bugfixes:
