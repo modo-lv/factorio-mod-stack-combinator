@@ -14,6 +14,7 @@ local function create(ev)
   local input = (ev.created_entity or ev.destination or ev.entity)
   local sc = This.StaCo.created(input)
   This.runtime:register_sc(sc)
+  table.insert(This.runtime.update_queue, sc.id)
 end
 
 --- Rotation
