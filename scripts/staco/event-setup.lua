@@ -46,7 +46,7 @@ local function ensure_internal_connections(ev)
   if cursor_stack.valid_for_read then
     local name = cursor_stack.name
     if name == "red-wire" or name == "green-wire" then
-      for _, sc in pairs(global.combinators()) do
+      for _, sc in pairs(This.runtime:combinators()) do
         for _, color in pairs({ "red", "green" }) do
           local control = sc.output.get_control_behavior(defines.wire_type[color])
           local network = control.get_circuit_network(defines.wire_type[color])
