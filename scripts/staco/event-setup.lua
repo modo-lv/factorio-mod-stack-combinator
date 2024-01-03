@@ -1,4 +1,5 @@
 local events = require('__stdlib__/stdlib/event/event')
+local StaCoConfig = require("staco-config")
 
 --------------------------------------------------------------------------------
 --- # Events related to the stack combinator entity lifecycle
@@ -15,6 +16,18 @@ local function create(ev)
   local sc = This.StaCo.created(input)
   This.runtime:register_sc(sc)
   table.insert(This.runtime.update_queue, sc.id)
+end
+
+--- Pasting
+local function pasted(ev)
+  if (ev.source and ev.destination and ev.source.name == This.StaCo.NAME) then
+    local to = This.runtime:sc(ev.destination)
+    -- Factorio now pops up the output after pasting setings, even if the rotation of input didn't actually change.
+    -- Calling the standard rotation handler seems to fix this.
+    to:rotated()
+    -- Update SC's config cache
+    to.config = StaCoConfig.create(to)
+  end
 end
 
 --- Rotation
@@ -91,7 +104,8 @@ function StackCombinatorEvents.register_all()
   events.register(defines.events.on_entity_cloned, create, event_filter, "destination")
   events.register(defines.events.script_raised_built, create, event_filter)
   events.register(defines.events.script_raised_revive, create, event_filter)
-  -- Rotation
+  -- Rotation & settings pasting
+  events.register(defines.events.on_entity_settings_pasted, pasted)
   events.register(defines.events.on_player_rotated_entity, rotate, event_filter)
   -- Removal
   events.register(defines.events.on_player_mined_entity, remove, event_filter)
