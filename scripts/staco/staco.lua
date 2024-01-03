@@ -22,10 +22,8 @@ local StaCo = {
 function StaCo:run()
   if not (self.input.valid and self.output.valid) then return end
 
-  local red = self.input.get_circuit_network(defines.wire_type.red,
-    defines.circuit_connector_id.combinator_input)
-  local green = self.input.get_circuit_network(defines.wire_type.green,
-    defines.circuit_connector_id.combinator_input)
+  local red = self.input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
+  local green = self.input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
 
   local op = self.config.operation
 
@@ -69,13 +67,17 @@ function StaCo.stackify(input, invert, operation, result)
   if (not input or not input.signals) then
     return result or {}
   end
-  local multiplier = invert and -1 or 1
+  local nonItems = Mod.settings:runtime().non_item_signals
 
   for _, entry in ipairs(input.signals) do
     local name = entry.signal.name
     local value = entry.count
-    if (entry.signal.type == "item") then
-      local stack = game.item_prototypes[name].stack_size
+    local type = entry.signal.type
+    local process = type == "item" or nonItems == "pass" or nonItems == "invert"
+    local multiplier = (invert and (type == "item" or nonItems == "invert")) and -1 or 1
+
+    if (process) then
+      local stack = type == "item" and game.item_prototypes[name].stack_size or 1
       local op = operation
       if (op == 1) then
         -- Multiply
@@ -103,7 +105,9 @@ function StaCo.stackify(input, invert, operation, result)
     if (result[name]) then
       result[name].count = result[name].count + value
     else
-      result[name] = { signal = entry.signal, count = value }
+      if (process) then
+        result[name] = { signal = entry.signal, count = value }
+      end
     end
   end
   return result

@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2024.01.03
+  Minor Features:
+    - A map setting for controlling how SCs handle non-item signals.
+  Bugfixes:
+    - Fixed a crash when placing a new SC in map editor.
+---------------------------------------------------------------------------------------------------
 Version: 1.3.5
 Date: 2024.01.03
   Modding:
