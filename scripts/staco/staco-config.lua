@@ -52,8 +52,6 @@ function StaCoConfig:save()
     first_signal = signal,
     operation = op_map_write[self.operation]
   }
-  local output = _table.deep_copy(self)
-  output.sc = nil
   self.sc:debug_log("Config: "
     .. "[img=item/red-wire] " .. tostring(self.invert_red) .. ", "
     .. "[img=item/green-wire] " .. tostring(self.invert_green) .. ", "
@@ -72,6 +70,8 @@ local op_map_read = {
 --- Read SC's configuration, or create the default if there isn't one
 function StaCoConfig:load_or_default()
   local params = self.sc.input.get_control_behavior().parameters
+
+  -- Input inversion
   local signal = params.first_signal
   if (signal and signal.type == "virtual") then
     self.invert_red = signal.name == "signal-red" or signal.name == "signal-yellow"

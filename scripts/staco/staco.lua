@@ -164,7 +164,7 @@ end
 --- In-game entity rotated
 function StaCo:rotated()
   -- Rotate output as well
-  self:debug_log("Input rotated, rotating output to match.")
+  self:debug_log("Input (may have been) rotated, ensuring output direction matches input.")
   self.output.direction = self.input.direction
 end
 
