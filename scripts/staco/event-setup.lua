@@ -82,6 +82,7 @@ local function cfg_update(ev)
   if (
     ev.setting == Mod.NAME .. "-update-delay"
       or ev.setting == Mod.NAME .. "-update-limit"
+      or ev.setting == Mod.NAME .. "-non-items"
   ) then
     This.runtime:cfg_update()
   end

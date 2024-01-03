@@ -47,6 +47,19 @@ local runtime = {
     order = "a"
   },
   {
+    -- Non-items
+    setting_type = "runtime-global",
+    name = Mod.NAME .. "-non-items",
+    type = "string-setting",
+    default_value = "pass",
+    allowed_values = {
+      "pass",
+      "invert",
+      "drop"
+    },
+    order = "b"
+  },
+  {
     -- Update frequency
     setting_type = "runtime-global",
     name = Mod.NAME .. "-update-delay",
@@ -64,7 +77,7 @@ local runtime = {
     default_value = 100,
     minimum_value = 1,
     order = "z"
-  }
+  },
 }
 
 ----------------------------------------------------------------------------------------------------
