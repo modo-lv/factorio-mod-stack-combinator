@@ -15,6 +15,8 @@ end
 -- Has to be called from within another event otherwise remote.call doesn't work
 local function register()
   if (remote.interfaces["PickerDollies"]) then
+    remote.call("PickerDollies", "add_oblong_name", This.StaCo.NAME)
+
     events.register(remote.call("PickerDollies", "dolly_moved_entity_id"), moved,
       function(ev)
         return ev.moved_entity and ev.moved_entity.name == This.StaCo.NAME
@@ -26,6 +28,7 @@ local function register()
       -- instead let's just ensure *all* StaCos are lined up with their outputs
       for _, sc in pairs(global.combinators) do
         moved({ moved_entity = sc.input })
+        sc:rotated()
       end
     end)
 
