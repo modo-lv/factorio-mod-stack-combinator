@@ -149,6 +149,7 @@ function Runtime:combinators(force_update)
   end
 
   Mod.logger:log("Registry updated: " .. table_size(global.combinators) .. " stack combinator(s).")
+  Runtime:rebuild_update_queue()
   return global.combinators
 end
 
