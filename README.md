@@ -5,7 +5,7 @@
 A mod for [Factorio](http://factorio.com) that adds a new type of circuit network combinator to research and craft: a stack combinator. This combinator modifies each item signal it receives according to that item's stack size and selected operation. For example, if the stack size for Coal is 50, and you send a Coal signal with value 2 and `*` (multiplication) selected, a stack combinator will output Coal×100 signal.
 
 ## Features
-* **Item signal *stackification***. Each item signal sent to the stack combinator input is output with its amount modified according to that item's stack size (non-item signals are output unchanged), depending on the selected operation:
+* **Item signal *stackification***. Each item signal sent to the stack combinator input is output with its amount modified according to that item's stack size (non-item signals are output unchanged, but can configured in map settings to drop or apply inversions), depending on the selected operation:
     * Multiplication
     * Division
     * Rounding to full stack: up (away from zero), down (towards zero) or both (whichever is closer) 
