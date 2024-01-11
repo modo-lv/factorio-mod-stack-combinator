@@ -37,10 +37,11 @@ end
 
 local op_map_write = {
   "*", -- 1
-  "/", -- 2
-  "AND", -- 3
-  "OR", -- 4
-  "XOR", -- 5
+  "+", -- 2
+  "/", -- 3
+  "AND", -- 4
+  "OR", -- 5
+  "XOR", -- 6
 }
 
 --- Write SC's configuration
@@ -61,10 +62,11 @@ end
 
 local op_map_read = {
   ["*"] = 1,
-  ["/"] = 2,
-  ["AND"] = 3,
-  ["OR"] = 4,
-  ["XOR"] = 5,
+  ["+"] = 2, -- divide with ceil
+  ["/"] = 3, -- divide with floor
+  ["AND"] = 4,
+  ["OR"] = 5,
+  ["XOR"] = 6,
 }
 
 --- Read SC's configuration, or create the default if there isn't one

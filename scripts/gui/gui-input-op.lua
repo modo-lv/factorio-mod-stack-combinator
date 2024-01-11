@@ -8,7 +8,8 @@ local GuiInputOp = {
 
   description_keys = {
     "multiply",
-    "divide",
+    "divide-ceil",
+    "divide-floor",
     "round",
     "ceil",
     "floor",
@@ -16,7 +17,8 @@ local GuiInputOp = {
 
   item_names = {
     " *",
-    " /",
+    " / ↑",
+    " / ↓",
     "↕",
     "↑",
     "↓",
@@ -35,12 +37,12 @@ function GuiInputOp:create(sc, parent)
     items = self.item_names,
     selected_index = sc.config.operation
   }
-  self.selector.style.width = 60
-
+  self.selector.style.width = 70
 
   self.description = parent.add {
     type = "label",
   }
+  self.description.style.width = 400
 end
 
 --------------------------------------------------------------------------------

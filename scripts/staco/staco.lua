@@ -82,17 +82,23 @@ function StaCo.stackify(input, invert, operation, result)
       if (op == 1) then
         -- Multiply
         value = value * stack * multiplier
-      elseif (op == 2) then
-        -- Divide
-        value = value / stack * multiplier
-      elseif (op == 3) then
+      elseif (op == 2 or op == 3) then
+        local func
+        if (op == 2 and value >= 0) or (op == 3 and value < 0) then
+          func = math.ceil
+        else
+          func = math.floor
+        end
+
+        value = func(value / stack) * multiplier
+      elseif (op == 4) then
         -- Round
-        op = math.abs(value) >= stack / 2 and 4 or 5
+        op = math.abs(value) >= stack / 2 and 5 or 6
       end
 
-      if (op == 4 or op == 5) then
+      if (op == 5 or op == 6) then
         local func
-        if (op == 4 and value >= 0) or (op == 5 and value < 0) then
+        if (op == 5 and value >= 0) or (op == 6 and value < 0) then
           func = math.ceil
         else
           func = math.floor
