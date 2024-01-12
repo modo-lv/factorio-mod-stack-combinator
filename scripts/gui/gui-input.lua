@@ -30,6 +30,7 @@ function GuiInput:create(sc, parent)
   combineContainer.style.horizontal_align = "center"
   combineContainer.style.horizontally_squashable = true
   combineContainer.style.horizontally_stretchable = true
+  combineContainer.style.margin = {0, 20}
 
   self.combine_first = combineContainer.add {
     type = "checkbox",

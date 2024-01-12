@@ -39,10 +39,11 @@ function GuiOutput:create(parent)
   local scroll_pane = parent.add({
     type = "scroll-pane",
     style = "naked_scroll_pane",
+    vertical_scroll_policy = "never",
+    horizontal_scroll_policy = "auto-and-reserve-space",
   })
-  scroll_pane.style.minimal_height = 36
   scroll_pane.style.margin = 0
-  scroll_pane.style.maximal_height = 36 * 4
+  scroll_pane.style.horizontally_stretchable = true
 
   local flow = scroll_pane.add {
     type = "flow",
@@ -50,12 +51,14 @@ function GuiOutput:create(parent)
   }
   flow.style.horizontal_align = "center"
   flow.style.horizontally_stretchable = true
+  flow.style.horizontally_squashable = true
 
   self.signal_table = flow.add {
     type = "table",
     style = "slot_table",
-    column_count = 15
+    column_count = Mod.settings:startup().signal_capacity
   }
+  flow.style.horizontally_squashable = true
 end
 
 return GuiOutput

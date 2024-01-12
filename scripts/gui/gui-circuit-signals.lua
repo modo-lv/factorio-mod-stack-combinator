@@ -56,36 +56,32 @@ function GuiCircuitSignals:create(input, parent)
   table.style.column_alignments[1] = "left"
   table.style.column_alignments[2] = "right"
 
+  local spacing = 36 / 4
   for _, color in ipairs { "red", "green" } do
-    local pane = table.add {
-      type = "flow",
-      direction = "vertical",
-    }
-    pane.style.horizontal_align = color == "red" and "left" or "right"
-    pane.style.vertical_align = "top"
-    pane.style.vertically_stretchable = true
-
-    local flow = pane.add {
+    local block = table.add {
       type = "flow",
       direction = "horizontal",
       maximum_horizontal_squash_size = 0,
     }
-    flow.style.horizontally_stretchable = true
-    flow.style.horizontal_align = color == "red" and "left" or "right"
+    block.style.horizontally_stretchable = true
+    block.style.horizontal_align = color == "red" and "left" or "right"
+    block.style.margin = {0, (color == "red" and spacing or 0), 0, (color == "green" and spacing or 0)}
+    block.style.width = 36 * 7
 
-    local scroll = flow.add {
+    local scroll = block.add {
       type = "scroll-pane",
       style = "naked_scroll_pane",
+      vertical_scroll_policy = "never",
+      horizontal_scroll_policy = "auto-and-reserve-space",
     }
-    scroll.style.minimal_height = 36
     scroll.style.margin = 0
-    scroll.style.maximal_height = 36 * 3
     scroll.style.padding = 0
 
     self[color] = scroll.add {
       type = "table",
       style = "slot_table",
-      column_count = 7,
+      vertical_centering = false,
+      column_count = Mod.settings:startup().signal_capacity,
     }
     self[color].style.horizontally_squashable = true
   end
