@@ -16,9 +16,14 @@ local Gui = {
     input = require("gui-input"),
     input_op = require("gui-input-op"),
     output = require("gui-output"),
-    output_network = require("gui-output-network")
+    input_network = { },
+    output_network = { },
   }
 }
+local GuiSignalDisplay = require("gui-circuit-signals")
+setmetatable(Gui.elements.input_network, { __index = GuiSignalDisplay })
+setmetatable(Gui.elements.output_network, { __index = GuiSignalDisplay })
+
 Gui.CLOSE_BUTTON_NAME = Gui.NAME .. "-close"
 Gui.INVERT_RED_NAME = Gui.NAME .. "-invert-red"
 Gui.INVERT_GREEN_NAME = Gui.NAME .. "-invert-green"
@@ -28,9 +33,9 @@ Gui.INPUT_OP_DESC = Gui.NAME .. "-input-op-description"
 function Gui:tick()
   self.elements.status:tick(self.staco)
   self.elements.output:tick(self.staco)
+  self.elements.input_network:tick(self.staco)
   self.elements.output_network:tick(self.staco)
 end
-
 
 --- Create and show the the GUI
 function Gui:create(sc, player)
@@ -57,7 +62,18 @@ function Gui:create(sc, player)
   self.elements.status:create(sc, contents)
   self.elements.preview:create(sc, contents)
 
-  -- Input configuration
+  -- Input signals
+  self.elements.input_network:create(true, contents)
+
+  -- Configuration start
+  contents.add { type = "line" }
+
+  contents.add {
+    type = "label",
+    style = "heading_3_label",
+    caption = { "", { "gui.config" } },
+  }
+
   self.elements.input:create(sc, contents)
   self.elements.input.red.name = self.INVERT_RED_NAME
   self.elements.input.green.name = self.INVERT_GREEN_NAME
@@ -68,10 +84,11 @@ function Gui:create(sc, player)
   self.elements.input_op.description.name = self.INPUT_OP_DESC
 
   contents.add { type = "line" }
+  -- Configuration end
 
   -- Output signals
   self.elements.output:create(contents)
-  self.elements.output_network:create(contents)
+  self.elements.output_network:create(false, contents)
 
   player.opened = window
   -- Keep for reference
@@ -93,8 +110,6 @@ function Gui:destroy(player)
     end
   end
 end
-
-
 
 --------------------------------------------------------------------------------
 return Gui

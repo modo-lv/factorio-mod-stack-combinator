@@ -28,9 +28,11 @@ local GuiInputOp = {
 function GuiInputOp:create(sc, parent)
   parent = parent.add {
     type = "flow",
-    direction = "horizontal"
+    direction = "vertical"
   }
   parent.style.vertical_align = "center"
+  parent.style.horizontal_align = "center"
+  parent.style.horizontally_stretchable = true
 
   self.selector = parent.add {
     type = "drop-down",
@@ -42,6 +44,7 @@ function GuiInputOp:create(sc, parent)
   self.description = parent.add {
     type = "label",
   }
+  self.description.style.horizontal_align = "center"
   self.description.style.width = 400
 end
 

@@ -1,48 +1,57 @@
 ----------------------------------------------------------------------------------------------------
---- GUI elements showing signals on the output circuit networks
+--- GUI elements showing signals on the circuit networks
 ----------------------------------------------------------------------------------------------------
 
-local GuiOutputNetwork = {
+local GuiCircuitSignals = {
   red = nil,
   green = nil,
+  input = false,
+  connector_id = nil,
 }
 
-function GuiOutputNetwork:tick(sc)
+function GuiCircuitSignals:tick(sc)
   for _, color in ipairs { "red", "green" } do
     self[color].clear()
-    local control = sc.output.get_control_behavior(defines.wire_type[color])
-    local network = control.get_circuit_network(defines.wire_type[color])
+    local control = (self.input and sc.input or sc.output).get_control_behavior(defines.wire_type[color])
+    local network = control.get_circuit_network(defines.wire_type[color], self.connector_id)
     -- If the wires between input & output have been cut, restore them.
-    if not network then
+    if not self.input and not network then
       sc:connect()
       network = control.get_circuit_network(defines.wire_type[color])
     end
-    for _, signal in ipairs(network.signals or { }) do
-      local st = signal.signal.type == "virtual" and "virtual-signal" or signal.signal.type
+    if network then
+      for _, signal in ipairs(network.signals or { }) do
+        local st = signal.signal.type == "virtual" and "virtual-signal" or signal.signal.type
 
-      self[color].add {
-        type = "sprite-button",
-        sprite = st .. "/" .. signal.signal.name,
-        number = signal.count,
-        style = color .. "_circuit_network_content_slot",
-      }
+        self[color].add {
+          type = "sprite-button",
+          sprite = st .. "/" .. signal.signal.name,
+          number = signal.count,
+          style = color .. "_circuit_network_content_slot",
+        }
+      end
     end
-    :: next ::
   end
 end
 
-function GuiOutputNetwork:create(parent)
+function GuiCircuitSignals:create(input, parent)
+  self.input = input
+  self.connector_id = input
+    and defines.circuit_connector_id.combinator_input
+    or defines.circuit_connector_id.constant_combinator
+  local key = input and "input" or "output"
+
   parent.add {
     type = "label",
     style = "heading_3_label",
-    caption = { "", { "gui.output-networks" }, " [img=info]" },
-    tooltip = { "gui.output-networks-description" }
+    caption = { "", { "gui." .. key .. "-networks" }, " [img=info]" },
+    tooltip = { "gui." .. key .. "-networks-description" }
   }
 
   local table = parent.add {
     type = "table",
     column_count = 2,
-    tooltip = { "gui.output-networks-description" }
+    tooltip = { "gui." .. key .. "-networks-description" }
   }
   table.style.column_alignments[1] = "left"
   table.style.column_alignments[2] = "right"
@@ -55,12 +64,6 @@ function GuiOutputNetwork:create(parent)
     pane.style.horizontal_align = color == "red" and "left" or "right"
     pane.style.vertical_align = "top"
     pane.style.vertically_stretchable = true
-
-    pane.add {
-      type = "label",
-      style = "heading_3_label_yellow",
-      caption = { "gui.output-network", "[item="..color.."-wire]"},
-    }
 
     local flow = pane.add {
       type = "flow",
@@ -76,14 +79,13 @@ function GuiOutputNetwork:create(parent)
     }
     scroll.style.minimal_height = 36
     scroll.style.margin = 0
-    scroll.style.maximal_height = 36 * 4
+    scroll.style.maximal_height = 36 * 3
     scroll.style.padding = 0
-
 
     self[color] = scroll.add {
       type = "table",
       style = "slot_table",
-      column_count = 5,
+      column_count = 7,
     }
     self[color].style.horizontally_squashable = true
   end
@@ -92,4 +94,4 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
-return GuiOutputNetwork
+return GuiCircuitSignals

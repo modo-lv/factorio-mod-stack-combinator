@@ -31,7 +31,8 @@ function GuiOutput:create(parent)
   parent.add({
     type = "label",
     -- Built-in localisation
-    caption = { "gui-constant.output-signals" },
+    caption = { "", { "gui-constant.output-signals" }, " [img=info]" },
+    tooltip = { "gui.output-signals-description" },
     style = "heading_3_label"
   })
 
@@ -53,7 +54,7 @@ function GuiOutput:create(parent)
   self.signal_table = flow.add {
     type = "table",
     style = "slot_table",
-    column_count = 11
+    column_count = 15
   }
 end
 

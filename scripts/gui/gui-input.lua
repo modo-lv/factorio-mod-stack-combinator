@@ -8,17 +8,10 @@ local GuiInput = {
 }
 
 function GuiInput:create(sc, parent)
-  parent.add {
-    type = "label",
-    style = "heading_3_label",
-    -- Built-in localisation
-    caption = { "gui-arithmetic.input" }
-  }
-
   local row = parent.add {
     type = "table",
     direction = "horizontal",
-    column_count = 2,
+    column_count = 3,
     tooltip = { "gui.invert-description" },
   }
 
@@ -28,8 +21,13 @@ function GuiInput:create(sc, parent)
     state = sc.config.invert_red,
     caption = { "", { "gui.invert-wire", "[item=red-wire]" }, " [img=info]" }
   }
-  GuiInput.red.style.horizontally_stretchable = true
   GuiInput.red.style.horizontally_squashable = false
+
+  local spacer = row.add {
+    type = "label"
+  }
+  spacer.style.horizontally_squashable = false
+  spacer.style.horizontally_stretchable = true
 
   GuiInput.green = row.add {
     type = "checkbox",
@@ -37,7 +35,6 @@ function GuiInput:create(sc, parent)
     state = sc.config.invert_green,
     caption = { "", { "gui.invert-wire", "[item=green-wire]" }, " [img=info]" }
   }
-  GuiInput.green.style.horizontally_stretchable = false
   GuiInput.green.style.horizontally_squashable = false
 
 end
