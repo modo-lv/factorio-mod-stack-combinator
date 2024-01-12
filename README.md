@@ -5,12 +5,14 @@
 A mod for [Factorio](http://factorio.com) that adds a new type of circuit network combinator to research and craft: a stack combinator. This combinator modifies each item signal it receives according to that item's stack size and selected operation. For example, if the stack size for Coal is 50, and you send a Coal signal with value 2 and `*` (multiplication) selected, a stack combinator will output Coal×100 signal.
 
 ## Features
-* **Item signal *stackification***. Each item signal sent to the stack combinator input is output with its amount modified according to that item's stack size (non-item signals are output unchanged, but can configured in map settings to drop or apply inversions), depending on the selected operation:
-    * Multiplication
-    * Division
-    * Rounding to full stack: up (away from zero), down (towards zero) or both (whichever is closer) 
+* **Item signal stacking**. Each item signal sent to the stack combinator input is output with its amount modified according to that item's stack size, depending on the selected operation:
+    * **Multiplication**.
+    * **Division** with result rounding up (away from zero) or down (towards zero).
+    * **Rounding to full stack**: up (away from zero), down (towards zero) or both (whichever is closer).
 * **Signal inversion**. Each combinator can also be configured to *invert* input signals (green, red or both), which treats positive input signal amounts as negative and vice-versa.
-* **Output signal display**. Opening the stack combinator shows all output signals, even if the combinator's output isn't connected to anything. The display includes "raw" output signals — what stack combinator is sending (displayer in silver), and "network" output signals — what the final signals are on the output wire, taking into account any other connected signal sources.
+* **Signal merge precedence**: You can choose per combinator whether to merge input signals (before applying stack calculations), or apply stacking to each wire separately (so that only the resulting output signals are merged).
+* **Input and output signal display**. Opening the stack combinator shows all input and output signals, even if the combinator's output isn't connected to anything. The display includes "raw" input and output signals — what stack combinator is receiving and sending (displayed in silver), and additional "network" output signals — what the final signals are on the output wire, taking into account any other signal sources connected to those wires.
+* **Non-item signals**: Fluid and virtual signals do not have stacks, so they are passed through as-is. This can be configured in map settings to apply inversion (if any) instead, or to drop non-item signals completely. 
 
 ## Compatibility & balancing
 
@@ -18,7 +20,7 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 * **Shouldn't break anything**. Stack combinator is based on the *arithmetic and constant combinators*, and does not involve any other entities or game objects.
 * Other mods:
     * Works in **[Nullius](https://mods.factorio.com/mod/nullius)**. 
-    * Can be **moved around with [Picker Dollies](https://mods.factorio.com/mod/PickerDollies)**.
+    * Can be **moved around and fully rotated with [Picker Dollies](https://mods.factorio.com/mod/PickerDollies)**.
     * Fits with **mods that change circuit wire colors**, such as [Colorblind Circuit Network](https://mods.factorio.com/mod/ColorblindCircuitNetwork) and [Almost Invisible Electric Wires](https://mods.factorio.com/mod/AlmostInvisibleElectricWires).
 * **Research costs** are calculated dynamically based on *circuit network* technology costs, so it should fit in naturally with balance changes introduced by other mods.
 * **Crafting costs** are an *arithmetic combinator* and a *repair pack* (*copper cable* in Nullius).
@@ -52,10 +54,10 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 ## Screenshots
 ![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/multi.png)
 
-![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/invert.png)
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/div-up.png)
 
-![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/div.png)
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/div-down.png)
 
-![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/round.png)
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/div-down-merged.png)
 
-![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/roundup.png)
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/round-invert.png)

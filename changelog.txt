@@ -1,8 +1,14 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.0
-Date: 2024.01.03
+Date: 2024.01.13
   Features:
-    - You can now select rounding mode for division on each SC.
+    - Rounding mode selection for division operations.
+    - Option to merge input signals from both wires before applying stack calculations.
+    - Input signals are now shown in the SC.
+  Changes:
+    - Signal displays are now single-line and horizontally scrollable.
+  Bugfixes:
+    - Fixed nearest full stack rounding which was outputting completely wrong result.
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.0
 Date: 2024.01.03
