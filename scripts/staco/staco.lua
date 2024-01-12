@@ -28,8 +28,31 @@ function StaCo:run()
   local op = self.config.operation
 
   local result = {}
-  result = self.stackify(red, self.config.invert_red, op, result)
-  result = self.stackify(green, self.config.invert_green, op, result)
+  if (self.config.combine_first) then
+    local first = red and red.signals or (green and green.signals or {})
+    local second = (red and green) and green.signals or {}
+
+    local combined = {}
+    for _, entry in pairs(first) do
+      local key = entry.signal.type .. "-" .. entry.signal.name
+      combined[key] = entry
+      if (self.config.invert_red) then
+        combined[key].count = combined[key].count * -1
+      end
+    end
+    for _, entry in pairs(second) do
+      local key = entry.signal.type .. "-" .. entry.signal.name
+      if (combined[key]) then
+        combined[key].count = combined[key].count + (entry.count * (self.config.invert_green and -1 or 1))
+      else
+        combined[key] = entry
+      end
+    end
+    result = self.stackify({ signals = combined }, false, op, { })
+  else
+    result = self.stackify(red, self.config.invert_red, op, result)
+    result = self.stackify(green, self.config.invert_green, op, result)
+  end
 
   local output = self.output.get_control_behavior()
 
@@ -69,7 +92,7 @@ function StaCo.stackify(input, invert, operation, result)
   end
   local nonItems = Mod.settings:runtime().non_item_signals
 
-  for _, entry in ipairs(input.signals) do
+  for _, entry in pairs(input.signals) do
     local name = entry.signal.name
     local value = entry.count
     local type = entry.signal.type
