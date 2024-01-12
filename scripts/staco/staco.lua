@@ -116,7 +116,7 @@ function StaCo.stackify(input, invert, operation, result)
         value = func(value / stack) * multiplier
       elseif (op == 4) then
         -- Round
-        op = math.abs(value) >= stack / 2 and 5 or 6
+        op = (math.abs(value) % stack > math.ceil(stack / 2)) and 5 or 6
       end
 
       if (op == 5 or op == 6) then
