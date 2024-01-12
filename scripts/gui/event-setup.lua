@@ -25,6 +25,13 @@ local function config(ev)
     save = true
   end
 
+  -- Update signal combining
+  if (el and el.name == This.gui.COMBINE_FIRST) then
+    sc.config.combine_first = el.state
+    save = true
+  end
+
+
   -- Update op description
   local op = This.gui.elements.input_op
   local selector = This.gui.elements.input_op.selector
@@ -86,7 +93,8 @@ function GuiEvents.register_all()
     function(ev)
       return ev.element and (
         ev.element.name == This.gui.INVERT_RED_NAME or
-          ev.element.name == This.gui.INVERT_GREEN_NAME
+          ev.element.name == This.gui.INVERT_GREEN_NAME or
+        ev.element.name == This.gui.COMBINE_FIRST
       )
     end
   )

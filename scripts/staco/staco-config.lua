@@ -11,6 +11,11 @@ local _table = require('__stdlib__/stdlib/utils/table')
 
 local GuiInputOp = require("scripts/gui/gui-input-op")
 
+--- Boolean settings stored as bits in the combinators second_constant
+local Flags = {
+  COMBINE_FIRST = 1
+}
+
 local StaCoConfig = {
   --- Static combinator that this configuration is for
   sc = nil,
@@ -20,6 +25,9 @@ local StaCoConfig = {
 
   --- Invert green inputs?
   invert_green = nil,
+
+  --- Combine inputs before stacking?
+  combine_first = nil,
 
   --- Input operation
   operation = 1,
@@ -49,14 +57,22 @@ function StaCoConfig:save()
   local r, g = self.invert_red, self.invert_green
   local name = (r and g and "yellow") or (r and "red") or (g and "green") or ("black")
   local signal = { type = "virtual", name = "signal-" .. name }
-  self.sc.input.get_or_create_control_behavior().parameters = {
+
+  local flags = 0
+  if (self.combine_first) then flags = bit32.bor(flags, Flags.COMBINE_FIRST) end
+
+  local control = self.sc.input.get_or_create_control_behavior()
+  control.parameters = {
     first_signal = signal,
+    second_constant = flags,
     operation = op_map_write[self.operation]
   }
   self.sc:debug_log("Config: "
-    .. "[img=item/red-wire] " .. tostring(self.invert_red) .. ", "
-    .. "[img=item/green-wire] " .. tostring(self.invert_green) .. ", "
-    .. "op = " .. GuiInputOp.item_names[self.operation] .. " (" .. self.operation ..")"
+    .. "Invert red: " .. tostring(self.invert_red) .. ", "
+    .. "Invert green: " .. tostring(self.invert_green) .. ", "
+    .. "Combine first: " .. tostring(self.combine_first) .. ", "
+    .. "Op: " .. GuiInputOp.item_names[self.operation] .. " (" .. self.operation .. "), "
+    .. "Flags: " .. (control.parameters.second_constant or "nil") .. "."
   )
 end
 
@@ -72,6 +88,12 @@ local op_map_read = {
 --- Read SC's configuration, or create the default if there isn't one
 function StaCoConfig:load_or_default()
   local params = self.sc.input.get_control_behavior().parameters
+
+  -- Combine first
+  if (params.second_constant == nil) then
+    self.sc:debug_log("second_constant unset")
+  end
+  self.combine_first = bit32.band(params.second_constant or 0, Flags.COMBINE_FIRST) == Flags.COMBINE_FIRST
 
   -- Input inversion
   local signal = params.first_signal
@@ -95,7 +117,8 @@ function StaCoConfig.defaults()
   local cfg = Mod.settings:runtime()
   return {
     invert_red = cfg.invert_signals == "red" or cfg.invert_signals == "both",
-    invert_green = cfg.invert_signals == "green" or cfg.invert_signals == "both"
+    invert_green = cfg.invert_signals == "green" or cfg.invert_signals == "both",
+    combine_first = false,
   }
 end
 

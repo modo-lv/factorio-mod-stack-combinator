@@ -32,11 +32,11 @@ function GuiInput:create(sc, parent)
   combineContainer.style.horizontally_stretchable = true
   combineContainer.style.margin = {0, 20}
 
-  self.combine_first = combineContainer.add {
+  GuiInput.combine_first = combineContainer.add {
     type = "checkbox",
     caption = { "", { "gui.input-combine-first" } },
     tooltip = { "", { "gui.input-combine-first-description", "[item=red-wire]", "[item=green-wire]" } },
-    state = false,
+    state = sc.config.combine_first,
   }
 
   GuiInput.green = row.add {
