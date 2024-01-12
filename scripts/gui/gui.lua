@@ -27,6 +27,7 @@ setmetatable(Gui.elements.output_network, { __index = GuiSignalDisplay })
 Gui.CLOSE_BUTTON_NAME = Gui.NAME .. "-close"
 Gui.INVERT_RED_NAME = Gui.NAME .. "-invert-red"
 Gui.INVERT_GREEN_NAME = Gui.NAME .. "-invert-green"
+Gui.COMBINE_FIRST = Gui.NAME .. "-combine-first"
 Gui.INPUT_OP_NAME = Gui.NAME .. "-input-op"
 Gui.INPUT_OP_DESC = Gui.NAME .. "-input-op-description"
 
@@ -77,6 +78,7 @@ function Gui:create(sc, player)
   self.elements.input:create(sc, contents)
   self.elements.input.red.name = self.INVERT_RED_NAME
   self.elements.input.green.name = self.INVERT_GREEN_NAME
+  self.elements.input.combine_first.name = self.COMBINE_FIRST
 
   -- Operation
   self.elements.input_op:create(sc, contents)
