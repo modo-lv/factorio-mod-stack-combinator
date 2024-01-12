@@ -13,7 +13,7 @@ local GuiInputOp = require("scripts/gui/gui-input-op")
 
 --- Boolean settings stored as bits in the combinators second_constant
 local Flags = {
-  COMBINE_FIRST = 1
+  MERGE_INPUTS = 1
 }
 
 local StaCoConfig = {
@@ -26,8 +26,8 @@ local StaCoConfig = {
   --- Invert green inputs?
   invert_green = nil,
 
-  --- Combine inputs before stacking?
-  combine_first = nil,
+  --- Merge inputs before stacking?
+  merge_inputs = nil,
 
   --- Input operation
   operation = 1,
@@ -59,7 +59,7 @@ function StaCoConfig:save()
   local signal = { type = "virtual", name = "signal-" .. name }
 
   local flags = 0
-  if (self.combine_first) then flags = bit32.bor(flags, Flags.COMBINE_FIRST) end
+  if (self.merge_inputs) then flags = bit32.bor(flags, Flags.MERGE_INPUTS) end
 
   local control = self.sc.input.get_or_create_control_behavior()
   control.parameters = {
@@ -70,7 +70,7 @@ function StaCoConfig:save()
   self.sc:debug_log("Config: "
     .. "Invert red: " .. tostring(self.invert_red) .. ", "
     .. "Invert green: " .. tostring(self.invert_green) .. ", "
-    .. "Combine first: " .. tostring(self.combine_first) .. ", "
+    .. "Merge first: " .. tostring(self.merge_inputs) .. ", "
     .. "Op: " .. GuiInputOp.item_names[self.operation] .. " (" .. self.operation .. "), "
     .. "Flags: " .. (control.parameters.second_constant or "nil") .. "."
   )
@@ -89,11 +89,11 @@ local op_map_read = {
 function StaCoConfig:load_or_default()
   local params = self.sc.input.get_control_behavior().parameters
 
-  -- Combine first
+  -- Merge first
   if (params.second_constant == nil) then
     self.sc:debug_log("second_constant unset")
   end
-  self.combine_first = bit32.band(params.second_constant or 0, Flags.COMBINE_FIRST) == Flags.COMBINE_FIRST
+  self.merge_inputs = bit32.band(params.second_constant or 0, Flags.MERGE_INPUTS) == Flags.MERGE_INPUTS
 
   -- Input inversion
   local signal = params.first_signal
@@ -118,7 +118,7 @@ function StaCoConfig.defaults()
   return {
     invert_red = cfg.invert_signals == "red" or cfg.invert_signals == "both",
     invert_green = cfg.invert_signals == "green" or cfg.invert_signals == "both",
-    combine_first = false,
+    merge_inputs = false,
   }
 end
 

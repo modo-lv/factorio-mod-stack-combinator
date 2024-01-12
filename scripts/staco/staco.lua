@@ -28,27 +28,27 @@ function StaCo:run()
   local op = self.config.operation
 
   local result = {}
-  if (self.config.combine_first) then
+  if (self.config.merge_inputs) then
     local first = red and red.signals or (green and green.signals or {})
     local second = (red and green) and green.signals or {}
 
-    local combined = {}
+    local merged = {}
     for _, entry in pairs(first) do
       local key = entry.signal.type .. "-" .. entry.signal.name
-      combined[key] = entry
+      merged[key] = entry
       if (self.config.invert_red) then
-        combined[key].count = combined[key].count * -1
+        merged[key].count = merged[key].count * -1
       end
     end
     for _, entry in pairs(second) do
       local key = entry.signal.type .. "-" .. entry.signal.name
-      if (combined[key]) then
-        combined[key].count = combined[key].count + (entry.count * (self.config.invert_green and -1 or 1))
+      if (merged[key]) then
+        merged[key].count = merged[key].count + (entry.count * (self.config.invert_green and -1 or 1))
       else
-        combined[key] = entry
+        merged[key] = entry
       end
     end
-    result = self.stackify({ signals = combined }, false, op, { })
+    result = self.stackify({ signals = merged }, false, op, { })
   else
     result = self.stackify(red, self.config.invert_red, op, result)
     result = self.stackify(green, self.config.invert_green, op, result)

@@ -188,7 +188,7 @@ Date: 2021.01.25
   Info:
     - Initial "proper" release.
   Features:
-    - Display for all signals on the circuit network that the stack combinator's output is connected to (to easily see resulting combined signals).
+    - Display for all signals on the circuit network that the stack combinator's output is connected to (to easily see resulting merged signals).
   Minor Features:
     - Support for modified signal wire colors: now using in-game wire images instead of "red" and "green" text and colors.
   Gui:

@@ -5,7 +5,7 @@
 local GuiInput = {
   red = nil,
   green = nil,
-  combine_first = nil,
+  merge_inputs = nil,
 }
 
 function GuiInput:create(sc, parent)
@@ -23,20 +23,20 @@ function GuiInput:create(sc, parent)
   }
   GuiInput.red.style.horizontally_squashable = false
 
-  local combineContainer = row.add {
+  local mergeContainer = row.add {
     type = "flow",
     direction = "horizontal"
   }
-  combineContainer.style.horizontal_align = "center"
-  combineContainer.style.horizontally_squashable = true
-  combineContainer.style.horizontally_stretchable = true
-  combineContainer.style.margin = {0, 20}
+  mergeContainer.style.horizontal_align = "center"
+  mergeContainer.style.horizontally_squashable = true
+  mergeContainer.style.horizontally_stretchable = true
+  mergeContainer.style.margin = {0, 20}
 
-  GuiInput.combine_first = combineContainer.add {
+  GuiInput.merge_inputs = mergeContainer.add {
     type = "checkbox",
-    caption = { "", { "gui.input-combine-first" } },
-    tooltip = { "", { "gui.input-combine-first-description", "[item=red-wire]", "[item=green-wire]" } },
-    state = sc.config.combine_first,
+    caption = { "", { "gui.input-merge-first" } },
+    tooltip = { "", { "gui.input-merge-first-description", "[item=red-wire]", "[item=green-wire]" } },
+    state = sc.config.merge_inputs,
   }
 
   GuiInput.green = row.add {

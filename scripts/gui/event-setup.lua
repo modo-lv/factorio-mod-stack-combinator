@@ -26,8 +26,8 @@ local function config(ev)
   end
 
   -- Update signal combining
-  if (el and el.name == This.gui.COMBINE_FIRST) then
-    sc.config.combine_first = el.state
+  if (el and el.name == This.gui.MERGE_INPUTS) then
+    sc.config.merge_inputs = el.state
     save = true
   end
 
@@ -94,7 +94,7 @@ function GuiEvents.register_all()
       return ev.element and (
         ev.element.name == This.gui.INVERT_RED_NAME or
           ev.element.name == This.gui.INVERT_GREEN_NAME or
-        ev.element.name == This.gui.COMBINE_FIRST
+        ev.element.name == This.gui.MERGE_INPUTS
       )
     end
   )
