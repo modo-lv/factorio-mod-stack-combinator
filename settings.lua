@@ -67,7 +67,7 @@ local runtime = {
     default_value = 6,
     maximum_value = 60,
     minimum_value = 0,
-    order = "y"
+    order = "x"
   },
   {
     -- Update limit
@@ -76,6 +76,14 @@ local runtime = {
     type = "int-setting",
     default_value = 100,
     minimum_value = 1,
+    order = "y"
+  },
+  {
+    -- Empty unpowered
+    setting_type = "runtime-global",
+    name = Mod.NAME .. "-empty-unpowered",
+    type = "bool-setting",
+    default_value = false,
     order = "z"
   },
 }

@@ -22,6 +22,15 @@ local StaCo = {
 function StaCo:run()
   if not (self.input.valid and self.output.valid) then return end
 
+  local output = self.output.get_control_behavior()
+
+  if (self.input.status == defines.entity_status.no_power) then
+    if (Mod.settings:runtime().empty_unpowered) then
+      output.parameters = nil
+    end
+    return
+  end
+
   local red = self.input.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_input)
   local green = self.input.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_input)
 
@@ -54,15 +63,8 @@ function StaCo:run()
     result = self.stackify(green, self.config.invert_green, op, result)
   end
 
-  local output = self.output.get_control_behavior()
-
   local total = table_size(result)
-  if (
-    self.input.status == defines.entity_status.no_power
-      or self.input.status == defines.entity_status.low_power
-  ) then
-    output.parameters = nil
-  elseif (This.runtime:signal_overflow(self, total)) then
+  if (This.runtime:signal_overflow(self, total)) then
     --- Not enough signal space
     output.parameters = nil
   else
