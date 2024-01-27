@@ -93,9 +93,15 @@ function Gui:create(sc, player)
   self.elements.output_network:create(false, contents)
 
   player.opened = window
+
   -- Keep for reference
   self.staco = sc
   self:tick()
+
+  -- Data on which players have our GUI open is not saved with the game, so we have to store it manually
+  global.open_sc_ids = global.open_sc_ids or {}
+  global.open_sc_ids[player.index] = sc.id
+
   window.force_auto_center()
   return window
 end
@@ -107,6 +113,7 @@ function Gui:destroy(player)
   for _, g in ipairs(player.gui.screen.children) do
     if g.name == Gui.NAME then
       player.opened = nil
+      global.open_sc_ids[player.index] = nil
       This.gui.staco = nil
       g.destroy()
     end

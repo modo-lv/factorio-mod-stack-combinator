@@ -67,8 +67,20 @@ end
 local function close(ev)
   This.gui:destroy(game.get_player(ev.player_index))
   -- Disable real-time updates
-  --events.remove(defines.events.on_tick, tick)
   events.remove(-10, tick)
+end
+
+--- Recreate any GUIs that were saved while open, to ensure proper functioning.
+--- Must be called once, on the first available tick, and then removed.
+local function restore()
+  for player_index, sc_id in pairs(global.open_sc_ids or {}) do
+    game.get_player(player_index).opened = nil
+    open({
+      entity = This.runtime:combinators()[sc_id].input,
+      player_index = player_index
+    })
+  end
+  events.remove(defines.events.on_tick, restore)
 end
 
 --- Close GUI if user clicks the `X` button
@@ -81,6 +93,12 @@ end
 
 --- Register handlers to their events
 function GuiEvents.register_all()
+  events.on_load(function()
+    -- Make sure to clean up any orphan update events
+    events.remove(-10)
+    events.register(defines.events.on_tick, restore)
+  end)
+
   -- Open
   events.register(defines.events.on_gui_opened, open,
     function(ev)

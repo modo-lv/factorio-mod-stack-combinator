@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.5.2
+Date: 2024.01.27
+  Bugfixes:
+    - StaCo GUIs now resume normal functioning on game load in cases when the game was (auto)saved with the GUI open.
+---------------------------------------------------------------------------------------------------
 Version: 1.5.1
 Date: 2024.01.20
   Changes:
