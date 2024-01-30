@@ -38,18 +38,15 @@ function StaCo:run()
 
   local result = {}
   if (self.config.merge_inputs) then
-    local first = red and red.signals or (green and green.signals or {})
-    local second = (red and green) and green.signals or {}
-
     local merged = {}
-    for _, entry in pairs(first) do
+    for _, entry in pairs(red and red.signals or {}) do
       local key = entry.signal.type .. "-" .. entry.signal.name
       merged[key] = entry
       if (self.config.invert_red) then
         merged[key].count = merged[key].count * -1
       end
     end
-    for _, entry in pairs(second) do
+    for _, entry in pairs(green and green.signals or {}) do
       local key = entry.signal.type .. "-" .. entry.signal.name
       if (merged[key]) then
         merged[key].count = merged[key].count + (entry.count * (self.config.invert_green and -1 or 1))
