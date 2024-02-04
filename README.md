@@ -11,6 +11,7 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
     * **Rounding to full stack**: up (away from zero), down (towards zero) or both (whichever is closer).
 * **Signal inversion**. Each combinator can also be configured to *invert* input signals (green, red or both), which treats positive input signal amounts as negative and vice-versa.
 * **Signal merge precedence**: You can choose per combinator whether to merge input signals (before applying stack calculations), or apply stacking to each wire separately (so that only the resulting output signals are merged).
+* **Wagon stack mode**: Each combinator can be toggled to use train wagon capacity instead of stack size, allowing for more convenient train station signal management in mods with multiple wagon tiers and/or stops of different sizes.
 * **Input and output signal display**. Opening the stack combinator shows all input and output signals, even if the combinator's output isn't connected to anything. The display includes "raw" input and output signals — what stack combinator is receiving and sending (displayed in silver), and additional "network" output signals — what the final signals are on the output wire, taking into account any other signal sources connected to those wires.
 * **Non-item signals**: Fluid and virtual signals do not have stacks, so they are passed through as-is. This can be configured in map settings to apply inversion (if any) instead, or to drop non-item signals completely. 
 
@@ -24,7 +25,6 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
     * Fits with **mods that change circuit wire colors**, such as [Colorblind Circuit Network](https://mods.factorio.com/mod/ColorblindCircuitNetwork) and [Almost Invisible Electric Wires](https://mods.factorio.com/mod/AlmostInvisibleElectricWires).
 * **Research costs** are calculated dynamically based on *circuit network* technology costs, so it should fit in naturally with balance changes introduced by other mods.
 * **Crafting costs** are an *arithmetic combinator* and a *repair pack* (*copper cable* in Nullius).
-* **Multiplayer** hasn't been tested, but the mod doesn't do anything incompatible that I know of, so it *should* be OK.
 
 ## Limitations & performance
 * Due to the way game works, the **maximum amount of output signals** is initially limited to 40 — twice the capacity of a vanilla *constant combinator*, meaning one StaCo can process signals from two full constant combinators. You can increase the limit in startup settings, but it may affect performance, depending on how many StaCos you have.
@@ -61,3 +61,5 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 ![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/div-down-merged.png)
 
 ![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/round-invert.png)
+
+![](https://github.com/modo-lv/factorio-mod-stack-combinator/raw/master/screenshots/wagon-stacks.png)

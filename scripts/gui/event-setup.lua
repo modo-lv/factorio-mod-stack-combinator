@@ -31,6 +31,12 @@ local function config(ev)
     save = true
   end
 
+  -- Update wagon stacking
+  if (el and el.name == This.gui.INPUT_WAGON_STACKS_NAME) then
+    sc.config.wagon_stacks = el.state
+    save = true
+  end
+
 
   -- Update op description
   local op = This.gui.elements.input_op
@@ -112,7 +118,8 @@ function GuiEvents.register_all()
       return ev.element and (
         ev.element.name == This.gui.INVERT_RED_NAME or
           ev.element.name == This.gui.INVERT_GREEN_NAME or
-        ev.element.name == This.gui.MERGE_INPUTS
+          ev.element.name == This.gui.MERGE_INPUTS or
+          ev.element.name == This.gui.INPUT_WAGON_STACKS_NAME
       )
     end
   )

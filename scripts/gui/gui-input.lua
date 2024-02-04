@@ -6,6 +6,7 @@ local GuiInput = {
   red = nil,
   green = nil,
   merge_inputs = nil,
+  wagon_stacks = nil,
 }
 
 function GuiInput:create(sc, parent)
@@ -47,6 +48,20 @@ function GuiInput:create(sc, parent)
   }
   GuiInput.green.style.horizontally_squashable = false
 
+  -- Second row of options
+  row = parent.add {
+    type = "flow",
+    direction = "horizontal"
+  }
+  row.style.horizontally_stretchable = true
+  row.style.horizontal_align = "center"
+
+  GuiInput.wagon_stacks = row.add {
+    type = "checkbox",
+    caption = { "", { "gui.input-wagon-stacks" }, " [img=info]" },
+    tooltip = { "", { "gui.input-wagon-stacks-description" } },
+    state = sc.config.wagon_stacks,
+  }
 end
 
 --------------------------------------------------------------------------------

@@ -11,9 +11,10 @@ local _table = require('__stdlib__/stdlib/utils/table')
 
 local GuiInputOp = require("scripts/gui/gui-input-op")
 
---- Boolean settings stored as bits in the combinators second_constant
+--- Boolean settings stored as bits in the combinator's second_constant
 local Flags = {
-  MERGE_INPUTS = 1
+  MERGE_INPUTS = 1,
+  WAGON_STACKS = 2,
 }
 
 local StaCoConfig = {
@@ -28,6 +29,9 @@ local StaCoConfig = {
 
   --- Merge inputs before stacking?
   merge_inputs = nil,
+
+  --- Treat wagon capacity as stack size?
+  wagon_stacks = nil,
 
   --- Input operation
   operation = 1,
@@ -60,6 +64,7 @@ function StaCoConfig:save()
 
   local flags = 0
   if (self.merge_inputs) then flags = bit32.bor(flags, Flags.MERGE_INPUTS) end
+  if (self.wagon_stacks) then flags = bit32.bor(flags, Flags.WAGON_STACKS) end
 
   local control = self.sc.input.get_or_create_control_behavior()
   control.parameters = {
@@ -85,15 +90,22 @@ local op_map_read = {
   ["XOR"] = 6,
 }
 
+local function hasFlag(value, flag)
+  return bit32.band(value or 0, flag) == flag
+end
+
 --- Read SC's configuration, or create the default if there isn't one
 function StaCoConfig:load_or_default()
   local params = self.sc.input.get_control_behavior().parameters
 
-  -- Merge first
-  if (params.second_constant == nil) then
-    self.sc:debug_log("second_constant unset")
+  function params.hasFlag(flag)
+    return bit32.band(params.second_constant or 0, flag) == flag
   end
-  self.merge_inputs = bit32.band(params.second_constant or 0, Flags.MERGE_INPUTS) == Flags.MERGE_INPUTS
+
+  -- Merge first
+  self.merge_inputs = params.hasFlag(Flags.MERGE_INPUTS)
+  -- Wagon wagon_stacks
+  self.wagon_stacks = params.hasFlag(Flags.WAGON_STACKS)
 
   -- Input inversion
   local signal = params.first_signal
@@ -119,6 +131,7 @@ function StaCoConfig.defaults()
     invert_red = cfg.invert_signals == "red" or cfg.invert_signals == "both",
     invert_green = cfg.invert_signals == "green" or cfg.invert_signals == "both",
     merge_inputs = false,
+    wagon_stacks = false,
   }
 end
 
