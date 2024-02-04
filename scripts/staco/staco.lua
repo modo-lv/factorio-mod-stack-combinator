@@ -54,10 +54,10 @@ function StaCo:run()
         merged[key] = entry
       end
     end
-    result = self.stackify({ signals = merged }, false, op, { })
+    result = self:stackify({ signals = merged }, false, op, { }, context)
   else
-    result = self.stackify(red, self.config.invert_red, op, result)
-    result = self.stackify(green, self.config.invert_green, op, result)
+    result = self:stackify(red, self.config.invert_red, op, result)
+    result = self:stackify(green, self.config.invert_green, op, result)
   end
 
   local total = table_size(result)
@@ -85,21 +85,48 @@ end
 -- @tparam Boolean invert Multiply all stackified signal values by -1?
 -- @tparam Int op Operation to perform
 -- @param[opt] result Already processed signals from the other wire, if any
-function StaCo.stackify(input, invert, operation, result)
+function StaCo:stackify(input, invert, operation, result, context)
   if (not input or not input.signals) then
     return result or {}
   end
   local nonItems = Mod.settings:runtime().non_item_signals
 
+  local wagon_stacks = { cargo = nil, fluid = nil }
+  if (self.config.wagon_stacks) then
+    for _, entry in pairs(input.signals) do
+      local entity = game.entity_prototypes[entry.signal.name]
+      if (not entity) then goto continue end
+
+      local cargo_stacks = entity.type == "cargo-wagon" and entity.get_inventory_size(defines.inventory.cargo_wagon)
+      if (cargo_stacks) then
+        cargo_stacks = cargo_stacks * entry.count
+        wagon_stacks.cargo = cargo_stacks + (wagon_stacks.cargo or 0)
+      end
+
+      local fluid_stack = entity.type == "fluid-wagon" and entity.fluid_capacity
+      if (fluid_stack) then
+        fluid_stack = fluid_stack * entry.count
+        wagon_stacks.fluid = fluid_stack + (wagon_stacks.fluid or 0)
+      end
+
+      ::continue::
+    end
+  end
+
   for _, entry in pairs(input.signals) do
     local name = entry.signal.name
     local value = entry.count
     local type = entry.signal.type
-    local process = type == "item" or nonItems == "pass" or nonItems == "invert"
+    local process = (type == "item" or nonItems == "pass" or nonItems == "invert")
+    if (self.config.wagon_stacks) then
+      local entity = game.entity_prototypes[name]
+      process = (type == "fluid" or (entity.type ~= "cargo-wagon" and entity.type ~= "fluid-wagon"))
+    end
     local multiplier = (invert and (type == "item" or nonItems == "invert")) and -1 or 1
 
     if (process) then
-      local stack = type == "item" and game.item_prototypes[name].stack_size or 1
+      local stack = (type == "item" and (game.item_prototypes[name].stack_size or 1) * (wagon_stacks.cargo or 1)) or 1
+      stack = (type == "fluid" and (wagon_stacks.fluid or 1)) or stack
       local op = operation
       if (op == 1) then
         -- Multiply

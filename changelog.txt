@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.6.0
+Date: 2024.02.04
+  Features:
+    -  Wagon stack mode for using train wagon capacity instead of plain stack size in output calculations.
+---------------------------------------------------------------------------------------------------
 Version: 1.5.3
 Date: 2024.01.30
   Bugfixes:

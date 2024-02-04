@@ -28,6 +28,7 @@ Gui.CLOSE_BUTTON_NAME = Gui.NAME .. "-close"
 Gui.INVERT_RED_NAME = Gui.NAME .. "-invert-red"
 Gui.INVERT_GREEN_NAME = Gui.NAME .. "-invert-green"
 Gui.MERGE_INPUTS = Gui.NAME .. "-merge-first"
+Gui.INPUT_WAGON_STACKS_NAME = Gui.NAME .. "-wagon-stacks"
 Gui.INPUT_OP_NAME = Gui.NAME .. "-input-op"
 Gui.INPUT_OP_DESC = Gui.NAME .. "-input-op-description"
 
@@ -79,6 +80,7 @@ function Gui:create(sc, player)
   self.elements.input.red.name = self.INVERT_RED_NAME
   self.elements.input.green.name = self.INVERT_GREEN_NAME
   self.elements.input.merge_inputs.name = self.MERGE_INPUTS
+  self.elements.input.wagon_stacks.name = self.INPUT_WAGON_STACKS_NAME
 
   -- Operation
   self.elements.input_op:create(sc, contents)
