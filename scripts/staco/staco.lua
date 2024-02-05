@@ -118,8 +118,8 @@ function StaCo:stackify(input, invert, operation, result, context)
     local value = entry.count
     local type = entry.signal.type
     local process = (type == "item" or nonItems == "pass" or nonItems == "invert")
-    if (self.config.wagon_stacks) then
-      local entity = game.entity_prototypes[name]
+    local entity = game.entity_prototypes[name]
+    if (self.config.wagon_stacks and entity) then
       process = (type == "fluid" or (entity.type ~= "cargo-wagon" and entity.type ~= "fluid-wagon"))
     end
     local multiplier = (invert and (type == "item" or nonItems == "invert")) and -1 or 1

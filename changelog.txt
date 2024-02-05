@@ -1,13 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.6.1
+Date: 2024.02.05
+  Bugfixes:
+    - Fixed a crash in wagon mode when using non-entity items.
+---------------------------------------------------------------------------------------------------
 Version: 1.6.0
 Date: 2024.02.04
   Features:
-    -  Wagon stack mode for using train wagon capacity instead of plain stack size in output calculations.
+    - Wagon stack mode for using train wagon capacity instead of plain stack size in output calculations.
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.3
 Date: 2024.01.30
   Bugfixes:
-    -  Signals were duplicated on merge if two wires connected, but one empty.
+    - Signals were duplicated on merge if two wires connected, but one empty.
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.2
 Date: 2024.01.27
