@@ -4,6 +4,10 @@
 local StaCo = {
   --[[ Constants ]]
   NAME = "stack-combinator",
+  PACKED_NAME = "stack-combinator-packed",
+  SEARCH_NAMES = "stack-combinator",
+  MATCH_NAMES = { ["stack-combinator"] = true },
+
   --[[ Classes ]]
   Output = require("staco-output"),
   Config = require("staco-config"),
@@ -172,11 +176,11 @@ end
 -- @tparam LuaEntity input In-game combinator entity
 -- @tparam[opt] LuaEntity output In-game output combinator entity if one exists
 function StaCo.created(input, output)
-  if not (input and input.name == StaCo.NAME) then
-    error("Tried to configure " .. input.name .. " as a static combinator.")
+  if not (input and StaCo.MATCH_NAMES[input.name]) then
+    error("Tried to configure " .. input.name .. " as a stack combinator.")
   end
-  if (output and output.name ~= StaCo.Output.NAME) then
-    error("Tried to configure " .. output.name .. " as a static combinator output.")
+  if (output and not StaCo.Output.MATCH_NAMES[output.name]) then
+    error("Tried to configure " .. output.name .. " as a stack combinator output.")
   end
 
   local sc = {}
@@ -187,7 +191,7 @@ function StaCo.created(input, output)
   if (output) then
     sc:debug_log("Output " .. output.unit_number .. " already exists, (re)connecting.")
   else
-    output = sc.input.surface.find_entity(This.StaCo.Output.NAME, input.position)
+    output = sc.input.surface.find_entity(This.StaCo.Output.determine_name(input), input.position)
     if (output) then
       sc:debug_log("Found existing output (" .. output.unit_number .. "), connecting.")
     else
@@ -205,6 +209,8 @@ end
 --- so that when player connects to the SC's output (which outputs nothing),
 --- the OC's signals are on the same wires.
 function StaCo:connect()
+  if not (self.input and self.input.valid) then return end
+  if not (self.output and self.output.valid) then return end
   self.input.connect_neighbour({
     wire = defines.wire_type.red,
     target_entity = self.output,

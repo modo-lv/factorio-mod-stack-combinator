@@ -8,3 +8,5 @@ require("prototypes/entities")
 require("prototypes/items")
 
 ----------------------------------------------------------------------------------------------------
+
+require("prototypes/other-mods/compaktcircuits.lua")
