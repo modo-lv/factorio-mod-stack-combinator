@@ -22,7 +22,7 @@ end
 
 --- Pasting
 local function pasted(ev)
-  if (ev.source and ev.destination and ev.source.name == This.StaCo.NAME) then
+  if (ev.source and ev.destination and This.StaCo.MATCH_NAMES[ev.source.name]) then
     local to = This.runtime:sc(ev.destination)
     -- Factorio now pops up the output after pasting setings, even if the rotation of input didn't actually change.
     -- Calling the standard rotation handler seems to fix this.
@@ -63,10 +63,12 @@ local function ensure_internal_connections(ev)
     if name == "red-wire" or name == "green-wire" then
       for _, sc in pairs(This.runtime:combinators()) do
         for _, color in pairs({ "red", "green" }) do
-          local control = sc.output.get_control_behavior(defines.wire_type[color])
-          local network = control.get_circuit_network(defines.wire_type[color])
-          if not network then
-            sc:connect()
+          if sc and sc.output and sc.output.valid then
+            local control = sc.output.get_control_behavior(defines.wire_type[color])
+            local network = control.get_circuit_network(defines.wire_type[color])
+            if not network then
+              sc:connect()
+            end
           end
         end
       end
@@ -92,7 +94,8 @@ end
 -- Filter events for stack combinator
 local function event_filter(ev, entity_field)
   entity_field = entity_field or "entity"
-  return ev[entity_field] and ev[entity_field].name == This.StaCo.NAME
+  local name = ev[entity_field] and ev[entity_field].name
+  return name and This.StaCo.MATCH_NAMES[name]
 end
 
 function StackCombinatorEvents.register_all()

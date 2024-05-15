@@ -22,6 +22,7 @@ A mod for [Factorio](http://factorio.com) that adds a new type of circuit networ
 * Other mods:
     * Works in **[Nullius](https://mods.factorio.com/mod/nullius)**. 
     * Can be **moved around and fully rotated with [Picker Dollies](https://mods.factorio.com/mod/PickerDollies)**.
+    * Supports [Compact circuits](https://mods.factorio.com/mod/compaktcircuit).
     * Fits with **mods that change circuit wire colors**, such as [Colorblind Circuit Network](https://mods.factorio.com/mod/ColorblindCircuitNetwork) and [Almost Invisible Electric Wires](https://mods.factorio.com/mod/AlmostInvisibleElectricWires).
 * **Research costs** are calculated dynamically based on *circuit network* technology costs, so it should fit in naturally with balance changes introduced by other mods.
 * **Crafting costs** are an *arithmetic combinator* and a *repair pack* (*copper cable* in Nullius).

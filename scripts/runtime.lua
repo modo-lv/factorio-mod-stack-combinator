@@ -39,8 +39,13 @@ function Runtime:run_combinators(tick)
       --log("Updating " .. i .. " of " .. serpent.line(self.update_queue) .. "...")
       local id = self.update_queue[i]
       local sc = self:combinators()[id]
-      if (not sc) then
+
+      if not sc then
         rebuild = true
+        break
+      elseif not (sc.input.valid and sc.output.valid) then
+        -- compakt circuits may have invalidated the combinators in the config
+        self:combinators(true)
         break
       else
         if (not sc.run) then
@@ -118,13 +123,13 @@ function Runtime:combinators(force_update)
   self.update_queue = {}
   for _, surface in pairs(game.surfaces) do
     -- Find all SC outputs
-    local outputs = surface.find_entities_filtered({ name = This.StaCo.Output.NAME })
+    local outputs = surface.find_entities_filtered({ name = This.StaCo.Output.SEARCH_NAMES })
 
     -- Find all SCs
-    local scs = surface.find_entities_filtered({ name = This.StaCo.NAME })
+    local scs = surface.find_entities_filtered({ name = This.StaCo.SEARCH_NAMES })
     -- Find each SC's output and store both in the list
     for _, input in pairs(scs) do
-      local output = surface.find_entity(This.StaCo.Output.NAME, input.position)
+      local output = surface.find_entity(This.StaCo.Output.determine_name(input), input.position)
       if not output then
         error(
           "Stack Combinator " .. input.unit_number ..
