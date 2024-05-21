@@ -8,7 +8,10 @@ local PickerDollies = {}
 
 --- Move the output after moving stack combinator
 local function moved(ev)
-  This.runtime:sc(ev.moved_entity):moved()
+  local sc = This.runtime:sc(ev.moved_entity)
+  assert(sc.run)
+  sc:moved()
+  return sc
 end
 
 --- Wire up the event handler
@@ -27,8 +30,8 @@ local function register()
       -- Figuring out which entity was being rotated would require accessing PD's game data etc., so
       -- instead let's just ensure *all* StaCos are lined up with their outputs
       for _, sc in pairs(global.combinators) do
-        moved({ moved_entity = sc.input })
-        sc:rotated()
+        local moved_sc = moved({ moved_entity = sc.input })
+        moved_sc:rotated()
       end
     end)
 
