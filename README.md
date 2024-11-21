@@ -1,3 +1,9 @@
+# Deprecated
+
+Now that Factorio 2.0 has Selector Combinator with signal stacking functionality, this mod is officially retired. I will leave it up for a while as enough people are still playing 1.1., but there will be no more updates or bugfixes of any kind.
+
+---
+
 # Stack Combinator
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/modo-lv/factorio-mod-stack-combinator?label=latest%20release)
